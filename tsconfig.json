@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+      "module": "commonjs",
+      "moduleResolution": "node",
+      "skipLibCheck": true,
+      "pretty": true,
+      "jsx": "react",
+      "outDir": "./dist",
+      "sourceMap": true,
+      "esModuleInterop": true,
+      "baseUrl": "./src",
+      "types": []
+  },
+  "include": [
+      "src/**/*.tsx"
+    ],
+  "exclude": [
+    "node_modules",
+    "./node_modules",
+    "./node_modules/*",
+    "./node_modules/@types/node/index.d.ts",
+  ]
+}
