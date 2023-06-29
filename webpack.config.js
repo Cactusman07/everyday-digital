@@ -56,7 +56,14 @@ module.exports = (env) => {
         },
         {
           test: /\.(woff2|woff|ttf|eot|svg)(\?v=[a-z0-9]\.[a-z0-9]\.[a-z0-9])?$/,
-          use: 'url-loader'
+          use: [{
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'assets/',
+              publicPath: '../assets/'
+            }
+          }]
         }
       ]
     },

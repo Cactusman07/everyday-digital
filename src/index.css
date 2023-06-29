@@ -6,6 +6,44 @@
 body{
   color: #fff;
   background: #000;
+  background-image: linear-gradient(115deg, #000 40%, #eb4b4b);
+}
+
+.fullpage{
+  position:fixed;
+  z-index:10;
+  top: 0; left: 0; right: 0; bottom: 0;
+  transition: all 2.5s ease-out;
+}
+
+#background1{
+  background-image:linear-gradient(115deg,#000 40%, #e34beb);
+  opacity:0;
+}
+#background2{
+  background-image:linear-gradient(115deg,#000 40%, #834beb);
+  opacity:0;
+}
+#background3{
+  background-image:linear-gradient(115deg,#000 40%, #4b6ceb);
+  opacity:0;
+}
+#background4{
+  background-image:linear-gradient(115deg,#000 40%, #4bafeb);
+  opacity:0;
+}
+#background5{
+  background-image:linear-gradient(115deg,#000 40%, #9deb4b);
+  opacity:0;
+}
+#background6{
+  background-image:linear-gradient(115deg,#000 40%, #ebe74b);
+  opacity:0;
+}
+
+#root{
+  z-index:20;
+  position:relative;
 }
 
 @font-face{ 
@@ -124,21 +162,22 @@ h1, h2, h3, h4, h5{
 /* Title */
 #title {
   position: absolute;
-  margin: auto;
-  width: 90vw;
-  height: 80pt;
+  margin: auto 0 auto 2rem;
+  width: 70vw;
+  height: 140pt;
   top: 0;
   bottom: 0;
-  font-size:80pt;
-  filter: url(#threshold) blur(0.6px);
+  font-size:140pt;
+  filter: blur(0.4px);
+}
+
+#textWrap{
+  filter: url(#threshold) blur(0.4px);
 }
 
 #text1,
 #text2 {
     position: absolute;
-    width: 100%;
-    display: inline-block;
-
     user-select: none;
 }
 
