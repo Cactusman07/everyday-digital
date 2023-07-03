@@ -11,17 +11,21 @@ const App = () => {
   const { loading, error, data } = useQuery(GET_ALL_PROJECTS);
 
   return (
-    <React.Fragment>        
+    <React.Fragment>
         <Fade show={loading} fadeIn={false} fadeOut={true}>
           <LandingSplashScreen />
         </Fade>
         { error ? (
-        <p>Error: {error.message}</p>
-      ) : (
-        <React.Fragment>
-          <HomeScreen />
-          <ProjectContainer data={data} />
-        </React.Fragment>
+          <h1>Error: {error.message}</h1>
+        ) : (
+          <React.Fragment>
+            <HomeScreen />
+            {
+              !loading ? (
+                <ProjectContainer data={data} />
+              ) : <React.Fragment/>
+            }
+          </React.Fragment>
       )} 
     </React.Fragment>
   );

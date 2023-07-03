@@ -18,7 +18,7 @@ const texts = [
   "Design",
   "Reliability",
   "Innovation",
-  "Mentorship",
+  "Mentoring",
   "Strategy"
 ];
 

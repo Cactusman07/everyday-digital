@@ -161,14 +161,17 @@ h1, h2, h3, h4, h5{
 
 /* Title */
 #title {
-  position: absolute;
-  margin: auto 0 auto 2rem;
+  position: absolute;  
   width: 70vw;
-  height: 140pt;
-  top: 0;
-  bottom: 0;
-  font-size:140pt;
+  top: 60px;
+  bottom: 60px;
   filter: blur(0.4px);
+}
+
+#title h1{
+  -ms-transform: translateY(-40%);
+    transform: translateY(-40%);
+    top: 40%;
 }
 
 #textWrap{
@@ -182,3 +185,95 @@ h1, h2, h3, h4, h5{
 }
 
 /* Title Ends */
+
+/* CTA Container */
+#ctaContainer {
+  display: grid;
+}
+
+.cta {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  outline: none;
+  border: 0;
+  vertical-align: middle;
+  text-decoration: none;
+  background: transparent;
+}
+
+.cta .circle {
+  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+  position: relative;
+  display: block;
+  margin: 0;
+  width: 3rem;
+  height: 3rem;
+  background: #fff;
+  border-radius: 1.625rem;
+}
+.cta .circle .icon {
+  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  background: #000;
+}
+.cta .circle .icon.arrow {
+  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+  left: 0.625rem;
+  width: 1.125rem;
+  height: 0.125rem;
+  background: none;
+}
+.cta .circle .icon.arrow::before {
+  position: absolute;
+  content: "";
+  top: -0.25rem;
+  right: 0.0625rem;
+  width: 0.625rem;
+  height: 0.625rem;
+  border-top: 0.125rem solid #000;
+  border-right: 0.125rem solid #000;
+  transform: rotate(45deg);
+}
+.cta .button-text {
+  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0.75rem 0;
+  margin: 0 0 0 1.85rem;
+  color: #fff;
+  font-weight: 700;
+  line-height: 1.6;
+  text-align: center;
+  text-transform: uppercase;
+}
+.cta:hover .circle {
+  width: 100%;
+  background-color: #c0ffff;
+}
+.cta:hover .circle .icon.arrow {
+  background: #000;
+  transform: translate(1rem, 0);
+}
+.cta:hover .button-text {
+  color: #000;
+}
+/* CTA Container ends */
+
+/* Image Hover effect */
+.animate-invert{
+  transition: all 0.4s ease;
+}
+.animate-invert:hover{
+  -webkit-filter: sepia(300%) hue-rotate(150deg) saturate(800%);
+  -moz-filter:  sepia(300%) hue-rotate(150deg) saturate(800%);
+  filter: sepia(300%) hue-rotate(150deg) saturate(800%);
+}
+
+/* Image Hover effect ends*/
