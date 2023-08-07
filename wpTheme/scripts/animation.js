@@ -14,7 +14,7 @@ const backgrounds = [
 
 const texts = [
   "Digital",
-  "Service",
+  "Automation",
   "Design",
   "Reliability",
   "Innovation",

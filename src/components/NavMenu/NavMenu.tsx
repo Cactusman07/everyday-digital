@@ -1,9 +1,25 @@
 /* A component used to fade out animate components just before being removed from the DOM */
 
+import SocialIcons from "components/SocialIcons/SocialIcons";
 import React, {useState} from "react";
+import { Link } from 'react-router-dom';
+
+import useMatchMedia from "hooks/matchMedia";
+import { menu } from "content";
 
 const NavMenu = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const isDesktopResolution = useMatchMedia("(min-width:768px)", true);
+  const navMenu = menu;
+
+  const m = [];
+  navMenu.forEach((mi, index) => {
+    m.push(
+      <li key={index} className="border-b border-gray-400 hover:border-light-blue my-4 uppercase hover:text-light-blue">
+        <Link onClick={() => setIsNavOpen(false)} to={`${mi.url}`} className="py-2">{mi.title}</Link>
+      </li>
+    );
+  });
 
   return (
     <div className="flex items-center justify-between py-4">      
@@ -22,17 +38,14 @@ const NavMenu = () => {
                 <line x1="6" y1="6" x2="18" y2="18" />
               </svg>
             </div>
-            <ul className="flex flex-col items-center justify-between min-h-[250px]">
-              <li className="border-b border-gray-400 my-8 uppercase">
-                <a href="/about">About</a>
-              </li>
-              <li className="border-b border-gray-400 my-8 uppercase">
-                <a href="/portfolio">Portfolio</a>
-              </li>
-              <li className="border-b border-gray-400 my-8 uppercase">
-                <a href="/contact">Contact</a>
-              </li>
+            <ul className="flex flex-col items-center justify-between min-h-[250px] text-xl">
+              {m}
             </ul>
+            {!isDesktopResolution && 
+              <div className="flex items-center justify-between mb-4">
+                <SocialIcons />
+              </div>
+            }
           </div>
         </section>
       </nav>
@@ -41,7 +54,7 @@ const NavMenu = () => {
         position: fixed;
         top: 0;
         bottom: 0;
-        transition: all 500ms ease-in;
+        transition: all 750ms ease-in;
         background: #000;
         z-index: 10;
         display: flex;
@@ -55,11 +68,17 @@ const NavMenu = () => {
         opacity: 0;
       }
       .showMenuNav {
-        width: 40%;
-        min-width:40vh;
+        width: 100%;
         height: 100vh;
         right:0;
         opacity:1;
+      }
+      @media only screen and (min-width: 600px) {
+        .showMenuNav{
+          width: 40%;
+          min-width:40vh;
+          transition: all 500ms ease-in;
+        }
       }
     `}</style>
     </div>

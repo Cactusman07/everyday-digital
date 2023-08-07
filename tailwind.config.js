@@ -2,7 +2,11 @@
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}","./wpTheme/**/*.php"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'light-blue' : '#c0ffff'
+      }
+    },
   },
   plugins: []
 }

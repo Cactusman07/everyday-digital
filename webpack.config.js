@@ -55,7 +55,11 @@ module.exports = (env) => {
           use: 'url-loader'
         },
         {
-          test: /\.(woff2|woff|ttf|eot|svg)(\?v=[a-z0-9]\.[a-z0-9]\.[a-z0-9])?$/,
+          test: /\.(woff2|woff|ttf|eot|svg)(\?v=[a-z0-9]\.[a-z0-9]\.[a-z0-9])?$/i,
+          type: 'asset/resource',
+          dependency: {
+            not: ['url']
+          },
           use: [{
             loader: 'file-loader',
             options: {

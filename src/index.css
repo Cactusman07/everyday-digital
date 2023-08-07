@@ -48,11 +48,16 @@ body{
 
 @font-face{ 
   font-family:"BananaItalic";
-  src: url("./assets/BananasItalicPersonalUseRegular-WyBxO.ttf") format('truetype');
+  src: url('./assets/BananasItalicPersonaluse-Regula.eot');
+  src: url('./assets/BananasItalicPersonaluse-Regula.eot?#iefix')  format('embedded-opentype'),
+       url('./assets/BananasItalicPersonaluse-Regula.woff2') format('woff2'),
+       url('./assets/BananasItalicPersonaluse-Regula.woff') format('woff'),
+       url("./assets/BananasItalicPersonaluse-Regula.ttf") format('truetype');
+  font-display: swap;
 }
 
 h1, h2, h3, h4, h5{
-  font-family: 'BananaItalic', sans-serif;
+  font-family: 'BananaItalic', sans-serif;  
 }
 
 /* Site Wide Styles End */
@@ -162,9 +167,10 @@ h1, h2, h3, h4, h5{
 /* Title */
 #title {
   position: absolute;  
-  width: 70vw;
-  top: 60px;
-  bottom: 60px;
+  top: 150px;
+  bottom: 200px;
+  left:30px;
+  right: 30px;
   filter: blur(0.4px);
 }
 
@@ -172,10 +178,7 @@ h1, h2, h3, h4, h5{
   -ms-transform: translateY(-40%);
     transform: translateY(-40%);
     top: 40%;
-}
-
-#textWrap{
-  filter: url(#threshold) blur(0.4px);
+    filter: url(#threshold) blur(0.4px);
 }
 
 #text1,
@@ -253,17 +256,21 @@ h1, h2, h3, h4, h5{
   text-align: center;
   text-transform: uppercase;
 }
-.cta:hover .circle {
+.cta:hover .circle,
+.cta-mobile .circle {
   width: 100%;
   background-color: #c0ffff;
 }
-.cta:hover .circle .icon.arrow {
+.cta:hover .circle .icon.arrow,
+.cta-mobile .circle .icon.arrow {
   background: #000;
   transform: translate(1rem, 0);
 }
-.cta:hover .button-text {
+.cta:hover .button-text,
+.cta-mobile .button-text {
   color: #000;
 }
+
 /* CTA Container ends */
 
 /* Image Hover effect */
