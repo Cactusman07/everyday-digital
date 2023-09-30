@@ -11,7 +11,7 @@
     "build-dev": "webpack --env development --watch",
     "build-css": "npx tailwind -i ./src/index.css -o ./wpTheme/dist/main.css",
     "watch-css": "npx tailwind -i ./src/index.css -o ./wpTheme/dist/main.css --watch",
-    "dev": "start http://localhost:3000/ ",
+    "dev": "start http://localhost:3000/",
     "test": "tsc && jest"
   },
   "keywords": [
@@ -19,7 +19,8 @@
     "react",
     "docker",
     "theme",
-    "development"
+    "wo theme development",
+    "graphQL"
   ],
   "browserslist": {
     "production": [

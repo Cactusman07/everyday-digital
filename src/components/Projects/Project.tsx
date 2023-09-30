@@ -1,26 +1,42 @@
 import React from 'react';
 
 interface Project {
-  title: string;
-  key: number;
+	title: string;
+	image: string;
+	excerpt: string;
+	content: string;
 }
 
 const Project = (props: Project) => {
+	const backgroundImage = `url(${props.image})`;
 
-  return (
-    <React.Fragment>
-      <div className="m-3 min-w-full p-4 md:w-1/3 flex rounded	border-1 border-slate-50 border-solid	shadow group hover:bg-black " >
-        <div className="w-12 h-12 inline-flex items-center justify-center rounded-full bg-red-100 text-red-500 mb-4 flex-shrink-0">
-          <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-6 h-6" viewBox="0 0 24 24">
-            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-          </svg>
-        </div>
-        <div className="flex-grow pl-6">
-          <h2 className="text-gray-900 text-lg title-font font-medium mb-2 group-hover:text-white">{props.title}</h2>
-        </div>
-      </div>
-    </React.Fragment>
-  );
+	return (
+		<div className='inline-block px-3'>
+			<div className='w-80 h-56 max-w-xs overflow-hidden'>
+				<div className='max-w-sm w-full lg:max-w-full lg:flex'>
+					<div
+						className='h-56 lg:h-auto lg:w-28 flex-none bg-cover bg-no-repeat rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden'
+						style={{ backgroundImage }}
+						title={props.title}></div>
+					<div className='border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal'>
+						<div className='mb-8'>
+							<div className='text-gray-900 font-bold text-xl mb-2'>
+								Can coffee make you a better developer?
+							</div>
+							<p className='text-gray-700 text-base'>
+								Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+								Voluptatibus quia, nulla! Maiores et perferendis eaque,
+								exercitationem praesentium nihil.
+							</p>
+						</div>
+						<div className='flex items-center'>
+							<span>Read more...</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
 };
 
 export default Project;

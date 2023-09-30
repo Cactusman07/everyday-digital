@@ -183,16 +183,13 @@ h1, h2, h3, h4, h5{
 
 #text1,
 #text2 {
-    position: absolute;
-    user-select: none;
+  position: absolute;
+  user-select: none;
 }
 
 /* Title Ends */
 
 /* CTA Container */
-#ctaContainer {
-  display: grid;
-}
 
 .cta {
   position: relative;
@@ -248,12 +245,12 @@ h1, h2, h3, h4, h5{
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 0.75rem 0;
+  padding: 0.75rem 20px;
   margin: 0 0 0 1.85rem;
   color: #fff;
   font-weight: 700;
   line-height: 1.6;
-  text-align: center;
+  text-align: right;
   text-transform: uppercase;
 }
 .cta:hover .circle,
@@ -269,6 +266,17 @@ h1, h2, h3, h4, h5{
 .cta:hover .button-text,
 .cta-mobile .button-text {
   color: #000;
+  margin: 0;
+  padding: 0.75rem 0;
+  text-align: center;
+}
+
+.cta-mobile{
+  margin: 6px;
+}
+
+.cta-mobile .arrow {
+  display: none;
 }
 
 /* CTA Container ends */

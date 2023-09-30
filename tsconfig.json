@@ -1,23 +1,43 @@
 {
   "compilerOptions": {
-      "module": "commonjs",
-      "moduleResolution": "node",
-      "skipLibCheck": true,
-      "pretty": true,
-      "jsx": "react",
-      "outDir": "./dist",
-      "sourceMap": true,
-      "esModuleInterop": true,
-      "baseUrl": "./src",
-      "types": ["node"]
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "pretty": true,
+    "jsx": "preserve",
+    "outDir": "./dist",
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "baseUrl": "./src",
+    "types": [
+      "node"
+    ],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "incremental": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
-      "src/**/*.tsx"
+    "src/**/*.tsx",
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",
     "./node_modules",
     "./node_modules/*",
-    "./node_modules/@types/node/index.d.ts",
+    "./node_modules/@types/node/index.d.ts"
   ]
 }
