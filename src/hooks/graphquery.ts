@@ -17,6 +17,11 @@ export const GET_ALL_CONTENT = gql`
 				}
 				title
 				uri
+				seo {
+					metaDesc
+					metaKeywords
+					title
+				}
 			}
 		}
 		projects {

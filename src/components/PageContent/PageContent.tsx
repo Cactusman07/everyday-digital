@@ -1,21 +1,51 @@
 import React from 'react';
+import { Footer, ProjectContainer } from '../ContentIndex';
+import { titleCSS, pageContent } from 'content';
 
 interface PageContent {
 	content: any;
 	title: string;
 	featuredImage: object;
+	seo: {
+		title: string;
+		metaDesc: string;
+		metaKeywords: string;
+	};
+	projects: {
+		date: string;
+		excerpt: string;
+		featuredImage: object;
+		content: string;
+		title: string;
+	};
 }
 
 const PageContent = (props: PageContent) => {
+	const pageTitle = `${props.seo.title} | Your Digital Partner`;
+	document.title = pageTitle;
+	document.querySelector('title').innerText = pageTitle;
+	document
+		.querySelector('meta[name="description"]')
+		.setAttribute('content', props.seo.metaDesc);
+
 	return (
 		<>
 			{!!props.content && (
-				<div
-					id='pageContent'
-					className='absolute bottom-[150px] inset-x-[10%] min-h-[200px] ml-8 mr-8'>
-					<h3>{props.title}</h3>
-					<div>{props.content}</div>
-				</div>
+				<React.Fragment>
+					<div id='content' className='mt-48 mb-24 mx-8 relative z-0'>
+						<h2>{props.title}</h2>
+						<div dangerouslySetInnerHTML={{ __html: props.content }} />
+						{props.title === 'Projects' && (
+							<ProjectContainer data={props.projects} />
+						)}
+					</div>
+					<Footer />
+
+					<style>
+						{titleCSS}
+						{pageContent}
+					</style>
+				</React.Fragment>
 			)}
 		</>
 	);

@@ -8,6 +8,7 @@ import PageContent from './PageContent/PageContent';
 import Project from './Projects/Project';
 import ProjectContainer from './Projects/ProjectContainer';
 import SocialIcons from './SocialIcons/SocialIcons';
+import Footer from './Footer/Footer';
 
 export {
 	CTAS,
@@ -20,4 +21,5 @@ export {
 	Project,
 	SocialIcons,
 	NotFound,
+	Footer,
 };

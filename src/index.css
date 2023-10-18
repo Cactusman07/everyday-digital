@@ -60,6 +60,24 @@ h1, h2, h3, h4, h5{
   font-family: 'BananaItalic', sans-serif;  
 }
 
+h2{
+  font-size: 3.5rem;
+  letter-spacing: 1.5px;
+}
+h3 {
+  font-size: 2.5rem;
+  letter-spacing: 1px;
+  font-weight: 400;
+}
+h4{
+  font-size: 2rem;
+  letter-spacing: 0.8px;
+}
+
+a:hover{
+  color: #4bafeb;
+}
+
 /* Site Wide Styles End */
 
 /* Logo Splash Screen */
@@ -266,9 +284,9 @@ h1, h2, h3, h4, h5{
 .cta:hover .button-text,
 .cta-mobile .button-text {
   color: #000;
-  margin: 0;
+  margin: 0 20px 0 0;
   padding: 0.75rem 0;
-  text-align: center;
+  text-align: right;
 }
 
 .cta-mobile{
@@ -292,3 +310,136 @@ h1, h2, h3, h4, h5{
 }
 
 /* Image Hover effect ends*/
+
+/* Arrow down css */
+.arrow-container {
+  padding: 20px;
+  text-align: center;
+  z-index: 25;
+  margin-top: -190px;
+  width: 100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.arrow-content {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+
+#more-arrows {
+  width: 75px;
+  height: 65px;
+}
+#more-arrows:hover polygon {
+  fill: #fff;
+  transition: all 0.2s ease-out;
+}
+#more-arrows:hover polygon.arrow-bottom {
+  transform: translateY(-18px);
+}
+#more-arrows:hover polygon.arrow-top {
+  transform: translateY(18px);
+}
+
+polygon {
+  fill: #fff;
+  transition: all 0.2s ease-out;
+}
+polygon.arrow-middle {
+  opacity: 0.75;
+}
+polygon.arrow-top {
+  opacity: 0.5;
+}
+
+/* Arrow down css ends */
+
+/* Contact Form */
+
+form {
+  margin-top: 30px;
+}
+
+form p {
+  margin-top: 5px;
+}
+
+form [type='submit']{
+  border: solid 2px #4b6ceb;
+  background: #4b6ceb;
+  color: #000;
+  font-size: 110%;
+  padding: 4px 0;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.5s ease;
+  max-width: 250px;
+}
+
+form [type='submit']:hover{
+  border: solid 2px #4b6ceb;
+  background: #000;
+  color: #4b6ceb;
+}
+
+label:focus-visible, input:focus-visible, textarea:focus-visible {
+  outline: 0px;
+}
+
+input, textarea {
+  margin-top: 8px;
+  padding: 4px;
+  min-width: 350px;  
+  background: none;
+  border-bottom: 2px solid white;
+}
+
+input {
+  max-width: 450px;
+  width: 50%;
+}
+
+textarea {
+  height: 80px;
+  max-width: 750px;
+  width: 80%;
+}
+
+/* Contact Form ends */
+
+/* Table */
+
+table {
+  margin-top: 30px;
+  border-collapse: separate;
+  border-spacing: 12px;
+  min-width: 850px;
+}
+
+thead {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: underline;
+}
+
+#tablePrices td {
+  text-align: center;
+  color: black;
+  font-weight: 600;
+  background-color: #c0ffff;
+  border-radius: 5%;
+  padding: 8px;
+}
+
+#tableDescription{
+  text-align: left;
+  vertical-align: baseline;
+}
+
+/* Table ends */

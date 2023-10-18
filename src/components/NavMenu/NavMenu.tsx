@@ -5,28 +5,29 @@ import { Link } from 'react-router-dom';
 import { SocialIcons } from 'components/ContentIndex';
 
 import useMatchMedia from 'hooks/matchMedia';
-import { menu } from 'content';
 
-const NavMenu = () => {
+const NavMenu = ({ menu }: any) => {
 	const [isNavOpen, setIsNavOpen] = useState(false);
 	const isDesktopResolution = useMatchMedia('(min-width:768px)', true);
-	const navMenu = menu;
 
 	const m = [];
-	navMenu.forEach((mi, index) => {
-		m.push(
-			<li
-				key={index}
-				className='border-b border-gray-400 hover:border-light-blue my-4 uppercase hover:text-light-blue'>
-				<Link
-					onClick={() => setIsNavOpen(false)}
-					to={`${mi.url}`}
-					className='py-2'>
-					{mi.title}
-				</Link>
-			</li>
-		);
-	});
+	if (!!menu) {
+		menu.forEach((mi, index) => {
+			m.push(
+				<li
+					key={index}
+					className='border-b border-gray-400 hover:border-light-blue my-4 uppercase hover:text-light-blue'>
+					<Link
+						onClick={() => setIsNavOpen(false)}
+						to={`${mi.uri}`}
+						className='py-2'>
+						{mi.title}
+					</Link>
+				</li>
+			);
+		});
+	}
+	m.reverse();
 
 	return (
 		<div className='flex items-center justify-between py-4'>
@@ -76,7 +77,7 @@ const NavMenu = () => {
         bottom: 0;
         transition: all 500ms ease;
         background: #000;
-        z-index: 10;
+        z-index: 50;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;

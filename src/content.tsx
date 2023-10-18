@@ -46,3 +46,28 @@ export const hideScroll = `
   display: none;
 }
 `;
+
+export const pageContent = `
+  #ctas{
+    display: inline-flex !important;
+    margin-bottom: 4rem;
+  }
+  .cta{ 
+    margin-left: 1rem;
+  }
+  @media (min-width: 768px) { #ctas{ margin-bottom: 1.5rem} }
+  #content{
+    position: fixed;
+    top: 0;
+    bottom: 50px;
+    overflow: auto;
+    left: 0;
+    right: 0;
+    margin: 8rem 0 6rem 0;
+    padding: 2rem;
+    z-index: 30;
+  }
+  #social{
+    display: flex !important;
+  }
+`;
