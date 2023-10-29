@@ -1,5 +1,6 @@
 import React from 'react';
-import { Footer, ProjectContainer } from '../ContentIndex';
+
+import { Footer, ProjectContainer, RenderTableContent } from '../ContentIndex';
 import { titleCSS, pageContent } from 'content';
 
 interface PageContent {
@@ -28,18 +29,29 @@ const PageContent = (props: PageContent) => {
 		.querySelector('meta[name="description"]')
 		.setAttribute('content', props.seo.metaDesc);
 
+	let contentToRender = '',
+		tableContent = '';
+	if (!!props?.content) {
+		[contentToRender, tableContent] = props.content.split(
+			`<div class="wp-block-group is-layout-constrained"><div class="wp-block-group__inner-container">`
+		);
+	}
+
 	return (
 		<>
 			{!!props.content && (
 				<React.Fragment>
 					<div id='content' className='mt-48 mb-24 mx-8 relative z-0'>
 						<h2>{props.title}</h2>
-						<div dangerouslySetInnerHTML={{ __html: props.content }} />
+						<div dangerouslySetInnerHTML={{ __html: contentToRender }} />
 						{props.title === 'Projects' && (
 							<ProjectContainer data={props.projects} />
 						)}
+						{!!tableContent?.length && (
+							<RenderTableContent tableContent={tableContent} />
+						)}
+						<Footer />
 					</div>
-					<Footer />
 
 					<style>
 						{titleCSS}

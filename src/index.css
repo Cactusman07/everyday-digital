@@ -7,6 +7,7 @@ body{
   color: #fff;
   background: #000;
   background-image: linear-gradient(115deg, #000 40%, #eb4b4b);
+  background-attachment: fixed;
 }
 
 .fullpage{
@@ -58,24 +59,66 @@ body{
 
 h1, h2, h3, h4, h5{
   font-family: 'BananaItalic', sans-serif;  
+  margin: 0.5rem 0;
 }
 
 h2{
   font-size: 3.5rem;
   letter-spacing: 1.5px;
+  line-height: 4rem;
 }
 h3 {
   font-size: 2.5rem;
   letter-spacing: 1px;
   font-weight: 400;
+  line-height: 2.8rem
 }
 h4{
   font-size: 2rem;
   letter-spacing: 0.8px;
+  line-height: 2.2rem;
 }
 
 a:hover{
   color: #4bafeb;
+}
+
+p a{
+  text-decoration: none;
+  color: #fff;
+  position: relative;
+  font-weight: 500;
+}
+
+p a::before {
+  content: '';
+  background-color: #4bafebbf;
+  position: absolute;
+  left: 0;
+  bottom: 2px;
+  width: 100%;
+  height: 4px;
+  z-index: -1;
+  transition: all .3s ease-in-out;
+}
+
+p a:hover{
+  color: #fff;
+}
+
+p a:hover::before {
+  bottom: 0;
+  height: 100%;
+  background:
+    linear-gradient(
+      to right,
+      #e34beb,
+      #834beb,
+      #4b6ceb,
+      #4bafeb,
+      #9deb4b
+  );
+  opacity:0.8;
 }
 
 /* Site Wide Styles End */
@@ -361,11 +404,32 @@ polygon.arrow-top {
 /* Contact Form */
 
 form {
-  margin-top: 30px;
+  margin-top: 50px;
 }
 
 form p {
-  margin-top: 5px;
+  margin-top: 10px;
+}
+
+input, textarea {
+  width: 100%;
+  margin-top: 8px;
+  padding: 4px;  
+  background: none;
+  border-bottom: 2px solid white;
+}
+
+textarea {
+  height: 125px;
+}
+
+@media screen and (min-width: 600px) {
+  input{
+    max-width: 450px;
+  }
+  textarea{
+    max-width: 650px;
+  }
 }
 
 form [type='submit']{
@@ -378,7 +442,7 @@ form [type='submit']{
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.5s ease;
-  max-width: 250px;
+  
 }
 
 form [type='submit']:hover{
@@ -391,55 +455,102 @@ label:focus-visible, input:focus-visible, textarea:focus-visible {
   outline: 0px;
 }
 
-input, textarea {
-  margin-top: 8px;
-  padding: 4px;
-  min-width: 350px;  
-  background: none;
-  border-bottom: 2px solid white;
-}
-
-input {
-  max-width: 450px;
-  width: 50%;
-}
-
-textarea {
-  height: 80px;
-  max-width: 750px;
-  width: 80%;
-}
-
 /* Contact Form ends */
 
 /* Table */
 
-table {
-  margin-top: 30px;
-  border-collapse: separate;
-  border-spacing: 12px;
-  min-width: 850px;
+@media screen and (min-width: 801px) {
+  .circle-bg::before{
+    border-radius: 50%; 
+    background:linear-gradient(75deg, #4b6ceb, #4bafeb);
+    content: "";
+    width:95px;
+    height:95px;
+    position:absolute;
+    left:0;
+    top:0;
+    right:0;
+    margin: auto;
+    z-index:0;
+  }
+}
+.responsiveTable {
+  width: 100%;
 }
 
-thead {
-  font-size: 1.5rem;
-  font-weight: 600;
-  text-align: center;
-  text-decoration: underline;
+.responsiveTable td .tdBefore {
+  display: none;
 }
 
-#tablePrices td {
-  text-align: center;
-  color: black;
-  font-weight: 600;
-  background-color: #c0ffff;
-  border-radius: 5%;
-  padding: 8px;
+.price-headers{
+  rotate:-8deg;
 }
 
-#tableDescription{
-  text-align: left;
-  vertical-align: baseline;
+@media screen and (max-width: 800px) {
+  /*
+    Force table elements to not behave like tables anymore
+    Hide table headers (but not display: none;, for accessibility)
+  */
+
+  .price-headers{
+    rotate:0deg;
+    padding: 1.5rem 0.5rem;
+  }
+
+  .responsiveTable table,
+  .responsiveTable thead,
+  .responsiveTable tbody,
+  .responsiveTable th,
+  .responsiveTable td,
+  .responsiveTable tr {
+    display: block;
+  }
+
+  .responsiveTable thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+    border-bottom: 2px solid #fff;
+  }
+
+  .responsiveTable tbody tr {
+    border-bottom: 2px solid #fff;
+    padding: 1rem .25rem
+  }
+  
+  .responsiveTable tbody tr:last-of-type {
+    border-bottom: none !important;
+  }
+
+  .responsiveTable td.pivoted {
+    border: none !important;
+    position: relative;
+    padding-left: calc(38% + 10px) !important;
+    text-align: right !important;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+  }
+
+  .responsiveTable td.pivoted.align-top{
+    border-bottom: 2px solid #fff !important;
+    padding: 1rem .25rem;
+  }
+
+  .responsiveTable td.pivoted.align-top:last-of-type{
+    border-bottom: none !important;
+  }
+
+  .responsiveTable td .tdBefore {
+    position: absolute;
+    display: block;
+    left: 1rem;
+    width: calc(40% - 20px);
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    text-align: left !important;
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
 }
 
 /* Table ends */

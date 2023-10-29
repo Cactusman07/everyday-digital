@@ -11,10 +11,12 @@ const ProjectContainer = ({ data }: { data: any }) => {
 				<p>Your project could be here... Get in touch!</p>
 			) : (
 				<div className='projectWrapper flex'>
-					{data?.map((project: any, index: number) => (
+					{data.map((project: any, index: number) => (
 						<Project
 							title={project.title}
-							image={project.featuredImage.node}
+							image={
+								!!project.featuredImage ? project.featuredImage.node : null
+							}
 							excerpt={project.excerpt}
 							content={project.content}
 							key={index}

@@ -9,6 +9,7 @@ import Project from './Projects/Project';
 import ProjectContainer from './Projects/ProjectContainer';
 import SocialIcons from './SocialIcons/SocialIcons';
 import Footer from './Footer/Footer';
+import RenderTableContent from './PageContent/TableContent';
 
 export {
 	CTAS,
@@ -22,4 +23,5 @@ export {
 	SocialIcons,
 	NotFound,
 	Footer,
+	RenderTableContent,
 };

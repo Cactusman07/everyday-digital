@@ -1,33 +1,67 @@
-import React from 'react';
-import { NavMenu, SocialIcons, CTAS } from 'components/ContentIndex';
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
+import { NavMenu, SocialIcons, CTAS } from 'components/ContentIndex';
 import useMatchMedia from 'hooks/matchMedia';
 
 const HomeScreen = ({ menu }: any) => {
 	const logo =
-		require('../../assets/EveryDayDigital_Logo_reversed.png').default;
-	const isDesktopResolution = useMatchMedia('(min-width:768px)', true);
+			require('../../assets/EveryDayDigital_Logo_reversed.png').default,
+		isDesktopResolution = useMatchMedia('(min-width:768px)', true),
+		location = useLocation();
+	const [showFooter, setShowFooter] = useState(true);
+	const [showHeader, setShowHeader] = useState(true);
+
+	const listenToScroll = () => {
+		let heighttoHide = 80;
+		const winScroll =
+			document.body.scrollTop || document.documentElement.scrollTop;
+		if (winScroll > heighttoHide) {
+			setShowHeader(false);
+		} else {
+			setShowHeader(true);
+		}
+	};
+
+	useEffect(() => {
+		if (location.pathname === '/') {
+			setShowFooter(true);
+		} else {
+			setShowFooter(false);
+		}
+	}, [location]);
+
+	useEffect(() => {
+		window.addEventListener('scroll', listenToScroll);
+		return () => window.removeEventListener('scroll', listenToScroll);
+	}, []);
 
 	return (
 		<>
 			<header
 				id='header'
 				className='h-[calc(100vh-40px)] mx-8 my-5 relative max-w-full z-10'>
-				<a
-					className='absolute w-14 sm:w-20 top-0 left-0'
-					href='https://www.everydaydigital.co.nz'>
-					<img
-						id='logo'
-						className='animate-invert w-14 sm:w-20 z-30 relative'
-						src={logo}
-						alt='Every Day Digital Logo'
-					/>
-				</a>
-				{isDesktopResolution && <SocialIcons absolutePos={true} />}
-				<div className='fixed md:absolute bottom-0 md:bottom-5 md:left-auto z-[5] right-0 left-0 justify-center flex'>
-					<CTAS />
-				</div>
+				{showHeader && (
+					<Link className='absolute w-14 sm:w-20 top-0 left-0' to={'/'}>
+						<img
+							id='logo'
+							className='animate-invert w-14 sm:w-20 z-30 relative'
+							src={logo}
+							alt='Every Day Digital Logo'
+						/>
+					</Link>
+				)}
+
+				{isDesktopResolution && showFooter && (
+					<SocialIcons absolutePos={true} />
+				)}
+				{showFooter && (
+					<div className='fixed md:absolute bottom-0 md:bottom-5 md:left-auto z-[5] right-0 left-0 justify-center flex'>
+						<CTAS />
+					</div>
+				)}
 				<div
+					style={{ opacity: !showHeader ? 0 : 1 }}
 					id='title'
 					className='transition-all duration-500 justify-center block text-8xl lg:text-[160px] xl:text-[210px] my-auto'>
 					<h1 className='absolute transition-all duration-700'>
@@ -39,7 +73,7 @@ const HomeScreen = ({ menu }: any) => {
 						</span>
 					</h1>
 				</div>
-				<svg id='filters'>
+				<svg id='filters' className='w-0 h-0'>
 					<defs>
 						<filter id='threshold'>
 							<feColorMatrix
