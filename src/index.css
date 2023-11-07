@@ -42,6 +42,40 @@ body{
   opacity:0;
 }
 
+#svgNZ{
+  position: fixed;
+  z-index: 0;
+  right: -40px;
+  height: 60%;
+  bottom: 30px;
+  transition: all 0.5s ease-out;
+}
+
+#svgNZ g circle{
+  fill: white;
+  opacity: 0.20;
+}
+
+@media screen and (min-width: 768px) {
+  #svgNZ{ 
+    bottom: 100px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  #svgNZ{ 
+    height: 75%;
+    bottom: 40px;
+  }
+}
+
+@media screen and (min-width: 1500px) {
+  #svgNZ{ 
+    height: 100%;
+    bottom: -100px;
+  }
+}
+
 #root{
   z-index:20;
   position:relative;
@@ -60,6 +94,10 @@ body{
 h1, h2, h3, h4, h5{
   font-family: 'BananaItalic', sans-serif;  
   margin: 0.5rem 0;
+}
+
+h2, h3, h4, h5{
+  text-shadow: #4bafebbf 2px 2px 0px;
 }
 
 h2{
@@ -554,3 +592,56 @@ label:focus-visible, input:focus-visible, textarea:focus-visible {
 }
 
 /* Table ends */
+
+/* Projects */
+
+.my-masonry-grid {
+
+  display: flex;
+  margin-left: -10px;
+  width: auto;
+}
+.my-masonry-grid_column {
+  padding-left: 0; 
+  background-clip: padding-box;
+}
+
+.my-masonry-grid_column > div { 
+  margin-bottom: 0;
+}
+
+.swiper {
+  width: 320px;
+  height: 320px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -150px !important;
+  margin-top: 40px !important;
+}
+
+.swiper-slide {
+  background-position: center;
+  background-size: cover;
+}
+
+.swiper-pagination-bullet{
+  background: rgba(255,255,255,0.8) !important;
+}
+
+.swiper-pagination-bullet-active{
+  background: #4b6ceb !important;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+}
+
+@media screen and (max-width: 500px) {
+  .project img{
+    filter:grayscale(0%) !important;
+  }
+}
+
+/* Projects ends */

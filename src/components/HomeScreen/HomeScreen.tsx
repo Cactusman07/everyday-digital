@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-import { NavMenu, SocialIcons, CTAS } from 'components/ContentIndex';
+import {
+	NavMenu,
+	SocialIcons,
+	CTAS,
+	SvgBackground,
+} from 'components/ContentIndex';
 import useMatchMedia from 'hooks/matchMedia';
 
 const HomeScreen = ({ menu }: any) => {
@@ -9,8 +14,10 @@ const HomeScreen = ({ menu }: any) => {
 			require('../../assets/EveryDayDigital_Logo_reversed.png').default,
 		isDesktopResolution = useMatchMedia('(min-width:768px)', true),
 		location = useLocation();
-	const [showFooter, setShowFooter] = useState(true);
-	const [showHeader, setShowHeader] = useState(true);
+
+	const [showFooter, setShowFooter] = useState(true),
+		[showHeader, setShowHeader] = useState(true),
+		[headerShadow, setHeaderShadow] = useState(false);
 
 	const listenToScroll = () => {
 		let heighttoHide = 80;
@@ -28,6 +35,7 @@ const HomeScreen = ({ menu }: any) => {
 			setShowFooter(true);
 		} else {
 			setShowFooter(false);
+			setHeaderShadow(true);
 		}
 	}, [location]);
 
@@ -38,6 +46,7 @@ const HomeScreen = ({ menu }: any) => {
 
 	return (
 		<>
+			<SvgBackground />
 			<header
 				id='header'
 				className='h-[calc(100vh-40px)] mx-8 my-5 relative max-w-full z-10'>
