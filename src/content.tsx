@@ -1,13 +1,3 @@
-export const menu = [
-	{ url: '/', title: 'Home' },
-	{ url: '/about', title: 'About' },
-	{ url: '/services', title: 'Services' },
-	{ url: '/projects', title: 'Projects' },
-	{ url: '/pricing', title: 'Pricing' },
-	{ url: '/contact', title: 'Contact' },
-	{ url: '/blog', title: 'Blog' },
-];
-
 export const titleCSS = `
   #title{
     position: fixed;

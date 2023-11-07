@@ -37,6 +37,10 @@ const App = () => {
 											title={page.title}
 											seo={page.seo}
 											projects={data.projects.nodes}
+											team={data.teams.nodes}
+											services={data.services.nodes}
+											posts={data.posts.nodes}
+											testimonials={data.testimonials.nodes}
 										/>
 									}></Route>
 							);

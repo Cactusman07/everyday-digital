@@ -1,6 +1,11 @@
 import React from 'react';
 
-import { Footer, ProjectContainer, RenderTableContent } from '../ContentIndex';
+import {
+	Footer,
+	ProjectContainer,
+	RenderTableContent,
+	AboutUsProfiles,
+} from '../ContentIndex';
 import { titleCSS, pageContent } from 'content';
 
 interface PageContent {
@@ -13,9 +18,33 @@ interface PageContent {
 		metaKeywords: string;
 	};
 	projects: {
+		excerpt: string;
+		featuredImage: object;
+		content: string;
+		title: string;
+	};
+	team: {
+		excerpt: string;
+		featuredImage: object;
+		content: string;
+		title: string;
+	};
+	services: {
+		excerpt: string;
+		featuredImage: object;
+		content: string;
+		title: string;
+	};
+	posts: {
 		date: string;
 		excerpt: string;
 		featuredImage: object;
+		content: string;
+		title: string;
+	};
+	testimonials: {
+		date: string;
+		excerpt: string;
 		content: string;
 		title: string;
 	};
@@ -37,6 +66,8 @@ const PageContent = (props: PageContent) => {
 		);
 	}
 
+	console.log(props.title);
+
 	return (
 		<>
 			{!!props.content && (
@@ -49,6 +80,9 @@ const PageContent = (props: PageContent) => {
 						)}
 						{!!tableContent?.length && (
 							<RenderTableContent tableContent={tableContent} />
+						)}
+						{props.title === 'About Every Day Digital' && (
+							<AboutUsProfiles data={props.team} />
 						)}
 						<Footer />
 					</div>

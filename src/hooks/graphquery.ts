@@ -28,7 +28,7 @@ export const GET_ALL_CONTENT = gql`
 			nodes {
 				content
 				date
-				excerpt
+				excerpt(format: RAW)
 				featuredImage {
 					node {
 						altText
@@ -38,6 +38,61 @@ export const GET_ALL_CONTENT = gql`
 				}
 				title
 				slug
+			}
+		}
+		services {
+			nodes {
+				featuredImage {
+					node {
+						altText
+						title
+						uri
+						slug
+						sourceUrl
+					}
+				}
+				excerpt(format: RAW)
+				content(format: RENDERED)
+				title
+			}
+		}
+		testimonials {
+			nodes {
+				content(format: RENDERED)
+				title
+			}
+		}
+		teams {
+			nodes {
+				featuredImage {
+					node {
+						altText
+						sourceUrl
+						title
+						uri
+						slug
+					}
+				}
+				excerpt(format: RAW)
+				content(format: RENDERED)
+				title
+			}
+		}
+		posts {
+			nodes {
+				content(format: RENDERED)
+				date
+				excerpt(format: RAW)
+				featuredImage {
+					node {
+						altText
+						slug
+						sourceUrl
+						title
+						uri
+					}
+				}
+				title
 			}
 		}
 	}

@@ -16,8 +16,7 @@ const HomeScreen = ({ menu }: any) => {
 		location = useLocation();
 
 	const [showFooter, setShowFooter] = useState(true),
-		[showHeader, setShowHeader] = useState(true),
-		[headerShadow, setHeaderShadow] = useState(false);
+		[showHeader, setShowHeader] = useState(true);
 
 	const listenToScroll = () => {
 		let heighttoHide = 80;
@@ -35,7 +34,6 @@ const HomeScreen = ({ menu }: any) => {
 			setShowFooter(true);
 		} else {
 			setShowFooter(false);
-			setHeaderShadow(true);
 		}
 	}, [location]);
 
