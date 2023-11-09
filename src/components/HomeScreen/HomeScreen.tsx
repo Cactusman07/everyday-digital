@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useContentContext } from 'index';
 
 import {
 	NavMenu,
 	SocialIcons,
 	CTAS,
 	SvgBackground,
+	ContentSlider,
 } from 'components/ContentIndex';
 import useMatchMedia from 'hooks/matchMedia';
 
@@ -14,6 +16,9 @@ const HomeScreen = ({ menu }: any) => {
 			require('../../assets/EveryDayDigital_Logo_reversed.png').default,
 		isDesktopResolution = useMatchMedia('(min-width:768px)', true),
 		location = useLocation();
+
+	const { showContent, toggleShowContent, contentData, updateContentData } =
+		useContentContext();
 
 	const [showFooter, setShowFooter] = useState(true),
 		[showHeader, setShowHeader] = useState(true);
@@ -98,6 +103,12 @@ const HomeScreen = ({ menu }: any) => {
 			<div id='menu' className='absolute top-0 right-5'>
 				<NavMenu menu={menu} />
 			</div>
+			<ContentSlider
+				toggle={toggleShowContent}
+				show={showContent}
+				contentData={contentData}
+				updateContentData={updateContentData}
+			/>
 		</>
 	);
 };

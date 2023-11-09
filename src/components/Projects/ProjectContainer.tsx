@@ -9,15 +9,9 @@ import 'swiper/css/pagination';
 import { EffectCube, Pagination, Autoplay } from 'swiper/modules';
 
 import { Project } from '../ContentIndex';
+import { breakpointColumnsObj } from '../../content';
 
-const breakpointColumnsObj = {
-	default: 4,
-	1100: 3,
-	700: 2,
-	500: 1,
-};
-
-const ProjectContainer = ({ data }: { data: any }) => {
+const ProjectContainer = ({ data, toggle, updateContentData }: any) => {
 	const [isCarousel, setIsCarousel] = useState(false);
 	const projectFound = data.length > 0 ? true : false;
 
@@ -83,6 +77,8 @@ const ProjectContainer = ({ data }: { data: any }) => {
 										key={index}
 										index={index}
 										carousel={true}
+										toggle={toggle}
+										updateContentData={updateContentData}
 									/>
 								</SwiperSlide>
 							))}
@@ -103,6 +99,8 @@ const ProjectContainer = ({ data }: { data: any }) => {
 									key={index}
 									index={index}
 									carousel={false}
+									toggle={toggle}
+									updateContentData={updateContentData}
 								/>
 							))}
 						</Masonry>

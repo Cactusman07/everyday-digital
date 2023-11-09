@@ -12,6 +12,8 @@ import SocialIcons from './SocialIcons/SocialIcons';
 import Footer from './Footer/Footer';
 import RenderTableContent from './PageContent/TableContent';
 import AboutUsProfiles from './AboutUsProfiles/AboutUsProfiles';
+import GeneralContentRenderer from './GeneralContentRenderer/GeneralContentRenderer';
+import ContentSlider from './ContentSlider/ContentSlider';
 
 export {
 	CTAS,
@@ -28,4 +30,6 @@ export {
 	RenderTableContent,
 	SvgBackground,
 	AboutUsProfiles,
+	GeneralContentRenderer,
+	ContentSlider,
 };

@@ -11,9 +11,11 @@ import {
 
 import { useQuery } from '@apollo/client';
 import { GET_ALL_CONTENT } from './hooks/graphquery';
+import { useContentContext } from 'index';
 
 const App = () => {
 	const { loading, error, data } = useQuery(GET_ALL_CONTENT);
+	const { toggleShowContent, updateContentData } = useContentContext();
 
 	return (
 		<Router>
@@ -32,6 +34,8 @@ const App = () => {
 									path={`/${page.uri}`}
 									element={
 										<PageContent
+											toggle={toggleShowContent}
+											updateContentData={updateContentData}
 											content={page.content}
 											featuredImage={page.featuredImage}
 											title={page.title}

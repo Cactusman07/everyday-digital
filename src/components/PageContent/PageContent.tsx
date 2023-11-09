@@ -5,10 +5,14 @@ import {
 	ProjectContainer,
 	RenderTableContent,
 	AboutUsProfiles,
+	GeneralContentRenderer,
 } from '../ContentIndex';
+import { useContentContext } from 'index';
 import { titleCSS, pageContent } from 'content';
 
 interface PageContent {
+	toggle: () => {};
+	updateContentData: (data: any) => {};
 	content: any;
 	title: string;
 	featuredImage: object;
@@ -58,6 +62,8 @@ const PageContent = (props: PageContent) => {
 		.querySelector('meta[name="description"]')
 		.setAttribute('content', props.seo.metaDesc);
 
+	const { toggleShowContent, updateContentData } = useContentContext();
+
 	let contentToRender = '',
 		tableContent = '';
 	if (!!props?.content) {
@@ -65,8 +71,6 @@ const PageContent = (props: PageContent) => {
 			`<div class="wp-block-group is-layout-constrained"><div class="wp-block-group__inner-container">`
 		);
 	}
-
-	console.log(props.title);
 
 	return (
 		<>
@@ -76,13 +80,37 @@ const PageContent = (props: PageContent) => {
 						<h2>{props.title}</h2>
 						<div dangerouslySetInnerHTML={{ __html: contentToRender }} />
 						{props.title === 'Projects' && (
-							<ProjectContainer data={props.projects} />
+							<ProjectContainer
+								data={props.projects}
+								toggle={toggleShowContent}
+								updateContentData={updateContentData}
+							/>
 						)}
-						{!!tableContent?.length && (
+						{!!tableContent?.length && props.title === 'Pricing' && (
 							<RenderTableContent tableContent={tableContent} />
 						)}
 						{props.title === 'About Every Day Digital' && (
-							<AboutUsProfiles data={props.team} />
+							<AboutUsProfiles
+								data={props.team}
+								toggle={toggleShowContent}
+								updateContentData={updateContentData}
+							/>
+						)}
+						{props.title === 'Blog' && (
+							<GeneralContentRenderer
+								data={props.posts}
+								icons={false}
+								toggle={toggleShowContent}
+								updateContentData={updateContentData}
+							/>
+						)}
+						{props.title === 'Services' && (
+							<GeneralContentRenderer
+								data={props.services}
+								icons={true}
+								toggle={toggleShowContent}
+								updateContentData={updateContentData}
+							/>
 						)}
 						<Footer />
 					</div>

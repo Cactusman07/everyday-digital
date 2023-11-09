@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 
 interface Project {
+	toggle: () => {};
+	updateContentData: (data: any) => {};
 	title: string;
 	image: {
 		altText: string;
@@ -13,12 +15,26 @@ interface Project {
 }
 
 const Project = (props: Project) => {
-	const [showMoreInfo, setShowMoreInfo] = useState(false);
 	const showImage = !!props.image;
 	const isCarousel = !!props.carousel;
 
-	const toggleShowMoreInfo = () => {
-		setShowMoreInfo(!showMoreInfo);
+	const updateContentAndToggle = (
+		title: any,
+		content: any,
+		image: any,
+		date: any,
+		isIcon: boolean,
+		isProfile: boolean
+	) => {
+		props.updateContentData({
+			title: title,
+			content: content,
+			image: image,
+			date: date,
+			isIcon: isIcon,
+			isProfile: isProfile,
+		});
+		props.toggle();
 	};
 
 	return (
@@ -34,32 +50,22 @@ const Project = (props: Project) => {
 						className={`w-full transition duration-300 grayscale hover:grayscale-0 ${
 							isCarousel ? 'cursor-grab' : 'cursor-pointer'
 						} object-cover scale-110 hover:scale-100`}
-						onClick={toggleShowMoreInfo}
+						onClick={(e: React.MouseEvent<HTMLDivElement>) => {
+							e.preventDefault();
+							updateContentAndToggle(
+								props.title,
+								props.content,
+								props.image,
+								null,
+								false,
+								false
+							);
+						}}
 					/>
 				</div>
 			) : (
 				<div className='px-6 py-2'>
 					<h4 className='mb-2 text-black'>{props.title}</h4>
-				</div>
-			)}
-
-			{showMoreInfo && (
-				<div className='fixed top-8 overflow-hidden bottom-8 left-8 right-8 shadow-md bg-white rounded-lg z-50'>
-					{showImage && (
-						<div
-							style={{
-								backgroundImage: `url(${props.image?.sourceUrl})`,
-								backgroundRepeat: 'no-repeat',
-								backgroundSize: '100%',
-								width: '100%',
-								height: '200px',
-							}}
-						/>
-					)}
-					<h4 className='mb-2 text-black'>{props.title}</h4>
-					<p
-						className='text-gray-700 text-base'
-						dangerouslySetInnerHTML={{ __html: props.excerpt }}></p>
 				</div>
 			)}
 		</>
