@@ -20,7 +20,7 @@ const ProjectContainer = ({ data, toggle, updateContentData }: any) => {
 	};
 
 	return (
-		<div id='projects' className='mt-4'>
+		<div id='projects' className='my-5 mx-3'>
 			{!projectFound ? (
 				<p>
 					Your project could be here... <Link to='/contact'>Get in touch!</Link>
@@ -28,7 +28,7 @@ const ProjectContainer = ({ data, toggle, updateContentData }: any) => {
 			) : (
 				<>
 					<p>
-						Your project could be here...{' '}
+						Your project could be here...
 						<Link to='/contact'>Get in touch!</Link>
 					</p>
 					<div className='my-6 mx-auto h-8 w-32'>

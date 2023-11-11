@@ -14,6 +14,7 @@ import RenderTableContent from './PageContent/TableContent';
 import AboutUsProfiles from './AboutUsProfiles/AboutUsProfiles';
 import GeneralContentRenderer from './GeneralContentRenderer/GeneralContentRenderer';
 import ContentSlider from './ContentSlider/ContentSlider';
+import Testimonials from './Testimonials/Testimonials';
 
 export {
 	CTAS,
@@ -32,4 +33,5 @@ export {
 	AboutUsProfiles,
 	GeneralContentRenderer,
 	ContentSlider,
+	Testimonials,
 };

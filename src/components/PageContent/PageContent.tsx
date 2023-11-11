@@ -6,6 +6,7 @@ import {
 	RenderTableContent,
 	AboutUsProfiles,
 	GeneralContentRenderer,
+	Testimonials,
 } from '../ContentIndex';
 import { useContentContext } from 'index';
 import { titleCSS, pageContent } from 'content';
@@ -112,6 +113,7 @@ const PageContent = (props: PageContent) => {
 								updateContentData={updateContentData}
 							/>
 						)}
+						<Testimonials data={props.testimonials} />
 						<Footer />
 					</div>
 

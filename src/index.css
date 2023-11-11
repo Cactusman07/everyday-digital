@@ -645,3 +645,15 @@ label:focus-visible, input:focus-visible, textarea:focus-visible {
 }
 
 /* Projects ends */
+
+/* Testimonials */
+
+.testimonial-content p{
+  overflow: hidden;
+   display: -webkit-box;
+   -webkit-line-clamp: 5;
+           line-clamp: 5; 
+   -webkit-box-orient: vertical;
+}
+
+/* Testimonials end */

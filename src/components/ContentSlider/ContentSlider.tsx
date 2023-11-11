@@ -36,9 +36,9 @@ const ContentSlider = ({
 				<div className='w-full m-0 max-h-80 lg:max-h-96 overflow-hidden'>
 					<img
 						className={`${
-							!!contentData.isIcon ? 'h-40 w-auto m-auto p-8' : ''
-						} ${
-							!!contentData.isProfile
+							!!contentData.isIcon
+								? 'h-40 w-auto m-auto p-8'
+								: !!contentData.isProfile
 								? 'h-60 w-auto mx-auto my-8 rounded-full shadow-md shadow-[#4bafeb] border border-black'
 								: 'w-full mt-[-20%]'
 						}`}
