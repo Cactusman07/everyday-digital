@@ -121,6 +121,10 @@ a:hover{
   color: #4bafeb;
 }
 
+p{
+  margin-bottom: 12px;
+}
+
 p a{
   text-decoration: none;
   color: #fff;
@@ -497,7 +501,7 @@ label:focus-visible, input:focus-visible, textarea:focus-visible {
 
 /* Table */
 
-@media screen and (min-width: 801px) {
+@media screen and (min-width: 970px) {
   .circle-bg::before{
     border-radius: 50%; 
     background:linear-gradient(75deg, #4b6ceb, #4bafeb);
@@ -506,7 +510,7 @@ label:focus-visible, input:focus-visible, textarea:focus-visible {
     height:95px;
     position:absolute;
     left:0;
-    top:0;
+    top:-15px;
     right:0;
     margin: auto;
     z-index:0;
@@ -524,7 +528,7 @@ label:focus-visible, input:focus-visible, textarea:focus-visible {
   rotate:-8deg;
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 969px) {
   /*
     Force table elements to not behave like tables anymore
     Hide table headers (but not display: none;, for accessibility)

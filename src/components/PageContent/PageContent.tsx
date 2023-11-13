@@ -65,21 +65,13 @@ const PageContent = (props: PageContent) => {
 
 	const { toggleShowContent, updateContentData } = useContentContext();
 
-	let contentToRender = '',
-		tableContent = '';
-	if (!!props?.content) {
-		[contentToRender, tableContent] = props.content.split(
-			`<div class="wp-block-group is-layout-constrained"><div class="wp-block-group__inner-container">`
-		);
-	}
-
 	return (
 		<>
 			{!!props.content && (
 				<React.Fragment>
 					<div id='content' className='mt-48 mb-24 mx-8 relative z-0'>
 						<h2>{props.title}</h2>
-						<div dangerouslySetInnerHTML={{ __html: contentToRender }} />
+						<div dangerouslySetInnerHTML={{ __html: props.content }} />
 						{props.title === 'Projects' && (
 							<ProjectContainer
 								data={props.projects}
@@ -87,9 +79,7 @@ const PageContent = (props: PageContent) => {
 								updateContentData={updateContentData}
 							/>
 						)}
-						{!!tableContent?.length && props.title === 'Pricing' && (
-							<RenderTableContent tableContent={tableContent} />
-						)}
+						{props.title === 'Pricing' && <RenderTableContent />}
 						{props.title === 'About Every Day Digital' && (
 							<AboutUsProfiles
 								data={props.team}
