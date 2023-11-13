@@ -652,7 +652,7 @@ label:focus-visible, input:focus-visible, textarea:focus-visible {
 
 /* Testimonials */
 
-.testimonial-content p{
+.testimonial-content p, .services-content p{
   overflow: hidden;
    display: -webkit-box;
    -webkit-line-clamp: 5;

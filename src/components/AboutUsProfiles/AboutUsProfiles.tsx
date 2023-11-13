@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './AboutUsStyles';
 
 const AboutUsProfiles = ({ data, toggle, updateContentData }: any) => {
@@ -19,6 +19,12 @@ const AboutUsProfiles = ({ data, toggle, updateContentData }: any) => {
 			isProfile: isProfile,
 		});
 		toggle();
+	};
+
+	const stripHtml = (html) => {
+		let tmp = document.createElement('DIV');
+		tmp.innerHTML = html;
+		return tmp.textContent || tmp.innerText || '';
 	};
 
 	return (
@@ -47,7 +53,7 @@ const AboutUsProfiles = ({ data, toggle, updateContentData }: any) => {
 									alt={profile.featuredImage?.node?.altText}
 								/>
 							</div>
-							<p className='title' data-cta={`${profile.excerpt}`}>
+							<p className='title' data-cta={`${stripHtml(profile.excerpt)}`}>
 								{profile.title}
 							</p>
 						</div>

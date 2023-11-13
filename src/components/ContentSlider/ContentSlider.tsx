@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const ContentSlider = ({
 	contentData,
@@ -17,7 +17,7 @@ const ContentSlider = ({
 				isIcon: false,
 				isProfile: false,
 			});
-		}, 500);
+		}, 100);
 	};
 
 	const image = !!contentData?.image?.node?.sourceUrl
@@ -47,9 +47,11 @@ const ContentSlider = ({
 					/>
 				</div>
 			)}
-			<div className='pr-8 pt-8 pl-8 relative'>
+			<div
+				className='pr-8 pt-8 pl-8 relative overflow-x-hidden overflow-y-scroll'
+				style={{ height: 'calc(100% - 20rem)' }}>
 				<div
-					className='absolute top-0 right-0 pl-4 pt-8 pr-8'
+					className='absolute top-0 right-0 pl-4 pt-8 pr-8 '
 					onClick={closeAndClear}>
 					<svg
 						className='h-8 w-8 text-black cursor-pointer animate-pulse'
@@ -68,7 +70,7 @@ const ContentSlider = ({
 				</span>
 				<h2 className='text-black'>{contentData.title}</h2>
 				<div
-					className='text-black'
+					className='text-black h-min pb-24'
 					dangerouslySetInnerHTML={{ __html: contentData.content }}
 				/>
 			</div>

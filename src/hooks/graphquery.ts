@@ -28,7 +28,7 @@ export const GET_ALL_CONTENT = gql`
 			nodes {
 				content
 				date
-				excerpt(format: RAW)
+				excerpt
 				featuredImage {
 					node {
 						altText
@@ -51,7 +51,7 @@ export const GET_ALL_CONTENT = gql`
 						sourceUrl
 					}
 				}
-				excerpt(format: RAW)
+				excerpt
 				content(format: RENDERED)
 				title
 			}
@@ -73,7 +73,7 @@ export const GET_ALL_CONTENT = gql`
 						slug
 					}
 				}
-				excerpt(format: RAW)
+				excerpt
 				content(format: RENDERED)
 				title
 			}
@@ -82,7 +82,7 @@ export const GET_ALL_CONTENT = gql`
 			nodes {
 				content(format: RENDERED)
 				date
-				excerpt(format: RAW)
+				excerpt
 				featuredImage {
 					node {
 						altText

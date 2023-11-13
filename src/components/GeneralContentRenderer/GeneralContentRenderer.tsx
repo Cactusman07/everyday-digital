@@ -79,10 +79,11 @@ const GeneralContentRenderer = ({
 									<span className='text-xs italic font-bold'>{date}</span>
 								)}
 								<h4 className='mt-0'>{item.title}</h4>
-								<p
+								<div
+									className='services-content'
 									dangerouslySetInnerHTML={{
 										__html: `${icons ? item.excerpt : item.content}`,
-									}}></p>
+									}}></div>
 							</div>
 						</div>
 					);
