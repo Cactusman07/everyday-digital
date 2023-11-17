@@ -1,6 +1,5 @@
 import React, { createContext, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import './index.css';
 import App from './app';
 import client from './apollo';
 import { ApolloProvider } from '@apollo/client';

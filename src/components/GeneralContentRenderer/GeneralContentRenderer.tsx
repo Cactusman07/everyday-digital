@@ -55,7 +55,7 @@ const GeneralContentRenderer = ({
 									icons
 								);
 							}}
-							className='bg-gradient-to-r from-10% from-[#4b6ceb] to-[#ffffff] to-50% hover:from-5% rounded-lg shadow-[#4bafeb] shadow-md hover:shadow-lg hover:shadow-[#4bafeb] transition-shadow cursor-pointer text-black flex flex-col m-5'>
+							className='bg-gradient-to-r from-10% from-[#4b6ceb] to-[#ffffff] to-50% hover:from-5% rounded-lg cursor-pointer text-black flex flex-col m-5'>
 							{icons && !!item.featuredImage?.node?.sourceUrl && (
 								<div className='mx-auto mt-6 max-w-[85px]'>
 									<img

@@ -39,7 +39,7 @@ const ContentSlider = ({
 							!!contentData.isIcon
 								? 'h-40 w-auto m-auto p-8'
 								: !!contentData.isProfile
-								? 'h-60 w-auto mx-auto my-8 rounded-full shadow-md shadow-[#4bafeb] border border-black'
+								? 'h-60 w-auto mx-auto my-8 rounded-full border border-black'
 								: 'w-full mt-[-20%]'
 						}`}
 						src={image?.sourceUrl}

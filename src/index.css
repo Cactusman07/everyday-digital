@@ -97,7 +97,7 @@ h1, h2, h3, h4, h5{
 }
 
 h2, h3, h4, h5{
-  text-shadow: #4bafebbf 2px 2px 0px;
+  text-shadow: #4bafeb 1px 1px 0px;
 }
 
 h2{
@@ -137,9 +137,9 @@ p a::before {
   background-color: #4bafebbf;
   position: absolute;
   left: 0;
-  bottom: 2px;
+  bottom: 0px;
   width: 100%;
-  height: 4px;
+  height: 2px;
   z-index: -1;
   transition: all .3s ease-in-out;
 }
@@ -274,14 +274,17 @@ p a:hover::before {
   bottom: 200px;
   left:30px;
   right: 30px;
+}
+
+#title #textWrap{
   filter: blur(0.4px);
+  filter: url(#threshold) blur(0.4px);
 }
 
 #title h1{
   -ms-transform: translateY(-40%);
     transform: translateY(-40%);
     top: 40%;
-    filter: url(#threshold) blur(0.4px);
 }
 
 #text1,
@@ -557,7 +560,6 @@ label:focus-visible, input:focus-visible, textarea:focus-visible {
 
   .responsiveTable tbody tr {
     border-bottom: 2px solid #fff;
-    padding: 1rem .25rem
   }
   
   .responsiveTable tbody tr:last-of-type {
@@ -567,7 +569,6 @@ label:focus-visible, input:focus-visible, textarea:focus-visible {
   .responsiveTable td.pivoted {
     border: none !important;
     position: relative;
-    padding-left: calc(38% + 10px) !important;
     text-align: right !important;
     white-space: pre-wrap;
     overflow-wrap: break-word;
@@ -575,7 +576,8 @@ label:focus-visible, input:focus-visible, textarea:focus-visible {
 
   .responsiveTable td.pivoted.align-top{
     border-bottom: 2px solid #fff !important;
-    padding: 1rem .25rem;
+    padding: 4rem 1.25rem 2rem;
+    text-align: left !important;
   }
 
   .responsiveTable td.pivoted.align-top:last-of-type{
@@ -586,12 +588,16 @@ label:focus-visible, input:focus-visible, textarea:focus-visible {
     position: absolute;
     display: block;
     left: 1rem;
-    width: calc(40% - 20px);
     white-space: pre-wrap;
     overflow-wrap: break-word;
     text-align: left !important;
     font-weight: 600;
     font-size: 1.1rem;
+  }
+
+  .responsiveTable td.align-top .tdBefore{
+    margin-top: -2.5rem !important;
+    font-size: 1.25rem !important;
   }
 }
 
