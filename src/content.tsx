@@ -44,8 +44,8 @@ export const titleCSS = `
   @media only screen and (max-width: 639px) {
     #title h1{
       font-size: 63px;
-      top: 40px;
-      left: 14px;
+      top: 32px;
+      left: 43px;
     }
   }
 
