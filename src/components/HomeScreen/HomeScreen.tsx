@@ -80,7 +80,7 @@ const HomeScreen = ({ menu }: any) => {
 						Every Day&nbsp;
 						<br className='sm:hidden' />
 						<span id='textWrap'>
-							<span id='text1'></span>
+							<span id='text1'>Digital</span>
 							<span id='text2'></span>
 						</span>
 					</h1>
