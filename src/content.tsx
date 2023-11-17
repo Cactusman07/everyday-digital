@@ -37,7 +37,7 @@ export const titleCSS = `
   #title h1{
     position: fixed;
     top: 41px;
-    left: 18px;
+    left: 48px;
     font-size: 90px;
   }
   

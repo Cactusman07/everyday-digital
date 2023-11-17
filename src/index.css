@@ -270,7 +270,7 @@ p a:hover::before {
 /* Title */
 #title {
   position: absolute;  
-  top: 150px;
+  top: 100px;
   bottom: 200px;
   left:30px;
   right: 30px;
