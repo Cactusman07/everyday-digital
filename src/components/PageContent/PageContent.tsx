@@ -40,6 +40,12 @@ interface PageContent {
 		content: string;
 		title: string;
 	};
+	prices: {
+		excerpt: string;
+		featuredImage: object;
+		content: string;
+		title: string;
+	};
 	posts: {
 		date: string;
 		excerpt: string;
@@ -79,7 +85,14 @@ const PageContent = (props: PageContent) => {
 								updateContentData={updateContentData}
 							/>
 						)}
-						{props.title === 'Pricing' && <RenderTableContent />}
+						{props.title === 'Pricing' && (
+							<GeneralContentRenderer
+								data={props.prices}
+								icons={true}
+								toggle={toggleShowContent}
+								updateContentData={updateContentData}
+							/>
+						)}
 						{props.title === 'About Every Day Digital' && (
 							<AboutUsProfiles
 								data={props.team}

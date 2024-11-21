@@ -56,6 +56,22 @@ export const GET_ALL_CONTENT = gql`
 				title
 			}
 		}
+		prices {
+			nodes {
+				featuredImage {
+					node {
+						altText
+						title
+						uri
+						slug
+						sourceUrl
+					}
+				}
+				excerpt
+				content(format: RENDERED)
+				title
+			}
+		}
 		testimonials {
 			nodes {
 				content(format: RENDERED)

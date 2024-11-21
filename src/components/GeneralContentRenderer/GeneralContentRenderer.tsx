@@ -42,6 +42,8 @@ const GeneralContentRenderer = ({
 						? new Date(item.date).toLocaleDateString()
 						: null;
 
+					console.log(item);
+
 					return (
 						<div
 							key={`${index}-item`}

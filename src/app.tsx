@@ -40,6 +40,7 @@ const App = () => {
 											featuredImage={page.featuredImage}
 											title={page.title}
 											seo={page.seo}
+											prices={data.prices.nodes}
 											projects={data.projects.nodes}
 											team={data.teams.nodes}
 											services={data.services.nodes}
