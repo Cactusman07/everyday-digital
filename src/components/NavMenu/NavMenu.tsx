@@ -12,15 +12,15 @@ const NavMenu = ({ menu }: any) => {
 
 	const m = [];
 	if (!!menu) {
-		menu.forEach((mi, index) => {
+		menu.forEach((mi) => {
 			m.push(
 				<li
-					key={index}
+					key={mi.uri}
 					className='border-b border-gray-400 hover:border-light-blue my-4 uppercase hover:text-light-blue'>
 					<Link
 						onClick={() => setIsNavOpen(false)}
-						to={`${mi.uri}`}
-						className='py-2'>
+						to={mi.uri}
+						className='py-2 text-white hover:text-[#4bafeb]'>
 						{mi.title}
 					</Link>
 				</li>

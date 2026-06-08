@@ -10,11 +10,13 @@ import Project from './Projects/Project';
 import ProjectContainer from './Projects/ProjectContainer';
 import SocialIcons from './SocialIcons/SocialIcons';
 import Footer from './Footer/Footer';
-import RenderTableContent from './PageContent/TableContent';
 import AboutUsProfiles from './AboutUsProfiles/AboutUsProfiles';
+import AboutSection from './AboutSection/AboutSection';
 import GeneralContentRenderer from './GeneralContentRenderer/GeneralContentRenderer';
 import ContentSlider from './ContentSlider/ContentSlider';
 import Testimonials from './Testimonials/Testimonials';
+import DetailPanel from './DetailPanel/DetailPanel';
+import ContactForm from './ContactForm/ContactForm';
 
 export {
 	CTAS,
@@ -28,10 +30,12 @@ export {
 	SocialIcons,
 	NotFound,
 	Footer,
-	RenderTableContent,
 	SvgBackground,
 	AboutUsProfiles,
+	AboutSection,
 	GeneralContentRenderer,
 	ContentSlider,
 	Testimonials,
+	DetailPanel,
+	ContactForm,
 };

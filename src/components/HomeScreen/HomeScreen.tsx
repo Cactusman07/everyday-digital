@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+
 import { useContentContext } from 'index';
 
 import {
@@ -84,6 +85,29 @@ const HomeScreen = ({ menu }: any) => {
 							<span id='text2'></span>
 						</span>
 					</h1>
+					{showFooter && (
+						<Link
+							to='/about/'
+							className='absolute flex items-center gap-3 group'
+							style={{ top: '64%', left: 0 }}>
+							<span className='text-white/70 text-xs uppercase tracking-[0.18em] font-medium transition-colors duration-300 group-hover:text-[#4bafeb]'>
+								About our approach
+							</span>
+							<span className='flex items-center justify-center w-7 h-7 rounded-full border border-white/25 group-hover:border-[#4bafeb] transition-all duration-300'>
+								<svg
+									className='h-3 w-3 text-white/70 group-hover:text-[#4bafeb] transition-transform duration-300 group-hover:translate-x-px'
+									viewBox='0 0 24 24'
+									fill='none'
+									stroke='currentColor'
+									strokeWidth='2'
+									strokeLinecap='round'
+									strokeLinejoin='round'>
+									<line x1='5' y1='12' x2='19' y2='12' />
+									<polyline points='12 5 19 12 12 19' />
+								</svg>
+							</span>
+						</Link>
+					)}
 				</div>
 				<svg id='filters' className='w-0 h-0'>
 					<defs>

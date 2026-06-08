@@ -55,26 +55,18 @@ module.exports = (env) => {
           use: 'url-loader'
         },
         {
-          test: /\.(woff2|woff|ttf|eot|svg)(\?v=[a-z0-9]\.[a-z0-9]\.[a-z0-9])?$/i,
+          test: /\.(woff2|woff|ttf|eot)(\?v=[a-z0-9]\.[a-z0-9]\.[a-z0-9])?$/i,
           type: 'asset/resource',
-          dependency: {
-            not: ['url']
-          },
-          use: [{
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]',
-              outputPath: 'assets/',
-              publicPath: '../assets/'
-            }
-          }]
+          generator: {
+            filename: 'assets/[name][ext]'
+          }
         }
       ]
     },
     plugins: [
       new BrowserSyncPlugin({
         proxy: {
-          target: 'http://localhost:8080'
+          target: 'http://localhost:8181'
         },
         files: [
           './wpTheme/**/*.php',

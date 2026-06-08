@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const ContentSlider = ({
 	contentData,
@@ -74,6 +75,28 @@ const ContentSlider = ({
 					dangerouslySetInnerHTML={{ __html: contentData.content }}
 				/>
 			</div>
+
+			{contentData.isIcon && (
+				<Link to='/contact/' onClick={closeAndClear}>
+					<div className='absolute bottom-0 left-0 right-0 px-8 py-5 bg-gradient-to-r from-[#4b6ceb] to-[#4bafeb] flex items-center justify-between group cursor-pointer'>
+						<div>
+							<p className='text-white font-semibold uppercase tracking-widest text-sm m-0'>Interested in this service?</p>
+							<p className='text-white/70 text-xs m-0 mt-1'>Get in touch and let's talk.</p>
+						</div>
+						<svg
+							className='h-6 w-6 text-white transition-transform duration-300 group-hover:translate-x-1'
+							viewBox='0 0 24 24'
+							fill='none'
+							stroke='currentColor'
+							strokeWidth='2'
+							strokeLinecap='round'
+							strokeLinejoin='round'>
+							<line x1='5' y1='12' x2='19' y2='12' />
+							<polyline points='12 5 19 12 12 19' />
+						</svg>
+					</div>
+				</Link>
+			)}
 
 			<style>{`
 		#contentSlider{

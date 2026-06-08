@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 export const GET_ALL_CONTENT = gql`
 	query ALL_CONTENT {
-		pages {
+		pages(where: { status: PUBLISH }) {
 			nodes {
 				content(format: RENDERED)
 				databaseId
@@ -17,11 +17,8 @@ export const GET_ALL_CONTENT = gql`
 				}
 				title
 				uri
-				seo {
-					metaDesc
-					metaKeywords
-					title
-				}
+				isPostsPage
+				isFrontPage
 			}
 		}
 		projects {
@@ -41,22 +38,6 @@ export const GET_ALL_CONTENT = gql`
 			}
 		}
 		services {
-			nodes {
-				featuredImage {
-					node {
-						altText
-						title
-						uri
-						slug
-						sourceUrl
-					}
-				}
-				excerpt
-				content(format: RENDERED)
-				title
-			}
-		}
-		prices {
 			nodes {
 				featuredImage {
 					node {

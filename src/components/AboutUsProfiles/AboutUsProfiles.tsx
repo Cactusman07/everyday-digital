@@ -1,5 +1,5 @@
 import React from 'react';
-import './AboutUsStyles';
+import './AboutUsStyles.css';
 
 const AboutUsProfiles = ({ data, toggle, updateContentData }: any) => {
 	const updateContentAndToggle = (

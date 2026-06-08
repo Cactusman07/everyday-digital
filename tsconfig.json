@@ -2,9 +2,11 @@
   "compilerOptions": {
     "module": "commonjs",
     "moduleResolution": "node",
+    "ignoreDeprecations": "6.0",
     "skipLibCheck": true,
     "pretty": true,
     "jsx": "react",
+    "rootDir": "./src",
     "outDir": "./dist",
     "sourceMap": true,
     "esModuleInterop": true,
@@ -18,12 +20,10 @@
     ],
   },
   "include": [
+    "src/**/*.ts",
     "src/**/*.tsx"
   ],
   "exclude": [
-    "node_modules",
-    "./node_modules",
-    "./node_modules/*",
-    "./node_modules/@types/node/index.d.ts"
+    "node_modules"
   ]
 }

@@ -13,8 +13,7 @@
 <!DOCTYPE html>
 <html lang='<?php language_attributes(); ?>'>
   <head>
-		<link rel="preload" href="<?php echo $TEMPLATE_PATH; ?>/dist/assets/BananasItalicPersonaluse-Regula.ttf" as="font" crossOrigin="anonymous" />
-		<link rel="stylesheet" href="<?php echo $TEMPLATE_PATH; ?>/dist/assets/BananasItalicPersonaluse-Regula.ttf" media="print" onload="this.media='all'" />
+		<link rel="preload" href="<?php echo $TEMPLATE_PATH; ?>/dist/assets/BananasItalicPersonaluse-Regula.ttf" as="font" type="font/ttf" crossOrigin="anonymous" />
     <meta http-equiv='content-type' content='text/html;charset=utf-8' charset='utf-8'/>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <meta name='description' content='Every Day Digital is a digital studio that cares about you. We strive for quality every day. We help keep you running every day.' />

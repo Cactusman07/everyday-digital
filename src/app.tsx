@@ -14,24 +14,25 @@ import { GET_ALL_CONTENT } from './hooks/graphquery';
 import { useContentContext } from 'index';
 
 const App = () => {
-	const { loading, error, data } = useQuery(GET_ALL_CONTENT);
+	const { loading, error, data } = useQuery(GET_ALL_CONTENT, { errorPolicy: 'all' });
+	const visibleErrors = error?.graphQLErrors.filter(e => !e.message.includes('"seo"'));
 	const { toggleShowContent, updateContentData } = useContentContext();
 
 	return (
-		<Router>
+		<Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
 			<Fade show={loading} fadeIn={false} fadeOut={true}>
 				<LandingSplashScreen />
 			</Fade>
-			{error && <h1>Error: {error.message}</h1>}
+			{!!visibleErrors?.length && <h1>Error: {visibleErrors[0].message}</h1>}
 			<React.Fragment>
-				<HomeScreen menu={!!data && !!data.pages ? data.pages.nodes : null} />
+				<HomeScreen menu={!!data && !!data.pages ? data.pages.nodes.filter((p: any) => !p.isFrontPage) : null} />
 				{!loading && !!data && (
 					<Routes>
-						{data.pages.nodes.map((page: any, index: number) => {
+						{data.pages.nodes.filter((page: any) => !page.isFrontPage).map((page: any, index: number) => {
 							return (
 								<Route
 									key={index}
-									path={`/${page.uri}`}
+									path={page.uri}
 									element={
 										<PageContent
 											toggle={toggleShowContent}
@@ -39,8 +40,6 @@ const App = () => {
 											content={page.content}
 											featuredImage={page.featuredImage}
 											title={page.title}
-											seo={page.seo}
-											prices={data.prices.nodes}
 											projects={data.projects.nodes}
 											team={data.teams.nodes}
 											services={data.services.nodes}

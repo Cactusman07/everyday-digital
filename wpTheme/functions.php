@@ -2,7 +2,7 @@
   function theme_enqueue_scripts()
   {
 
-    $version = '1.1.0';
+    $version = '2.0.1';
 
     wp_enqueue_script('theme-script', get_stylesheet_directory_uri() . '/dist/main.js', array('jquery'), $version, true );
     wp_enqueue_style('theme-style', get_stylesheet_directory_uri() . '/dist/main.css', array(), $version);
@@ -11,7 +11,7 @@
       // Add theme variables later that are needed in react
     );
 
-    wp_localize_script('theme', 'wp_config', $config);
+    wp_localize_script('theme-script', 'wp_config', $config);
   }
   add_action('admin_notices', 'showAdminMessages');
 
@@ -137,55 +137,6 @@
     register_post_type('Team', $args );
   }
   add_action('init', 'create_postTypeTeam', 0 );
-
-  /* Add custom post type 'Pricing Item' to Theme */
-  function create_postTypePrices() {
-  
-    $labels = array(
-      'name'					      => _x( 'Prices', 'Post Type General Name', "Every Day Digital"),
-      'singular name'			  => _x( 'Price Item', 'Singular Name', "Every Day Digital"),
-      'menu_name'				    => __( 'Price Items', "Every Day Digital"),
-      'all_items'         	=> __( 'All Prices', "Every Day Digital" ),
-      'view_item'         	=> __( 'View Prices', "Every Day Digital" ),
-      'add_new_item'      	=> __( 'Add New Price Item', "Every Day Digital" ),
-      'add_new'           	=> __( 'Add Price Item', "Every Day Digital" ),
-      'edit_item'         	=> __( 'Edit Price Item', "Every Day Digital" ),
-      'update_item'       	=> __( 'Update Price Item', "Every Day Digital" ),
-      'search_items'      	=> __( 'Search for Price Item', "Every Day Digital" ),
-      'not_found'         	=> __( 'Not Found', "Every Day Digital" ),
-      'not_found_in_trash'	=> __( 'Not found in Trash', "Every Day Digital" ),
-    );
-    
-    $args = array(
-      'label'				        => __('Prices', "Every Day Digital"),
-      'description'		      => __('A list of Price Items.', "Every Day Digital"),
-      'labels'			        => $labels,
-      'supports'			      => array( 'title', 'editor', 'thumbnail', 'excerpt', 'comments' ),
-      'hierarchical' 		    => true,
-      'public'			        => true,
-      'publicly_queryable'  => true,
-      'query_var'           => true,
-      'show_in_rest'        => true,
-      'rest_base'           => 'prices',
-      'rest_controller_class' => 'WP_REST_Posts_Controller',
-      'show_ui'			        => true,
-      'show_in_menu'        => true,
-      'show_in_nav_menus'   => true,
-      'show_in_admin_bar'   => true,
-      'menu_position'       => 5,
-      'can_export'          => true,
-      'has_archive'         => false,
-      'exclude_from_search' => false,
-      'publicly_queryable'  => true,
-      'capability_type'     => 'page',
-      'menu_icon'           => 'dashicons-money',
-      'show_in_graphql'     => true,
-      'graphql_single_name' => 'price',
-      'graphql_plural_name' => 'prices',
-    );
-    register_post_type('Prices', $args );
-  }
-  add_action('init', 'create_postTypePrices', 0 );
 
   /* Add custom post type 'Services' to Theme */
   function create_postTypeServices() {

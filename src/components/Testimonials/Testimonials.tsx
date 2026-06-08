@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination, Navigation } from 'swiper/modules';
+import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -24,7 +24,7 @@ const Testimonials = (testimonials: any) => {
 							clickable: true,
 						}}
 						navigation={true}
-						modules={[Pagination, Navigation]}
+						modules={[Autoplay, Pagination, Navigation]}
 						className='mySwiper max-h-48 !h-48'>
 						{testimonials.data.map((testimonial: any, index: number) => (
 							<SwiperSlide key={`${index}-testimonial`}>
