@@ -65,6 +65,7 @@ module.exports = (env) => {
     },
     plugins: [
       new BrowserSyncPlugin({
+        port: 3001,
         proxy: {
           target: 'http://localhost:8181'
         },
@@ -80,7 +81,7 @@ module.exports = (env) => {
     ],
     output: {
       filename: 'main.js',
-      path: !!env.production ? path.resolve(__dirname, './dist') : path.resolve(__dirname, './wpTheme/dist'),
+      path: path.resolve(__dirname, './wpTheme/dist'),
       clean: false
     }
   }
