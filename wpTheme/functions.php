@@ -2,7 +2,7 @@
   function theme_enqueue_scripts()
   {
 
-    $version = '2.0.1';
+    $version = '2.0.2';
 
     wp_enqueue_script('theme-script', get_stylesheet_directory_uri() . '/dist/main.js', array('jquery'), $version, true );
     wp_enqueue_style('theme-style', get_stylesheet_directory_uri() . '/dist/main.css', array(), $version);

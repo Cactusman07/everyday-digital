@@ -1,13 +1,13 @@
 {
   "name": "everyday-digital",
-  "version": "1.0.0",
+  "version": "2.0.2",
   "description": "A custom theme for Every Day Digital. Based on tutorial by Sam Muir (https://github.com/Cactusman07/wordpress-react-theme-development)",
   "main": "./src/index.js",
   "scripts": {
     "start": "docker-compose up -d && npm run dev && npm run build-css && npm run build-dev",
     "stop": "docker stop db wordpress phpmyadmin wordpress-cli",
     "remove": "docker rm db wordpress phpmyadmin wordpress-cli",
-    "build-prod": "webpack --env production",
+    "build-prod": "webpack --env production && npm run build-css && node scripts/zip-theme.js",
     "build-dev": "webpack --env development --watch",
     "copy-fonts": "node -e \"const {mkdirSync,readdirSync,copyFileSync}=require('fs');mkdirSync('wpTheme/dist/assets',{recursive:true});readdirSync('src/assets').filter(f=>/\\.(ttf|woff2?|eot)$/.test(f)).forEach(f=>copyFileSync('src/assets/'+f,'wpTheme/dist/assets/'+f))\"",
     "build-css": "npm run copy-fonts && npx tailwind -i ./src/index.css -o ./wpTheme/dist/main.css",
