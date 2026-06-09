@@ -1,12 +1,19 @@
 import React from 'react';
 import './AboutUsStyles.css';
+import { WPTeam } from '../../types';
 
-const AboutUsProfiles = ({ data, toggle, updateContentData }: any) => {
+interface AboutUsProfilesProps {
+	data: WPTeam[];
+	toggle: () => void;
+	updateContentData: (data: any) => void;
+}
+
+const AboutUsProfiles = ({ data, toggle, updateContentData }: AboutUsProfilesProps) => {
 	const updateContentAndToggle = (
-		title: any,
-		content: any,
-		image: any,
-		date: any,
+		title: string,
+		content: string,
+		image: WPTeam['featuredImage'],
+		date: string | null,
 		isIcon: boolean,
 		isProfile: boolean
 	) => {
@@ -21,7 +28,7 @@ const AboutUsProfiles = ({ data, toggle, updateContentData }: any) => {
 		toggle();
 	};
 
-	const stripHtml = (html) => {
+	const stripHtml = (html: string) => {
 		let tmp = document.createElement('DIV');
 		tmp.innerHTML = html;
 		return tmp.textContent || tmp.innerText || '';
@@ -32,7 +39,7 @@ const AboutUsProfiles = ({ data, toggle, updateContentData }: any) => {
 			<>
 				<h2 className='text-center'>Meet the Team</h2>
 				<div className='flex about-container'>
-					{data.map((profile: any, index: number) => {
+					{data.map((profile: WPTeam, index: number) => {
 						return (
 							<div
 								key={`${index}-about`}

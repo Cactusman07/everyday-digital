@@ -1,19 +1,30 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
-const ContentSlider = ({
-	contentData,
-	show,
-	toggle,
-	updateContentData,
-}: any) => {
+interface ContentSliderData {
+	title: string;
+	content: string;
+	image?: { node?: { sourceUrl?: string; altText?: string }; sourceUrl?: string; altText?: string } | null;
+	date?: string | null;
+	isIcon?: boolean;
+	isProfile?: boolean;
+}
+
+interface ContentSliderProps {
+	contentData: ContentSliderData;
+	show: boolean;
+	toggle: () => void;
+	updateContentData: (data: ContentSliderData) => void;
+}
+
+const ContentSlider = ({ contentData, show, toggle, updateContentData }: ContentSliderProps) => {
 	const closeAndClear = () => {
 		toggle();
 		setTimeout(() => {
 			updateContentData({
 				title: '',
 				content: '',
-				image: '',
+				image: null,
 				date: '',
 				isIcon: false,
 				isProfile: false,
@@ -98,29 +109,6 @@ const ContentSlider = ({
 				</Link>
 			)}
 
-			<style>{`
-		#contentSlider{
-			transition: all 500ms ease;
-		}
-		.hideContentSlider {
-			width:0px;
-			left:-300px;
-			opacity: 0;
-		}
-		.showContentSlider {
-			width: 100%;
-			height: 100vh;
-			left:0;
-			opacity:1;
-		}
-		@media only screen and (min-width: 600px) {
-			.showContentSlider{
-				width: 50%;
-				min-width:50vh;
-				transition: all 500ms ease;
-			}
-		}
-	`}</style>
 		</div>
 	);
 };

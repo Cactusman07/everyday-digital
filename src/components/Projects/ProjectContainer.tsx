@@ -1,9 +1,10 @@
 import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import DetailPanel from '../DetailPanel/DetailPanel';
+import { WPProject } from '../../types';
 
-const ProjectContainer = ({ data }: { data: any[] }) => {
-	const [active, setActive] = useState<any>(null);
+const ProjectContainer = ({ data }: { data: WPProject[] }) => {
+	const [active, setActive] = useState<WPProject | null>(null);
 	const close = useCallback(() => setActive(null), []);
 
 	if (!data?.length) {
@@ -35,7 +36,7 @@ const ProjectContainer = ({ data }: { data: any[] }) => {
 			</div>
 
 			<div className='projects-grid'>
-				{data.map((project: any) => {
+				{data.map((project: WPProject) => {
 					const imgSrc = project.featuredImage?.node?.sourceUrl;
 					return (
 						<button

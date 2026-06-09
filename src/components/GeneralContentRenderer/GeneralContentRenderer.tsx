@@ -1,5 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import DetailPanel from '../DetailPanel/DetailPanel';
+import { WPService, WPPost } from '../../types';
+
+type ContentItem = WPService | WPPost;
 
 const GeneralContentRenderer = ({
 	data,
@@ -7,19 +10,19 @@ const GeneralContentRenderer = ({
 	toggle,
 	updateContentData,
 }: {
-	data: any;
+	data: ContentItem[];
 	icons: boolean;
-	toggle: () => {};
-	updateContentData: (data: any) => {};
+	toggle: () => void;
+	updateContentData: (data: any) => void;
 }) => {
-	const [active, setActive] = useState<any>(null);
+	const [active, setActive] = useState<ContentItem | null>(null);
 	const close = useCallback(() => setActive(null), []);
 
 	if (icons) {
 		return (
 			<>
 				<div className='grid grid-cols-1 md:grid-cols-2 gap-3 mt-8'>
-					{data.map((item: any, index: number) => (
+					{data.map((item: ContentItem, index: number) => (
 						<div
 							key={`${index}-item`}
 							onClick={() => setActive(item)}
@@ -72,9 +75,9 @@ const GeneralContentRenderer = ({
 
 	return (
 		<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-8'>
-			{data.map((item: any, index: number) => {
-				const date = item?.date
-					? new Date(item.date).toLocaleDateString()
+			{data.map((item: ContentItem, index: number) => {
+				const date = (item as WPPost)?.date
+					? new Date((item as WPPost).date).toLocaleDateString()
 					: null;
 
 				return (

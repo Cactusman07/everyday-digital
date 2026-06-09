@@ -27,7 +27,7 @@ const DetailPanel = ({ title, content, image, type, onClose }: DetailPanelProps)
 
 	return (
 		<>
-			<div className='project-overlay' onClick={onClose} aria-hidden='true' />
+			<div className='project-overlay' onClick={onClose} role='presentation' />
 
 			<div className='project-panel' role='dialog' aria-modal='true' aria-label={title}>
 				<button

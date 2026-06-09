@@ -1,8 +1,12 @@
-import { pageContent, titleCSS } from 'content';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const NotFound = () => {
+	useEffect(() => {
+		document.body.classList.add('inner-page');
+		return () => document.body.classList.remove('inner-page');
+	}, []);
+
 	return (
 		<div id='content' className='mt-48 mb-24 mx-8 relative z-0'>
 			<h2>Oops! That link doesn't seem to work!</h2>
@@ -29,10 +33,6 @@ const NotFound = () => {
 					</li>
 				</ul>
 			</div>
-			<style>
-				{titleCSS}
-				{pageContent}
-			</style>
 		</div>
 	);
 };

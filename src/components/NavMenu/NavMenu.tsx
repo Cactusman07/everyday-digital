@@ -1,18 +1,17 @@
-/* A component used to fade out animate components just before being removed from the DOM */
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { SocialIcons } from 'components/ContentIndex';
 
 import useMatchMedia from 'hooks/matchMedia';
+import { WPPage } from '../../types';
 
-const NavMenu = ({ menu }: any) => {
+const NavMenu = ({ menu }: { menu: WPPage[] | null }) => {
 	const [isNavOpen, setIsNavOpen] = useState(false);
 	const isDesktopResolution = useMatchMedia('(min-width:768px)', true);
 
 	const m = [];
 	if (!!menu) {
-		menu.forEach((mi) => {
+		menu.forEach((mi: WPPage) => {
 			m.push(
 				<li
 					key={mi.uri}
@@ -67,38 +66,6 @@ const NavMenu = ({ menu }: any) => {
 					)}
 				</div>
 			</nav>
-			<style>{`
-      #navMenu{
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        transition: all 500ms ease;
-        background: #000;
-        z-index: 50;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-evenly;
-        align-items: center;
-      }
-      .hideMenuNav {
-        width:0px;
-        right:-300px;
-        opacity: 0;
-      }
-      .showMenuNav {
-        width: 100%;
-        height: 100vh;
-        right:0;
-        opacity:1;
-      }
-      @media only screen and (min-width: 600px) {
-        .showMenuNav{
-          width: 40%;
-          min-width:40vh;
-          transition: all 500ms ease;
-        }
-      }
-    `}</style>
 		</div>
 	);
 };

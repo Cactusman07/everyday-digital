@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 import { useContentContext } from 'index';
@@ -11,8 +11,9 @@ import {
 	ContentSlider,
 } from 'components/ContentIndex';
 import useMatchMedia from 'hooks/matchMedia';
+import { WPPage } from '../../types';
 
-const HomeScreen = ({ menu }: any) => {
+const HomeScreen = ({ menu }: { menu: WPPage[] | null }) => {
 	const logo =
 			require('../../assets/EveryDayDigital_Logo_reversed.png').default,
 		isDesktopResolution = useMatchMedia('(min-width:768px)', true),
@@ -24,29 +25,21 @@ const HomeScreen = ({ menu }: any) => {
 	const [showFooter, setShowFooter] = useState(true),
 		[showHeader, setShowHeader] = useState(true);
 
-	const listenToScroll = () => {
-		let heighttoHide = 80;
+	const listenToScroll = useCallback(() => {
+		const heightToHide = 80;
 		const winScroll =
 			document.body.scrollTop || document.documentElement.scrollTop;
-		if (winScroll > heighttoHide) {
-			setShowHeader(false);
-		} else {
-			setShowHeader(true);
-		}
-	};
+		setShowHeader(winScroll <= heightToHide);
+	}, []);
 
 	useEffect(() => {
-		if (location.pathname === '/') {
-			setShowFooter(true);
-		} else {
-			setShowFooter(false);
-		}
+		setShowFooter(location.pathname === '/');
 	}, [location]);
 
 	useEffect(() => {
 		window.addEventListener('scroll', listenToScroll);
 		return () => window.removeEventListener('scroll', listenToScroll);
-	}, []);
+	}, [listenToScroll]);
 
 	return (
 		<>

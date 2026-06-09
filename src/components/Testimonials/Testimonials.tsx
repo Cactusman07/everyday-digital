@@ -7,10 +7,12 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
-const Testimonials = (testimonials: any) => {
+import { WPTestimonial } from '../../types';
+
+const Testimonials = ({ data }: { data: WPTestimonial[] }) => {
 	return (
 		<>
-			{testimonials?.data?.length > 0 && (
+			{data?.length > 0 && (
 				<div id='testimonials' className='mt-8 text-center'>
 					<h2>See what others think about us!</h2>
 					<Swiper
@@ -26,7 +28,7 @@ const Testimonials = (testimonials: any) => {
 						navigation={true}
 						modules={[Autoplay, Pagination, Navigation]}
 						className='mySwiper max-h-48 !h-48'>
-						{testimonials.data.map((testimonial: any, index: number) => (
+						{data.map((testimonial: WPTestimonial, index: number) => (
 							<SwiperSlide key={`${index}-testimonial`}>
 								<div className='testimonial text-left italic text-sm'>
 									<h4>{testimonial.title}</h4>

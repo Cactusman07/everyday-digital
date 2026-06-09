@@ -6,7 +6,6 @@ import SvgBackground from './HomeScreen/SvgBackground';
 import LandingSplashScreen from './LoadingSplashScreen/LandingSplashScreen';
 import NavMenu from './NavMenu/NavMenu';
 import PageContent from './PageContent/PageContent';
-import Project from './Projects/Project';
 import ProjectContainer from './Projects/ProjectContainer';
 import SocialIcons from './SocialIcons/SocialIcons';
 import Footer from './Footer/Footer';
@@ -26,7 +25,6 @@ export {
 	NavMenu,
 	PageContent,
 	ProjectContainer,
-	Project,
 	SocialIcons,
 	NotFound,
 	Footer,

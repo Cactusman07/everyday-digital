@@ -12,9 +12,10 @@ import {
 import { useQuery } from '@apollo/client';
 import { GET_ALL_CONTENT } from './hooks/graphquery';
 import { useContentContext } from 'index';
+import { WPPage, ContentData } from './types';
 
 const App = () => {
-	const { loading, error, data } = useQuery(GET_ALL_CONTENT, { errorPolicy: 'all' });
+	const { loading, error, data } = useQuery<ContentData>(GET_ALL_CONTENT, { errorPolicy: 'all' });
 	const visibleErrors = error?.graphQLErrors.filter(e => !e.message.includes('"seo"'));
 	const { toggleShowContent, updateContentData } = useContentContext();
 
@@ -25,10 +26,10 @@ const App = () => {
 			</Fade>
 			{!!visibleErrors?.length && <h1>Error: {visibleErrors[0].message}</h1>}
 			<React.Fragment>
-				<HomeScreen menu={!!data && !!data.pages ? data.pages.nodes.filter((p: any) => !p.isFrontPage) : null} />
+				<HomeScreen menu={!!data && !!data.pages ? data.pages.nodes.filter((p: WPPage) => !p.isFrontPage) : null} />
 				{!loading && !!data && (
 					<Routes>
-						{data.pages.nodes.filter((page: any) => !page.isFrontPage).map((page: any, index: number) => {
+						{data.pages.nodes.filter((page: WPPage) => !page.isFrontPage).map((page: WPPage, index: number) => {
 							return (
 								<Route
 									key={index}
