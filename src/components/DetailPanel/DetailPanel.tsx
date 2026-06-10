@@ -6,10 +6,11 @@ interface DetailPanelProps {
 	content: string;
 	image?: { sourceUrl: string; altText?: string } | null;
 	type: 'service' | 'project';
+	coverImage?: boolean;
 	onClose: () => void;
 }
 
-const DetailPanel = ({ title, content, image, type, onClose }: DetailPanelProps) => {
+const DetailPanel = ({ title, content, image, type, coverImage = false, onClose }: DetailPanelProps) => {
 	useEffect(() => {
 		const onKey = (e: KeyboardEvent) => {
 			if (e.key === 'Escape') onClose();
@@ -51,7 +52,11 @@ const DetailPanel = ({ title, content, image, type, onClose }: DetailPanelProps)
 				) : (
 					image?.sourceUrl && (
 						<div className='project-panel__hero'>
-							<img src={image.sourceUrl} alt={image.altText || title} />
+							<img
+								src={image.sourceUrl}
+								alt={image.altText || title}
+								className={coverImage ? 'project-panel__hero-img--cover' : ''}
+							/>
 						</div>
 					)
 				)}

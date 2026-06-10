@@ -5,6 +5,7 @@ const path = require('path');
 const root = path.resolve(__dirname, '..');
 const themePath = path.join(root, 'wpTheme');
 const outPath = path.join(root, 'EverydayDigitalTheme.zip');
+const archiveRoot = 'EverydayDigitalTheme';
 
 // Verify wpTheme/style.css exists before zipping
 const styleCssPath = path.join(themePath, 'style.css');
@@ -13,6 +14,7 @@ if (!fs.existsSync(styleCssPath)) {
   process.exit(1);
 }
 console.log(`✓ Found wpTheme/style.css`);
+console.log(`✓ Packaging theme as ${archiveRoot}/...`);
 
 const output = fs.createWriteStream(outPath);
 const archive = archiver('zip', { zlib: { level: 9 } });
@@ -32,5 +34,5 @@ output.on('close', () => {
 archive.on('error', err => { throw err; });
 
 archive.pipe(output);
-archive.directory(themePath, 'wpTheme');
+archive.directory(themePath, archiveRoot);
 archive.finalize();
