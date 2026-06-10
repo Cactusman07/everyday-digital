@@ -49,6 +49,9 @@ export interface WPPost {
 	excerpt?: string;
 	featuredImage?: WPFeaturedImage;
 	title: string;
+	tags?: {
+		nodes: Array<{ name: string }>;
+	};
 }
 
 export interface WPTestimonial {

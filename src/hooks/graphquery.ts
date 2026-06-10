@@ -90,6 +90,11 @@ export const GET_ALL_CONTENT = gql`
 					}
 				}
 				title
+				tags {
+					nodes {
+						name
+					}
+				}
 			}
 		}
 	}

@@ -19,7 +19,7 @@ const ProjectContainer = ({ data }: { data: WPProject[] }) => {
 	}
 
 	return (
-		<div className='projects-page'>
+		<div className='projects-page w-full'>
 			<div className='border-l-4 border-[#4b6ceb] rounded-r-xl bg-white/5 px-6 py-5 mb-8'>
 				<p className='text-[#4bafeb] text-[32px] font-bold mt-0 mb-3'>Explore Our Digital Ventures</p>
 				<p className='text-white/70 text-base leading-relaxed m-0'>
@@ -60,7 +60,7 @@ const ProjectContainer = ({ data }: { data: WPProject[] }) => {
 				})}
 			</div>
 
-			<div className='mt-8 bg-white/5 border border-white/10 rounded-2xl p-6 flex items-center justify-between gap-6 flex-wrap'>
+			<div className='mt-8 bg-white/5 border border-white/10 rounded-2xl p-6 flex items-center justify-between gap-6 flex-wrap w-full'>
 				<p className='text-white/70 text-base leading-relaxed m-0'>
 					<strong className='text-white font-medium'>Like what you see?</strong><br />
 					We'd love to hear about your project — no commitment, just a conversation.

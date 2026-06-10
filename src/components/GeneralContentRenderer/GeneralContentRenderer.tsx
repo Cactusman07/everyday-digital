@@ -74,11 +74,12 @@ const GeneralContentRenderer = ({
 	}
 
 	return (
-		<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-8'>
+		<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3 mt-8'>
 			{data.map((item: ContentItem, index: number) => {
 				const date = (item as WPPost)?.date
 					? new Date((item as WPPost).date).toLocaleDateString()
 					: null;
+				const tags = (item as WPPost)?.tags?.nodes || [];
 
 				return (
 					<div
@@ -114,6 +115,15 @@ const GeneralContentRenderer = ({
 								dangerouslySetInnerHTML={{ __html: item.excerpt || item.content }}
 							/>
 						</div>
+						{tags.length > 0 && (
+							<div className='px-5 pb-5 pt-0 flex flex-wrap gap-2'>
+								{tags.map((tag, tagIndex) => (
+									<span key={tagIndex} className='text-[#4bafeb] text-xs bg-[#4b6ceb]/10 px-2.5 py-1 rounded-full'>
+										{tag.name}
+									</span>
+								))}
+							</div>
+						)}
 					</div>
 				);
 			})}
