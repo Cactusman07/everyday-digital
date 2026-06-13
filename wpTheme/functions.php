@@ -2,7 +2,7 @@
   function theme_enqueue_scripts()
   {
 
-    $version = '2.0.2';
+    $version = '2.0.3';
 
     wp_enqueue_script('theme-script', get_stylesheet_directory_uri() . '/dist/main.js', array('jquery'), $version, true );
     wp_enqueue_style('theme-style', get_stylesheet_directory_uri() . '/dist/main.css', array(), $version);
@@ -67,6 +67,7 @@
       'public'			        => true,
       'publicly_queryable'  => true,
       'query_var'           => true,
+      'rewrite'             => array( 'slug' => 'projects', 'with_front' => false ),
       'show_in_rest'        => true,
       'rest_base'           => 'projects',
       'rest_controller_class' => 'WP_REST_Posts_Controller',
@@ -78,7 +79,6 @@
       'can_export'          => true,
       'has_archive'         => false,
       'exclude_from_search' => false,
-      'publicly_queryable'  => true,
       'capability_type'     => 'page',
       'menu_icon'           => 'dashicons-star-filled',
       'show_in_graphql'     => true,
@@ -116,6 +116,7 @@
       'public'			        => true,
       'publicly_queryable'  => true,
       'query_var'           => true,
+      'rewrite'             => array( 'slug' => 'team', 'with_front' => false ),
       'show_in_rest'        => true,
       'rest_base'           => 'team',
       'rest_controller_class' => 'WP_REST_Posts_Controller',
@@ -127,7 +128,6 @@
       'can_export'          => true,
       'has_archive'         => false,
       'exclude_from_search' => false,
-      'publicly_queryable'  => true,
       'capability_type'     => 'page',
       'menu_icon'           => 'dashicons-admin-users',
       'show_in_graphql'     => true,
@@ -165,6 +165,7 @@
       'public'			        => true,
       'publicly_queryable'  => true,
       'query_var'           => true,
+      'rewrite'             => array( 'slug' => 'services', 'with_front' => false ),
       'show_in_rest'        => true,
       'rest_base'           => 'services',
       'rest_controller_class' => 'WP_REST_Posts_Controller',
@@ -176,7 +177,6 @@
       'can_export'          => true,
       'has_archive'         => false,
       'exclude_from_search' => false,
-      'publicly_queryable'  => true,
       'capability_type'     => 'page',
       'menu_icon'           => 'dashicons-superhero',
       'show_in_graphql'     => true,
@@ -214,6 +214,7 @@
       'public'			        => true,
       'publicly_queryable'  => true,
       'query_var'           => true,
+      'rewrite'             => array( 'slug' => 'testimonials', 'with_front' => false ),
       'show_in_rest'        => true,
       'rest_base'           => 'testimonials',
       'rest_controller_class' => 'WP_REST_Posts_Controller',
@@ -225,7 +226,6 @@
       'can_export'          => true,
       'has_archive'         => false,
       'exclude_from_search' => false,
-      'publicly_queryable'  => true,
       'capability_type'     => 'page',
       'menu_icon'           => 'dashicons-editor-quote',
       'show_in_graphql'     => true,
@@ -235,4 +235,13 @@
     register_post_type('Testimonials', $args );
   }
   add_action('init', 'create_postTypeTestimonials', 0 );
+
+  function theme_flush_rewrite_rules() {
+    create_postTypeProjects();
+    create_postTypeTeam();
+    create_postTypeServices();
+    create_postTypeTestimonials();
+    flush_rewrite_rules();
+  }
+  add_action('after_switch_theme', 'theme_flush_rewrite_rules');
 ?>

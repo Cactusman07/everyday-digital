@@ -1,6 +1,6 @@
 {
   "name": "everyday-digital",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "A custom theme for Every Day Digital. Based on tutorial by Sam Muir (https://github.com/Cactusman07/wordpress-react-theme-development)",
   "main": "./src/index.js",
   "scripts": {
