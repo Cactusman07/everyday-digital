@@ -36,6 +36,7 @@ export interface WPService {
   excerpt: string;
   content: string;
   title: string;
+  slug: string;
 }
 
 export interface WPTeam {
@@ -53,6 +54,7 @@ export interface WPPost {
   excerpt?: string;
   featuredImage?: WPFeaturedImage;
   title: string;
+  slug: string;
   tags?: {
     nodes: Array<{ name: string }>;
   };

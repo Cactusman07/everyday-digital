@@ -7,6 +7,7 @@ import {
   Fade,
   HomeScreen,
   PageContent,
+  SingleItemPage,
 } from "./components/ContentIndex";
 
 import { useQuery } from "@apollo/client";
@@ -59,6 +60,42 @@ const App = () => {
                   ></Route>
                 );
               })}
+            <Route
+              path="/blog/:slug"
+              element={
+                <SingleItemPage
+                  type="blog"
+                  posts={data.posts.nodes}
+                  projects={data.projects.nodes}
+                  services={data.services.nodes}
+                  testimonials={data.testimonials.nodes}
+                />
+              }
+            />
+            <Route
+              path="/projects/:slug"
+              element={
+                <SingleItemPage
+                  type="project"
+                  posts={data.posts.nodes}
+                  projects={data.projects.nodes}
+                  services={data.services.nodes}
+                  testimonials={data.testimonials.nodes}
+                />
+              }
+            />
+            <Route
+              path="/services/:slug"
+              element={
+                <SingleItemPage
+                  type="service"
+                  posts={data.posts.nodes}
+                  projects={data.projects.nodes}
+                  services={data.services.nodes}
+                  testimonials={data.testimonials.nodes}
+                />
+              }
+            />
             <Route path="/" element={<></>}></Route>
             <Route path="*" element={<NotFound />} />
           </Routes>

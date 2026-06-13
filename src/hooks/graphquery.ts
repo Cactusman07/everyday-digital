@@ -53,6 +53,7 @@ export const GET_ALL_CONTENT = gql`
         excerpt
         content(format: RENDERED)
         title
+        slug
       }
     }
     testimonials {
@@ -94,6 +95,7 @@ export const GET_ALL_CONTENT = gql`
           }
         }
         title
+        slug
         tags {
           nodes {
             name

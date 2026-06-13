@@ -15,6 +15,7 @@ import GeneralContentRenderer from "./GeneralContentRenderer/GeneralContentRende
 import Testimonials from "./Testimonials/Testimonials";
 import DetailPanel from "./DetailPanel/DetailPanel";
 import ContactForm from "./ContactForm/ContactForm";
+import SingleItemPage from "./SingleItemPage/SingleItemPage";
 
 export {
   CTAS,
@@ -34,4 +35,5 @@ export {
   Testimonials,
   DetailPanel,
   ContactForm,
+  SingleItemPage,
 };
