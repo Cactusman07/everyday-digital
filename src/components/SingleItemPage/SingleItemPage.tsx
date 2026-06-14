@@ -56,8 +56,15 @@ const SingleItemPage = ({ type, posts, projects, services, testimonials }: Singl
   const date = post?.date ? new Date(post.date).toLocaleDateString() : null;
   const image = item.featuredImage?.node ?? null;
 
+  const imageClass =
+    type === 'blog'
+      ? isCover
+        ? 'w-full h-full object-cover'
+        : 'max-w-full max-h-full object-contain'
+      : 'w-full h-full object-cover';
+
   return (
-    <div id='content' className='mt-48 mb-24 mx-8 relative z-0'>
+    <div id='content' className='mt-48 mb-24 mx-8 relative z-0 single-item-page'>
       <Link
         to={backPath}
         className='inline-flex items-center gap-2 text-white/50 hover:text-white text-sm mb-8 transition-colors duration-200 group'
@@ -78,8 +85,7 @@ const SingleItemPage = ({ type, posts, projects, services, testimonials }: Singl
       </Link>
 
       {isService ? (
-        <div className='flex items-center justify-between gap-4 mb-2'>
-          <h2 className='m-0'>{item.title}</h2>
+        <div className='flex items-center gap-4 mb-2'>
           {image?.sourceUrl && (
             <img
               src={image.sourceUrl}
@@ -87,19 +93,16 @@ const SingleItemPage = ({ type, posts, projects, services, testimonials }: Singl
               className='w-10 h-10 object-contain content-icon-tint flex-shrink-0'
             />
           )}
+          <h2 className='m-0'>{item.title}</h2>
         </div>
       ) : (
         <>
           {image?.sourceUrl && (
-            <div className='w-full h-64 md:h-80 overflow-hidden rounded-xl mb-8 bg-white flex items-center justify-center'>
+            <div className='w-full h-64 md:h-80 overflow-hidden rounded-xl mb-8 flex items-center justify-center'>
               <img
                 src={image.sourceUrl}
                 alt={image.altText || item.title}
-                className={
-                  isCover
-                    ? 'w-full h-full object-cover'
-                    : 'max-w-full max-h-full object-contain'
-                }
+                className={imageClass}
               />
             </div>
           )}

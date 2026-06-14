@@ -96,6 +96,18 @@ const App = () => {
                 />
               }
             />
+            <Route
+              path="/:slug"
+              element={
+                <SingleItemPage
+                  type="blog"
+                  posts={data.posts.nodes}
+                  projects={data.projects.nodes}
+                  services={data.services.nodes}
+                  testimonials={data.testimonials.nodes}
+                />
+              }
+            />
             <Route path="/" element={<></>}></Route>
             <Route path="*" element={<NotFound />} />
           </Routes>

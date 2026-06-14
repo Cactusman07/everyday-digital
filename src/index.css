@@ -1194,3 +1194,52 @@ body.inner-page #social {
 }
 
 /* Projects redesign ends */
+
+/* Single item page — override panel styles for dark background */
+
+.single-item-page .project-panel__content {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.single-item-page .project-panel__content p {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.single-item-page .project-panel__content a,
+.single-item-page .project-panel__content p a {
+  color: #fff !important;
+  font-weight: 500;
+}
+
+.single-item-page .project-panel__content h1,
+.single-item-page .project-panel__content h2,
+.single-item-page .project-panel__content h3,
+.single-item-page .project-panel__content h4,
+.single-item-page .project-panel__content h5 {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-weight: 700;
+  color: #4bafeb;
+  text-shadow: none !important;
+  letter-spacing: normal !important;
+  font-size: 1.2rem;
+  line-height: 1.4;
+  margin: 1.25rem 0 0.5rem;
+}
+
+.single-item-page .project-panel__content strong {
+  font-weight: 600;
+  color: #fff;
+}
+
+.single-item-page .project-panel__content ul,
+.single-item-page .project-panel__content ol {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.single-item-page .project-panel__content ol li::marker,
+.single-item-page .project-panel__content ul li::marker {
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Single item page ends */
