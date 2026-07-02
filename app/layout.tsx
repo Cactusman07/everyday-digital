@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import HomeHero from "@/components/HomeHero";
 import SvgBackground from "@/components/SvgBackground";
 import { OrganizationJsonLd } from "@/components/JsonLd";
@@ -83,6 +85,9 @@ export default async function RootLayout({
         {/* {children} is where each page's content renders.
             e.g. visiting /about renders app/[slug]/page.tsx here */}
         <div id="root">{children}</div>
+
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

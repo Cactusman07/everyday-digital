@@ -31,7 +31,7 @@ export default function HomeHero({ menu }: { menu: WPPage[] | null }) {
   const pathname = usePathname();
 
   // Derived directly from pathname — no useEffect needed since pathname is reactive
-  const showFooter = pathname === "/";
+  const isHomePage = pathname === "/";
   const [showHeader, setShowHeader] = useState(true);
 
   const listenToScroll = useCallback(() => {
@@ -48,42 +48,38 @@ export default function HomeHero({ menu }: { menu: WPPage[] | null }) {
 
   return (
     <>
-      <header
-        id="header"
-        className="h-[calc(100vh-40px)] mx-8 my-5 relative max-w-full z-10"
-      >
-        {showHeader && (
-          <Link className="absolute w-14 sm:w-20 top-0 left-0" href="/">
-            <Image
-              id="logo"
-              className="animate-invert w-14 sm:w-20 z-30 relative"
-              src={logo}
-              alt="Every Day Digital Logo"
-            />
-          </Link>
-        )}
+      {isHomePage ? (
+        <header
+          id="header"
+          className="h-[calc(100vh-40px)] mx-8 my-5 relative max-w-full z-10"
+        >
+          {showHeader && (
+            <Link className="absolute w-14 sm:w-20 top-0 left-0" href="/">
+              <Image
+                id="logo"
+                className="animate-invert w-14 sm:w-20 z-30 relative"
+                src={logo}
+                alt="Every Day Digital Logo"
+              />
+            </Link>
+          )}
 
-        {isDesktopResolution && showFooter && (
-          <SocialIcons absolutePos={true} />
-        )}
-        {showFooter && (
+          {isDesktopResolution && <SocialIcons absolutePos={true} />}
           <div className="fixed md:absolute bottom-0 md:bottom-5 md:left-auto z-[5] right-0 left-0 justify-center flex">
             <CTAS />
           </div>
-        )}
-        <div
-          style={{ opacity: !showHeader ? 0 : 1 }}
-          id="title"
-          className="transition-all duration-500 justify-center block text-7xl sm:text-8xl lg:text-[160px] xl:text-[210px] my-auto"
-        >
-          <h1 className="absolute transition-all duration-700">
-            Every Day&nbsp;
-            <br className="sm:hidden" />
-            <span id="textWrap">
-              <BackgroundGradients />
-            </span>
-          </h1>
-          {showFooter && (
+          <div
+            style={{ opacity: !showHeader ? 0 : 1 }}
+            id="title"
+            className="transition-all duration-500 justify-center block text-7xl sm:text-8xl lg:text-[160px] xl:text-[210px] my-auto"
+          >
+            <h1 className="absolute transition-all duration-700">
+              Every Day&nbsp;
+              <br className="sm:hidden" />
+              <span id="textWrap">
+                <BackgroundGradients />
+              </span>
+            </h1>
             <Link
               href="/about/"
               className="absolute flex items-center gap-3 group"
@@ -107,23 +103,34 @@ export default function HomeHero({ menu }: { menu: WPPage[] | null }) {
                 </svg>
               </span>
             </Link>
-          )}
-        </div>
-        <svg id="filters" className="w-0 h-0">
-          <defs>
-            <filter id="threshold">
-              <feColorMatrix
-                in="SourceGraphic"
-                type="matrix"
-                values="1 0 0 0 0
+          </div>
+          <svg id="filters" className="w-0 h-0">
+            <defs>
+              <filter id="threshold">
+                <feColorMatrix
+                  in="SourceGraphic"
+                  type="matrix"
+                  values="1 0 0 0 0
                     0 1 0 0 0
                     0 0 1 0 0
                     0 0 0 255 -140"
-              />
-            </filter>
-          </defs>
-        </svg>
-      </header>
+                />
+              </filter>
+            </defs>
+          </svg>
+        </header>
+      ) : (
+        <div className="mx-8 my-5 relative z-10">
+          <Link className="inline-block w-14 sm:w-20" href="/">
+            <Image
+              id="logo"
+              className="animate-invert w-14 sm:w-20 z-30 relative"
+              src={logo}
+              alt="Every Day Digital Logo"
+            />
+          </Link>
+        </div>
+      )}
       <div id="menu" className="absolute top-0 right-5">
         <NavMenu menu={menu} />
       </div>
