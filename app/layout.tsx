@@ -1,0 +1,89 @@
+import type { Metadata } from "next";
+import "./globals.css";
+import HomeHero from "@/components/HomeHero";
+import SvgBackground from "@/components/SvgBackground";
+import { OrganizationJsonLd } from "@/components/JsonLd";
+import { getPages } from "@/lib/wordpress";
+import type { WPPage } from "@/lib/types";
+
+// Next.js Metadata API — this exported object sets default <head> tags for every page.
+// The `title.template` means child pages can export { title: "About" } and it becomes
+// "About | Every Day Digital" automatically. Child pages override; these are fallbacks.
+export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "https://everydaydigital.co.nz",
+  ),
+  title: {
+    default: "Every Day Digital | Your Digital Partner",
+    template: "%s | Every Day Digital",
+  },
+  description:
+    "Every Day Digital is a digital studio that cares about you. We strive for quality every day. We help keep you running every day.",
+  openGraph: {
+    type: "website",
+    locale: "en_NZ",
+    siteName: "Every Day Digital",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
+// Root Layout — wraps every page in the app. This is a Server Component (no "use client"),
+// so we can fetch data directly with async/await. Next.js calls this once and streams the
+// HTML shell, then slots in each page's content via {children}.
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  // Fetch WordPress pages server-side for the navigation menu.
+  // This runs on the server — the browser never sees this fetch.
+  let menu: WPPage[] | null = null;
+  try {
+    const pages = await getPages();
+    menu = pages.filter((p: WPPage) => !p.isFrontPage);
+  } catch {
+    // WordPress may not be running during build — gracefully degrade to no menu
+  }
+
+  return (
+    <html lang="en-NZ">
+      <head>
+        {/* Preload the custom font so it's available before CSS requests it */}
+        <link
+          rel="preload"
+          href="/fonts/BananasItalicPersonaluse-Regula.ttf"
+          as="font"
+          type="font/ttf"
+          crossOrigin="anonymous"
+        />
+      </head>
+      <body>
+        {/* Background gradient divs — animated by BackgroundGradients client component */}
+        <div id="background1" className="fullpage" />
+        <div id="background2" className="fullpage" />
+        <div id="background3" className="fullpage" />
+        <div id="background4" className="fullpage" />
+        <div id="background5" className="fullpage" />
+        <div id="background6" className="fullpage" />
+        <noscript>You need to enable JavaScript to run this app.</noscript>
+
+        {/* JSON-LD structured data for SEO — tells Google this is an Organization */}
+        <OrganizationJsonLd />
+
+        {/* SVG NZ map background and hero section with nav */}
+        <SvgBackground />
+        <HomeHero menu={menu} />
+
+        {/* {children} is where each page's content renders.
+            e.g. visiting /about renders app/[slug]/page.tsx here */}
+        <div id="root">{children}</div>
+      </body>
+    </html>
+  );
+}
