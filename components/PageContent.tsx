@@ -28,7 +28,7 @@ interface PageContentProps {
 
 export default function PageContent(props: PageContentProps) {
   return (
-    <div id="content" className="mt-48 mb-24 mx-8 relative z-0">
+    <div id="content" className="mt-8 mb-24 mx-8 relative z-0">
       <h2>{props.title}</h2>
       {!!props.content && !props.title?.toLowerCase().includes("contact") && (
         <div dangerouslySetInnerHTML={{ __html: props.content }} />
