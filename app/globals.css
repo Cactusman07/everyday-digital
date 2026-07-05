@@ -837,13 +837,13 @@ label:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-v
   bottom: 50px;
   left: 0;
   right: 0;
-  margin: 8rem 0 6rem 0;
+  margin: 0;
   padding: 2rem;
   z-index: 30;
 }
 
 @media (max-width: 769px) {
-  .inner-page #content { margin: 6rem 0 6rem 0; }
+  .inner-page #content { margin: 0; }
 }
 
 .inner-page #social {
