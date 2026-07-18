@@ -44,10 +44,7 @@ export default function NavMenu({ menu }: { menu: WPPage[] | null }) {
             <span className="block h-0.5 w-8 animate-pulse bg-white"></span>
           </div>
         </section>
-        <div
-          id="navMenu"
-          className={isNavOpen ? "showMenuNav" : "hideMenuNav"}
-        >
+        <div id="navMenu" className={isNavOpen ? "showMenuNav" : "hideMenuNav"}>
           <div
             className="absolute top-0 right-0 pl-4 pt-8 pr-8"
             onClick={() => setIsNavOpen(false)}

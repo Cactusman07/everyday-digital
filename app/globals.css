@@ -11,46 +11,49 @@
 }
 
 /* Site Wide Styles Defaults */
-body{
+body {
   color: #fff;
   background: #000;
   background-image: linear-gradient(115deg, #000 40%, #eb4b4b);
   background-attachment: fixed;
 }
 
-.fullpage{
-  position:fixed;
-  z-index:10;
-  top: 0; left: 0; right: 0; bottom: 0;
+.fullpage {
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   transition: all 2.5s ease-out;
 }
 
-#background1{
-  background-image:linear-gradient(115deg,#000 40%, #e34beb);
-  opacity:0;
+#background1 {
+  background-image: linear-gradient(115deg, #000 40%, #e34beb);
+  opacity: 0;
 }
-#background2{
-  background-image:linear-gradient(115deg,#000 40%, #834beb);
-  opacity:0;
+#background2 {
+  background-image: linear-gradient(115deg, #000 40%, #834beb);
+  opacity: 0;
 }
-#background3{
-  background-image:linear-gradient(115deg,#000 40%, #4b6ceb);
-  opacity:0;
+#background3 {
+  background-image: linear-gradient(115deg, #000 40%, #4b6ceb);
+  opacity: 0;
 }
-#background4{
-  background-image:linear-gradient(115deg,#000 40%, #4bafeb);
-  opacity:0;
+#background4 {
+  background-image: linear-gradient(115deg, #000 40%, #4bafeb);
+  opacity: 0;
 }
-#background5{
-  background-image:linear-gradient(115deg,#000 40%, #9deb4b);
-  opacity:0;
+#background5 {
+  background-image: linear-gradient(115deg, #000 40%, #9deb4b);
+  opacity: 0;
 }
-#background6{
-  background-image:linear-gradient(115deg,#000 40%, #ebe74b);
-  opacity:0;
+#background6 {
+  background-image: linear-gradient(115deg, #000 40%, #ebe74b);
+  opacity: 0;
 }
 
-#svgNZ{
+#svgNZ {
   position: fixed;
   z-index: 0;
   right: -40px;
@@ -59,56 +62,53 @@ body{
   transition: all 0.5s ease-out;
 }
 
-#svgNZ g circle{
+#svgNZ g circle {
   fill: white;
-  opacity: 0.20;
+  opacity: 0.2;
 }
 
 @media screen and (min-width: 768px) {
-  #svgNZ{
+  #svgNZ {
     bottom: 100px;
   }
 }
 
 @media screen and (min-width: 1024px) {
-  #svgNZ{
+  #svgNZ {
     height: 75%;
     bottom: 40px;
   }
 }
 
 @media screen and (min-width: 1500px) {
-  #svgNZ{
+  #svgNZ {
     height: 100%;
     bottom: -100px;
   }
 }
 
-#root{
-  z-index:20;
-  position:relative;
+#root {
+  z-index: 20;
+  position: relative;
 }
 
-@font-face{
-  font-family:"BananaItalic";
-  src: url('/fonts/BananasItalicPersonaluse-Regula.eot');
-  src: url('/fonts/BananasItalicPersonaluse-Regula.eot?#iefix')  format('embedded-opentype'),
-       url('/fonts/BananasItalicPersonaluse-Regula.woff2') format('woff2'),
-       url('/fonts/BananasItalicPersonaluse-Regula.woff') format('woff'),
-       url('/fonts/BananasItalicPersonaluse-Regula.ttf') format('truetype');
-  font-display: swap;
-}
-
-h1, h2, h3, h4, h5{
-  font-family: 'BananaItalic', sans-serif;
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: var(--font-banana-italic), sans-serif;
   margin: 0.5rem 0;
 }
 
-h2, h3, h4, h5{
+h2,
+h3,
+h4,
+h5 {
   text-shadow: #4bafeb 1px 1px 0px;
 }
 
-h2{
+h2 {
   font-size: 3.5rem;
   letter-spacing: 2px;
   line-height: 4rem;
@@ -117,23 +117,23 @@ h3 {
   font-size: 2.5rem;
   letter-spacing: 1.6px;
   font-weight: 400;
-  line-height: 2.8rem
+  line-height: 2.8rem;
 }
-h4{
+h4 {
   font-size: 2rem;
   letter-spacing: 1.2px;
   line-height: 2.2rem;
 }
 
-a:hover{
+a:hover {
   color: #4bafeb;
 }
 
-p{
+p {
   margin-bottom: 12px;
 }
 
-p a{
+p a {
   text-decoration: none;
   color: #fff;
   position: relative;
@@ -141,7 +141,7 @@ p a{
 }
 
 p a::before {
-  content: '';
+  content: "";
   background-color: #4bafebbf;
   position: absolute;
   left: 0;
@@ -149,47 +149,46 @@ p a::before {
   width: 100%;
   height: 2px;
   z-index: -1;
-  transition: all .3s ease-in-out;
+  transition: all 0.3s ease-in-out;
 }
 
-p a:hover{
+p a:hover {
   color: #fff;
 }
 
 p a:hover::before {
   bottom: 0;
   height: 100%;
-  background:
-    linear-gradient(
-      to right,
-      #e34beb,
-      #834beb,
-      #4b6ceb,
-      #4bafeb,
-      #9deb4b
+  background: linear-gradient(
+    to right,
+    #e34beb,
+    #834beb,
+    #4b6ceb,
+    #4bafeb,
+    #9deb4b
   );
-  opacity:0.8;
+  opacity: 0.8;
 }
 
 /* Site Wide Styles End */
 
 /* Logo Splash Screen */
-#logoContainer{
-  overflow:hidden;
-  position:relative;
+#logoContainer {
+  overflow: hidden;
+  position: relative;
 }
 
-#splash_logo{
-  width:100%;
+#splash_logo {
+  width: 100%;
 }
 #logoContainer:before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100px;
   width: 20px;
   height: 100%;
-  background: rgba(0,0,0, 0.3);
+  background: rgba(0, 0, 0, 0.3);
   transform: skewX(-30deg);
   animation-name: slide;
   animation-duration: 4s;
@@ -201,7 +200,7 @@ p a:hover::before {
     rgba(0, 0, 0, 0.2) 0%,
     rgba(0, 0, 0, 0.35) 77%,
     rgba(0, 0, 0, 0.7) 92%,
-    rgba(0, 0, 0, 0.0) 100%
+    rgba(0, 0, 0, 0) 100%
   );
 }
 
@@ -248,9 +247,18 @@ p a:hover::before {
 }
 
 @keyframes dot {
-  0% { background-color: grey; transform: scale(1); }
-  50% { background-color: #fff; transform: scale(1.3); }
-  100% { background-color: grey; transform: scale(1); }
+  0% {
+    background-color: grey;
+    transform: scale(1);
+  }
+  50% {
+    background-color: #fff;
+    transform: scale(1.3);
+  }
+  100% {
+    background-color: grey;
+    transform: scale(1);
+  }
 }
 
 /* Logo Splash Screen Ends */
@@ -280,19 +288,19 @@ p a:hover::before {
   position: absolute;
   top: 100px;
   bottom: 200px;
-  left:30px;
+  left: 30px;
   right: 30px;
 }
 
-#title #textWrap{
+#title #textWrap {
   filter: blur(0.4px);
   filter: url(#threshold) blur(0.4px);
 }
 
-#title h1{
+#title h1 {
   -ms-transform: translateY(-40%);
-    transform: translateY(-40%);
-    top: 40%;
+  transform: translateY(-40%);
+  top: 40%;
 }
 
 #text1,
@@ -385,7 +393,7 @@ p a:hover::before {
   text-align: right;
 }
 
-.cta-mobile{
+.cta-mobile {
   margin: 6px;
 }
 
@@ -396,12 +404,12 @@ p a:hover::before {
 /* CTA Container ends */
 
 /* Image Hover effect */
-.animate-invert{
+.animate-invert {
   transition: all 0.4s ease;
 }
-.animate-invert:hover{
+.animate-invert:hover {
   -webkit-filter: sepia(300%) hue-rotate(150deg) saturate(800%);
-  -moz-filter:  sepia(300%) hue-rotate(150deg) saturate(800%);
+  -moz-filter: sepia(300%) hue-rotate(150deg) saturate(800%);
   filter: sepia(300%) hue-rotate(150deg) saturate(800%);
 }
 
@@ -456,7 +464,10 @@ polygon.arrow-top {
 
 /* Contact Form */
 
-label:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+label:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
   outline: 0px;
 }
 
@@ -616,18 +627,18 @@ label:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-v
 /* Table */
 
 @media screen and (min-width: 970px) {
-  .circle-bg::before{
+  .circle-bg::before {
     border-radius: 50%;
-    background:linear-gradient(75deg, #4b6ceb, #4bafeb);
+    background: linear-gradient(75deg, #4b6ceb, #4bafeb);
     content: "";
-    width:95px;
-    height:95px;
-    position:absolute;
-    left:0;
-    top:-15px;
-    right:0;
+    width: 95px;
+    height: 95px;
+    position: absolute;
+    left: 0;
+    top: -15px;
+    right: 0;
     margin: auto;
-    z-index:0;
+    z-index: 0;
   }
 }
 .responsiveTable {
@@ -638,13 +649,13 @@ label:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-v
   display: none;
 }
 
-.price-headers{
-  rotate:-8deg;
+.price-headers {
+  rotate: -8deg;
 }
 
 @media screen and (max-width: 969px) {
-  .price-headers{
-    rotate:0deg;
+  .price-headers {
+    rotate: 0deg;
     padding: 1.5rem 0.5rem;
   }
 
@@ -680,13 +691,13 @@ label:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-v
     overflow-wrap: break-word;
   }
 
-  .responsiveTable td.pivoted.align-top{
+  .responsiveTable td.pivoted.align-top {
     border-bottom: 2px solid #fff !important;
     padding: 4rem 1.25rem 2rem;
     text-align: left !important;
   }
 
-  .responsiveTable td.pivoted.align-top:last-of-type{
+  .responsiveTable td.pivoted.align-top:last-of-type {
     border-bottom: none !important;
   }
 
@@ -701,7 +712,7 @@ label:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-v
     font-size: 1.1rem;
   }
 
-  .responsiveTable td.align-top .tdBefore{
+  .responsiveTable td.align-top .tdBefore {
     margin-top: -2.5rem !important;
     font-size: 1.25rem !important;
   }
@@ -726,11 +737,11 @@ label:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-v
   background-size: cover;
 }
 
-.swiper-pagination-bullet{
-  background: rgba(255,255,255,0.8) !important;
+.swiper-pagination-bullet {
+  background: rgba(255, 255, 255, 0.8) !important;
 }
 
-.swiper-pagination-bullet-active{
+.swiper-pagination-bullet-active {
   background: #4b6ceb !important;
 }
 
@@ -740,8 +751,8 @@ label:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-v
 }
 
 @media screen and (max-width: 500px) {
-  .project img{
-    filter:grayscale(0%) !important;
+  .project img {
+    filter: grayscale(0%) !important;
   }
 }
 
@@ -828,7 +839,9 @@ label:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-v
 }
 
 @media (min-width: 768px) {
-  .inner-page #ctas { margin-bottom: 1.5rem; }
+  .inner-page #ctas {
+    margin-bottom: 1.5rem;
+  }
 }
 
 .inner-page #content {
@@ -843,7 +856,9 @@ label:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-v
 }
 
 @media (max-width: 769px) {
-  .inner-page #content { margin: 0; }
+  .inner-page #content {
+    margin: 0;
+  }
 }
 
 .inner-page #social {
@@ -854,12 +869,13 @@ label:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-v
 
 /* Testimonials */
 
-.testimonial-content p, .services-content p{
+.testimonial-content p,
+.services-content p {
   overflow: hidden;
-   display: -webkit-box;
-   -webkit-line-clamp: 5;
-           line-clamp: 5;
-   -webkit-box-orient: vertical;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  line-clamp: 5;
+  -webkit-box-orient: vertical;
 }
 
 /* Testimonials end */
@@ -897,7 +913,8 @@ label:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-v
 }
 
 .content-icon-tint {
-  filter: invert(62%) sepia(57%) saturate(553%) hue-rotate(168deg) brightness(103%) contrast(97%);
+  filter: invert(62%) sepia(57%) saturate(553%) hue-rotate(168deg)
+    brightness(103%) contrast(97%);
 }
 
 .projects-grid {
@@ -948,7 +965,7 @@ label:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-v
 .project-card__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, transparent 50%);
   display: flex;
   align-items: flex-end;
   padding: 0.875rem;
@@ -965,7 +982,7 @@ label:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-v
   font-size: 13px;
   font-weight: 500;
   color: #fff;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .project-card:focus-visible {
@@ -983,8 +1000,12 @@ label:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-v
 }
 
 @keyframes overlayIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .project-panel {
@@ -1000,7 +1021,7 @@ label:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-v
   flex-direction: column;
   overflow: hidden;
   animation: panelIn 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  box-shadow: 4px 0 32px rgba(0,0,0,0.35);
+  box-shadow: 4px 0 32px rgba(0, 0, 0, 0.35);
 }
 
 @media (min-width: 600px) {
@@ -1015,15 +1036,20 @@ label:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-v
 .project-panel h3,
 .project-panel h4,
 .project-panel h5 {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
   text-shadow: none !important;
   letter-spacing: normal !important;
-  color: #4A90D9;
+  color: #4a90d9;
 }
 
 @keyframes panelIn {
-  from { transform: translateX(-100%); }
-  to   { transform: translateX(0); }
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 
 .project-panel__close {
@@ -1117,10 +1143,11 @@ label:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-v
 .project-panel__title {
   font-size: 24px !important;
   font-weight: 600 !important;
-  color: #4A90D9 !important;
+  color: #4a90d9 !important;
   margin: 0 0 0.875rem !important;
   line-height: 1.3 !important;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
   text-shadow: none !important;
   letter-spacing: normal !important;
   padding-right: 2rem;
@@ -1148,9 +1175,10 @@ label:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-v
 .project-panel__content h1,
 .project-panel__content h2,
 .project-panel__content h3 {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
   font-weight: 600;
-  color: #4A90D9;
+  color: #4a90d9;
   text-shadow: none !important;
   margin: 1.25rem 0 0.5rem;
 }
@@ -1217,7 +1245,8 @@ label:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-v
 .single-item-page .project-panel__content h3,
 .single-item-page .project-panel__content h4,
 .single-item-page .project-panel__content h5 {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
   font-weight: 700;
   color: #4bafeb;
   text-shadow: none !important;
@@ -1248,7 +1277,7 @@ label:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-v
 /* About Us Profiles */
 
 @media screen and (max-width: 769px) {
-  .about-container{
+  .about-container {
     align-items: center;
     flex-direction: column;
   }
@@ -1285,7 +1314,8 @@ label:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-v
   letter-spacing: 0.125vmin;
   opacity: 0;
   transform: translateX(-25%);
-  transition: transform 0.3s ease-out,
+  transition:
+    transform 0.3s ease-out,
     opacity 0.3s ease-out;
 }
 
@@ -1294,7 +1324,9 @@ label:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-v
   height: 200px;
   overflow: hidden;
   clip-path: polygon(100% 0, 100% 50%, 100% 100%, 0% 100%, 0 50%, 0% 0%);
-  transition: transform 0.3s ease-out, border-radius 0.3s ease-out,
+  transition:
+    transform 0.3s ease-out,
+    border-radius 0.3s ease-out,
     clip-path 0.3s ease-out;
   border-radius: 50%;
 }

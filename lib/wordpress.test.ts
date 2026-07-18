@@ -88,8 +88,8 @@ describe("fetchGraphQL", () => {
 describe("getPages", () => {
   it("returns page nodes from response", async () => {
     const mockPages = [
-      { title: "Home", uri: "/", isFrontPage: true },
-      { title: "About", uri: "/about/" },
+      { title: "Home", uri: "/", isFrontPage: true, content: "<p>Welcome</p>" },
+      { title: "About", uri: "/about/", content: "<p>About us</p>" },
     ];
     mockGraphQLResponse({ pages: { nodes: mockPages } });
 
@@ -100,17 +100,46 @@ describe("getPages", () => {
 
 describe("getProjects", () => {
   it("returns project nodes from response", async () => {
-    const mockProjects = [{ title: "Project 1", slug: "project-1" }];
+    const mockProjects = [
+      {
+        title: "Project 1",
+        slug: "project-1",
+        content: "<p>Project details</p>",
+      },
+    ];
     mockGraphQLResponse({ projects: { nodes: mockProjects } });
 
     const result = await getProjects();
     expect(result).toEqual(mockProjects);
   });
+
+  it("sanitizes unsafe HTML in content and excerpt", async () => {
+    const mockProjects = [
+      {
+        title: "Project 1",
+        slug: "project-1",
+        content: "<p>Safe</p><script>alert(1)</script>",
+        excerpt: '<img src=x onerror="alert(1)">Caption',
+      },
+    ];
+    mockGraphQLResponse({ projects: { nodes: mockProjects } });
+
+    const result = await getProjects();
+    expect(result[0].content).toBe("<p>Safe</p>");
+    expect(result[0].excerpt).toBe('<img src="x" />Caption');
+  });
 });
 
 describe("getServices", () => {
   it("returns service nodes from response", async () => {
-    const mockServices = [{ title: "Web Design", slug: "web-design" }];
+    const mockServices = [
+      {
+        title: "Web Design",
+        slug: "web-design",
+        content: "<p>We build websites</p>",
+        excerpt: "<p>Websites</p>",
+      },
+    ];
     mockGraphQLResponse({ services: { nodes: mockServices } });
 
     const result = await getServices();
@@ -120,7 +149,9 @@ describe("getServices", () => {
 
 describe("getPosts", () => {
   it("returns post nodes from response", async () => {
-    const mockPosts = [{ title: "Blog Post", slug: "blog-post" }];
+    const mockPosts = [
+      { title: "Blog Post", slug: "blog-post", content: "<p>Post body</p>" },
+    ];
     mockGraphQLResponse({ posts: { nodes: mockPosts } });
 
     const result = await getPosts();
@@ -130,7 +161,9 @@ describe("getPosts", () => {
 
 describe("getTeams", () => {
   it("returns team nodes from response", async () => {
-    const mockTeams = [{ title: "Sam Muir" }];
+    const mockTeams = [
+      { title: "Sam Muir", content: "<p>Bio</p>", excerpt: "<p>Short bio</p>" },
+    ];
     mockGraphQLResponse({ teams: { nodes: mockTeams } });
 
     const result = await getTeams();
@@ -140,7 +173,9 @@ describe("getTeams", () => {
 
 describe("getTestimonials", () => {
   it("returns testimonial nodes from response", async () => {
-    const mockTestimonials = [{ title: "Great service", content: "<p>Loved it</p>" }];
+    const mockTestimonials = [
+      { title: "Great service", content: "<p>Loved it</p>" },
+    ];
     mockGraphQLResponse({ testimonials: { nodes: mockTestimonials } });
 
     const result = await getTestimonials();
@@ -151,21 +186,31 @@ describe("getTestimonials", () => {
 describe("getPageBySlug", () => {
   it("finds page by slug with trailing slash", async () => {
     const mockPages = [
-      { title: "Home", uri: "/" },
-      { title: "About", uri: "/about/" },
+      { title: "Home", uri: "/", content: "<p>Home</p>" },
+      { title: "About", uri: "/about/", content: "<p>About</p>" },
     ];
     mockGraphQLResponse({ pages: { nodes: mockPages } });
 
     const result = await getPageBySlug("about");
-    expect(result).toEqual({ title: "About", uri: "/about/" });
+    expect(result).toEqual({
+      title: "About",
+      uri: "/about/",
+      content: "<p>About</p>",
+    });
   });
 
   it("finds page by slug without trailing slash", async () => {
-    const mockPages = [{ title: "Contact", uri: "/contact" }];
+    const mockPages = [
+      { title: "Contact", uri: "/contact", content: "<p>Contact</p>" },
+    ];
     mockGraphQLResponse({ pages: { nodes: mockPages } });
 
     const result = await getPageBySlug("contact");
-    expect(result).toEqual({ title: "Contact", uri: "/contact" });
+    expect(result).toEqual({
+      title: "Contact",
+      uri: "/contact",
+      content: "<p>Contact</p>",
+    });
   });
 
   it("returns undefined for missing slug", async () => {
@@ -179,13 +224,17 @@ describe("getPageBySlug", () => {
 describe("getPostBySlug", () => {
   it("finds post by slug", async () => {
     const mockPosts = [
-      { title: "First Post", slug: "first-post" },
-      { title: "Second Post", slug: "second-post" },
+      { title: "First Post", slug: "first-post", content: "<p>First</p>" },
+      { title: "Second Post", slug: "second-post", content: "<p>Second</p>" },
     ];
     mockGraphQLResponse({ posts: { nodes: mockPosts } });
 
     const result = await getPostBySlug("second-post");
-    expect(result).toEqual({ title: "Second Post", slug: "second-post" });
+    expect(result).toEqual({
+      title: "Second Post",
+      slug: "second-post",
+      content: "<p>Second</p>",
+    });
   });
 
   it("returns undefined for missing slug", async () => {

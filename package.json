@@ -7,9 +7,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "tidy": "npm run format && npm run lint && npm run typecheck && npm run test",
+    "tidy:check": "npm run format:check && npm run lint && npm run typecheck && npm run test",
     "prepare": "husky",
     "wp:start": "docker-compose up -d",
     "wp:stop": "docker-compose stop",
@@ -33,6 +38,7 @@
     "next": "^16.2.9",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
+    "sanitize-html": "^2.17.6",
     "swiper": "^12.2.0"
   },
   "devDependencies": {
@@ -43,21 +49,28 @@
     "@types/node": "^20.3.2",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
+    "@types/sanitize-html": "^2.16.1",
     "@vitejs/plugin-react": "^6.0.3",
     "eslint": "^9.39.4",
     "eslint-config-next": "^16.2.9",
+    "eslint-config-prettier": "^10.1.8",
     "husky": "^9.1.7",
     "jsdom": "^29.1.1",
     "lint-staged": "^17.0.8",
     "postcss": "^8.5.10",
+    "prettier": "^3.9.5",
     "tailwindcss": "^4.3.1",
     "typescript": "^6.0.3",
     "vitest": "^4.1.9"
   },
   "lint-staged": {
-    "*.{ts,tsx}": [
+    "*.{ts,tsx,js,jsx,mjs}": [
+      "prettier --check",
       "eslint --max-warnings 0 --no-warn-ignored",
       "vitest related --run"
+    ],
+    "*.{json,css,md}": [
+      "prettier --check"
     ]
   },
   "overrides": {

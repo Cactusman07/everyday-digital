@@ -15,7 +15,9 @@ test.describe("Smoke tests", () => {
 
   test("navigation menu opens and contains links", async ({ page }) => {
     await page.goto("/");
-    const hamburger = page.locator("#menu button, #menu [role='button']").first();
+    const hamburger = page
+      .locator("#menu button, #menu [role='button']")
+      .first();
     if (await hamburger.isVisible()) {
       await hamburger.click();
       const nav = page.locator("#navMenu");

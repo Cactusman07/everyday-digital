@@ -24,12 +24,12 @@ Browser → Next.js (port 3000) → WordPress GraphQL API (port 8181)
 
 ## Local URLs
 
-| Service     | URL                    |
-|-------------|------------------------|
-| Next.js     | http://localhost:3000   |
-| WordPress   | http://localhost:8181   |
-| phpMyAdmin  | http://localhost:8180   |
-| MariaDB     | localhost:3306          |
+| Service    | URL                   |
+| ---------- | --------------------- |
+| Next.js    | http://localhost:3000 |
+| WordPress  | http://localhost:8181 |
+| phpMyAdmin | http://localhost:8180 |
+| MariaDB    | localhost:3306        |
 
 ---
 
@@ -106,18 +106,18 @@ docker-compose down -v  # Remove everything including database volume
 
 ## Available Scripts
 
-| Script            | Description                                        |
-|-------------------|----------------------------------------------------|
-| `npm run dev`     | Start Next.js dev server with hot reload           |
-| `npm run build`   | Production build (SSG + ISR)                       |
-| `npm start`       | Serve production build on port 3000                |
-| `npm run lint`    | Run Next.js ESLint                                 |
-| `npm test`        | Run Vitest test suite                              |
-| `npm run test:watch` | Run Vitest in watch mode                        |
-| `npm run test:e2e`| Run Playwright E2E tests                             |
-| `npm run wp:start`| Start Docker containers                            |
-| `npm run wp:stop` | Stop Docker containers                             |
-| `npm run wp:remove`| Remove Docker containers                          |
+| Script               | Description                              |
+| -------------------- | ---------------------------------------- |
+| `npm run dev`        | Start Next.js dev server with hot reload |
+| `npm run build`      | Production build (SSG + ISR)             |
+| `npm start`          | Serve production build on port 3000      |
+| `npm run lint`       | Run Next.js ESLint                       |
+| `npm test`           | Run Vitest test suite                    |
+| `npm run test:watch` | Run Vitest in watch mode                 |
+| `npm run test:e2e`   | Run Playwright E2E tests                 |
+| `npm run wp:start`   | Start Docker containers                  |
+| `npm run wp:stop`    | Stop Docker containers                   |
+| `npm run wp:remove`  | Remove Docker containers                 |
 
 ---
 

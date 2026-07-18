@@ -53,9 +53,7 @@ export default function ProjectContainer({ data }: { data: WPProject[] }) {
               {imgSrc && (
                 <Image
                   src={imgSrc}
-                  alt={
-                    project.featuredImage?.node?.altText || project.title
-                  }
+                  alt={project.featuredImage?.node?.altText || project.title}
                   fill
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   className="project-card__img object-cover"
@@ -71,9 +69,7 @@ export default function ProjectContainer({ data }: { data: WPProject[] }) {
 
       <div className="mt-8 bg-white/5 border border-white/10 rounded-2xl p-6 flex items-center justify-between gap-6 flex-wrap w-full">
         <p className="text-white/70 text-base leading-relaxed m-0">
-          <strong className="text-white font-medium">
-            Like what you see?
-          </strong>
+          <strong className="text-white font-medium">Like what you see?</strong>
           <br />
           We&apos;d love to hear about your project — no commitment, just a
           conversation.

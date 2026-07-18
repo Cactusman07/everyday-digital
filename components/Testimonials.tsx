@@ -11,10 +11,9 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
-const Swiper = dynamic(
-  () => import("swiper/react").then((mod) => mod.Swiper),
-  { ssr: false },
-);
+const Swiper = dynamic(() => import("swiper/react").then((mod) => mod.Swiper), {
+  ssr: false,
+});
 const SwiperSlide = dynamic(
   () => import("swiper/react").then((mod) => mod.SwiperSlide),
   { ssr: false },

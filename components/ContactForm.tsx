@@ -128,11 +128,7 @@ export default function ContactForm() {
         />
       </div>
 
-      <button
-        type="submit"
-        className="form-submit"
-        disabled={state.submitting}
-      >
+      <button type="submit" className="form-submit" disabled={state.submitting}>
         {state.submitting ? "Sending…" : "Send message"}
       </button>
 

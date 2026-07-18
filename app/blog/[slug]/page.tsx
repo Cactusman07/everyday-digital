@@ -52,10 +52,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   let posts, testimonials;
   try {
-    [posts, testimonials] = await Promise.all([
-      getPosts(),
-      getTestimonials(),
-    ]);
+    [posts, testimonials] = await Promise.all([getPosts(), getTestimonials()]);
   } catch {
     notFound();
   }
@@ -63,7 +60,8 @@ export default async function BlogPostPage({ params }: PageProps) {
   const post = posts.find((p) => p.slug === slug);
   if (!post) notFound();
 
-  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://everydaydigital.co.nz";
+  const SITE_URL =
+    process.env.NEXT_PUBLIC_SITE_URL || "https://everydaydigital.co.nz";
 
   return (
     <div className="inner-page">

@@ -76,7 +76,9 @@ export default function DetailPanel({
                 fill
                 sizes="70vw"
                 className={
-                  coverImage ? "project-panel__hero-img--cover object-cover" : "object-contain"
+                  coverImage
+                    ? "project-panel__hero-img--cover object-cover"
+                    : "object-contain"
                 }
               />
             </div>

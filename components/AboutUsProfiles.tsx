@@ -37,10 +37,7 @@ export default function AboutUsProfiles({ data }: { data: WPTeam[] }) {
                     className="object-cover"
                   />
                 </div>
-                <p
-                  className="title"
-                  data-cta={`${stripHtml(profile.excerpt)}`}
-                >
+                <p className="title" data-cta={`${stripHtml(profile.excerpt)}`}>
                   {profile.title}
                 </p>
               </div>

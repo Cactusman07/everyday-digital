@@ -60,7 +60,8 @@ export default async function ServicePage({ params }: PageProps) {
   const service = services.find((s) => s.slug === slug);
   if (!service) notFound();
 
-  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://everydaydigital.co.nz";
+  const SITE_URL =
+    process.env.NEXT_PUBLIC_SITE_URL || "https://everydaydigital.co.nz";
 
   return (
     <div className="inner-page">

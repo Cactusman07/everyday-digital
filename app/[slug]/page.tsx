@@ -8,7 +8,23 @@ import {
   getPosts,
   getTestimonials,
 } from "@/lib/wordpress";
+import type { WPProject, WPTeam, WPService, WPPost } from "@/lib/types";
 import PageContent from "@/components/PageContent";
+
+// PageContent.tsx only renders one of projects/team/services/posts per page,
+// picked by the WordPress page's title (Testimonials render on every page).
+// This mirrors those same title checks so we only fetch the one dataset a
+// given page actually needs, instead of all four on every single page load.
+// Keep in sync with the title checks in PageContent.tsx.
+type SecondaryContentType = "projects" | "team" | "posts" | "services" | null;
+
+function getSecondaryContentType(title: string): SecondaryContentType {
+  if (title === "Projects") return "projects";
+  if (title.toLowerCase().includes("about")) return "team";
+  if (title === "Blog") return "posts";
+  if (title === "Services") return "services";
+  return null;
+}
 
 // Next.js 16 passes route params as a Promise (async dynamic APIs).
 // For a URL like /about, params resolves to { slug: "about" }.
@@ -59,20 +75,51 @@ export async function generateMetadata({
 export default async function DynamicPage({ params }: PageProps) {
   const { slug } = await params;
 
-  let pages, projects, teams, services, posts, testimonials;
+  let pages;
   try {
-    [pages, projects, teams, services, posts, testimonials] = await Promise.all(
-      [getPages(), getProjects(), getTeams(), getServices(), getPosts(), getTestimonials()],
-    );
+    pages = await getPages();
   } catch {
     notFound();
   }
 
-  const page = pages.find(
-    (p) => p.uri === `/${slug}/` || p.uri === `/${slug}`,
-  );
+  const page = pages.find((p) => p.uri === `/${slug}/` || p.uri === `/${slug}`);
   // notFound() triggers the app/not-found.tsx page with a 404 status code
   if (!page) notFound();
+
+  const secondaryType = getSecondaryContentType(page.title);
+
+  let projects: WPProject[] = [];
+  let team: WPTeam[] = [];
+  let services: WPService[] = [];
+  let posts: WPPost[] = [];
+  let testimonials;
+
+  try {
+    // Testimonials are needed everywhere; the secondary dataset (if any) is
+    // fetched alongside it in parallel, never all four at once.
+    if (secondaryType === "projects") {
+      [testimonials, projects] = await Promise.all([
+        getTestimonials(),
+        getProjects(),
+      ]);
+    } else if (secondaryType === "team") {
+      [testimonials, team] = await Promise.all([getTestimonials(), getTeams()]);
+    } else if (secondaryType === "posts") {
+      [testimonials, posts] = await Promise.all([
+        getTestimonials(),
+        getPosts(),
+      ]);
+    } else if (secondaryType === "services") {
+      [testimonials, services] = await Promise.all([
+        getTestimonials(),
+        getServices(),
+      ]);
+    } else {
+      testimonials = await getTestimonials();
+    }
+  } catch {
+    notFound();
+  }
 
   return (
     <PageContent
@@ -80,7 +127,7 @@ export default async function DynamicPage({ params }: PageProps) {
       featuredImage={page.featuredImage}
       title={page.title}
       projects={projects}
-      team={teams}
+      team={team}
       services={services}
       posts={posts}
       testimonials={testimonials}

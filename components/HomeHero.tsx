@@ -15,18 +15,16 @@ import Image from "next/image";
 // Replaces react-router-dom's useLocation().
 import { usePathname } from "next/navigation";
 
-import NavMenu from "./NavMenu";
 import CTAS from "./CTAS";
 import SocialIcons from "./SocialIcons";
 import BackgroundGradients from "./BackgroundGradients";
 import useMatchMedia from "@/hooks/useMatchMedia";
-import type { WPPage } from "@/lib/types";
 
 // Static image import — Next.js analyses this at build time to get width/height/blur placeholder.
 // The image file lives in public/images/ and is served from the Next.js static file server.
 import logo from "@/public/images/EveryDayDigital_Logo_reversed.png";
 
-export default function HomeHero({ menu }: { menu: WPPage[] | null }) {
+export default function HomeHero({ menuSlot }: { menuSlot: React.ReactNode }) {
   const isDesktopResolution = useMatchMedia("(min-width:768px)", true);
   const pathname = usePathname();
 
@@ -42,7 +40,9 @@ export default function HomeHero({ menu }: { menu: WPPage[] | null }) {
   }, []);
 
   useEffect(() => {
-    window.addEventListener("scroll", listenToScroll);
+    // passive: true tells the browser this handler never calls preventDefault(),
+    // so it can start compositing the scroll immediately instead of waiting on JS.
+    window.addEventListener("scroll", listenToScroll, { passive: true });
     return () => window.removeEventListener("scroll", listenToScroll);
   }, [listenToScroll]);
 
@@ -132,7 +132,7 @@ export default function HomeHero({ menu }: { menu: WPPage[] | null }) {
         </div>
       )}
       <div id="menu" className="absolute top-0 right-5">
-        <NavMenu menu={menu} />
+        {menuSlot}
       </div>
     </>
   );

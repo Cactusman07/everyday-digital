@@ -1,0 +1,13 @@
+wordpress
+EverydayDigitalTheme
+wpTheme
+node_modules
+dist
+build
+.next
+out
+
+playwright-report
+test-results
+
+package-lock.json

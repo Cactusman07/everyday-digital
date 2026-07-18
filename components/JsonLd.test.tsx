@@ -13,7 +13,11 @@ function getJsonLdData(container: HTMLElement): Record<string, unknown> {
 
 describe("JsonLd", () => {
   it("renders a script tag with JSON-LD data", () => {
-    const data = { "@context": "https://schema.org", "@type": "Thing", name: "Test" };
+    const data = {
+      "@context": "https://schema.org",
+      "@type": "Thing",
+      name: "Test",
+    };
     const { container } = render(<JsonLd data={data} />);
 
     const parsed = getJsonLdData(container);

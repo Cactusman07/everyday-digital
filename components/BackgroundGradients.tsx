@@ -1,3 +1,9 @@
+// "use client" — this component still needs the DOM to animate the hero's rotating
+// word and background gradients, but it no longer drives that animation with a
+// requestAnimationFrame loop. That loop ran a JS callback on every single frame
+// (~60x/second) for as long as the page was open, competing with the main thread
+// for every tap/scroll. Instead we let the browser's own CSS transition engine
+// interpolate blur/opacity, and only touch JS twice per ~2.5s cycle to flip state.
 "use client";
 
 import { useEffect, useRef } from "react";
@@ -12,109 +18,90 @@ const texts = [
   "Strategy",
 ];
 
-const morphTime = 2;
-const cooldownTime = 0.5;
+const morphSeconds = 2;
+const cooldownSeconds = 0.5;
+const blurPx = 12;
 
 export default function BackgroundGradients() {
   const text1Ref = useRef<HTMLSpanElement>(null);
   const text2Ref = useRef<HTMLSpanElement>(null);
-  const stateRef = useRef({
-    textIndex: texts.length - 1,
-    backgroundIndex: 0,
-    time: 0,
-    morph: 0,
-    cooldown: cooldownTime,
-  });
-  const rafRef = useRef<number>(0);
 
   useEffect(() => {
+    if (!text1Ref.current || !text2Ref.current) return;
+    // Re-bind to new consts: TS's control-flow narrowing above doesn't survive
+    // into the nested closures below, but a const's inferred type does.
     const text1 = text1Ref.current;
     const text2 = text2Ref.current;
-    if (!text1 || !text2) return;
 
     const backgrounds = Array.from({ length: 6 }, (_, i) =>
       document.getElementById(`background${i + 1}`),
     );
 
-    const state = stateRef.current;
-    state.time = Date.now();
-    text1.textContent = texts[state.textIndex % texts.length];
-    text2.textContent = texts[(state.textIndex + 1) % texts.length];
+    // Index of the word currently shown (sharp) in text1. Starts where the
+    // server-rendered markup left off, so the effect never "restarts" the word.
+    let index = texts.length - 1;
+    let backgroundIndex = 0;
 
-    function changeBackground(idx: number) {
+    function showNextBackground() {
       backgrounds.forEach((bg) => {
         if (bg) bg.style.opacity = "0";
       });
-      if (idx < backgrounds.length && backgrounds[idx]) {
-        backgrounds[idx]!.style.opacity = "1";
+      if (backgrounds[backgroundIndex]) {
+        backgrounds[backgroundIndex]!.style.opacity = "1";
       }
+      // Matches the original off-by-one cadence: one "blank" cycle every 7 turns.
+      backgroundIndex =
+        backgroundIndex + 1 > backgrounds.length ? 0 : backgroundIndex + 1;
     }
 
-    function setMorph(fraction: number) {
-      text2!.style.filter = `blur(${Math.min(8 / fraction - 8, 100)}px)`;
-      text2!.style.opacity = `${Math.pow(fraction, 0.4) * 100}%`;
-
-      const inv = 1 - fraction;
-      text1!.style.filter = `blur(${Math.min(8 / inv - 8, 100)}px)`;
-      text1!.style.opacity = `${Math.pow(inv, 0.4) * 100}%`;
-
-      text1!.textContent = texts[state.textIndex % texts.length];
-      text2!.textContent = texts[(state.textIndex + 1) % texts.length];
+    function snap(el: HTMLSpanElement, sharp: boolean) {
+      el.style.transition = "none";
+      el.style.filter = sharp ? "blur(0px)" : `blur(${blurPx}px)`;
+      el.style.opacity = sharp ? "100%" : "0%";
     }
 
-    function doCooldown() {
-      state.morph = 0;
-      text2!.style.filter = "";
-      text2!.style.opacity = "100%";
-      text1!.style.filter = "";
-      text1!.style.opacity = "0%";
+    // Initial state: text1 is already server-rendered and sharp (no flash of
+    // blank text), text2 is preloaded with the next word, hidden and blurred.
+    snap(text1, true);
+    text2.textContent = texts[(index + 1) % texts.length];
+    snap(text2, false);
+
+    let timeoutId: ReturnType<typeof setTimeout>;
+
+    function cycle() {
+      // Cooldown: hold the current word sharp for a beat before morphing.
+      timeoutId = setTimeout(() => {
+        const transition = `filter ${morphSeconds}s ease-in-out, opacity ${morphSeconds}s ease-in-out`;
+        text1.style.transition = transition;
+        text2.style.transition = transition;
+        text1.style.filter = `blur(${blurPx}px)`;
+        text1.style.opacity = "0%";
+        text2.style.filter = "blur(0px)";
+        text2.style.opacity = "100%";
+        showNextBackground();
+
+        // Once the CSS transition finishes, swap roles and start the next cycle.
+        timeoutId = setTimeout(() => {
+          index++;
+          text1.textContent = texts[index % texts.length];
+          snap(text1, true);
+          text2.textContent = texts[(index + 1) % texts.length];
+          snap(text2, false);
+          cycle();
+        }, morphSeconds * 1000);
+      }, cooldownSeconds * 1000);
     }
 
-    function doMorph() {
-      state.morph -= state.cooldown;
-      state.cooldown = 0;
-      let fraction = state.morph / morphTime;
-      if (fraction > 1) {
-        state.cooldown = cooldownTime;
-        fraction = 1;
-      }
-      setMorph(fraction);
-    }
+    cycle();
 
-    function animate() {
-      rafRef.current = requestAnimationFrame(animate);
-
-      const newTime = Date.now();
-      const shouldIncrementIndex = state.cooldown > 0;
-      const dt = (newTime - state.time) / 1000;
-      state.time = newTime;
-      state.cooldown -= dt;
-
-      if (state.cooldown <= 0) {
-        if (shouldIncrementIndex) {
-          state.textIndex++;
-          changeBackground(state.backgroundIndex);
-          state.backgroundIndex++;
-          if (state.backgroundIndex > backgrounds.length) {
-            state.backgroundIndex = 0;
-          }
-        }
-        doMorph();
-      } else {
-        doCooldown();
-      }
-    }
-
-    animate();
-
-    return () => {
-      cancelAnimationFrame(rafRef.current);
-    };
+    return () => clearTimeout(timeoutId);
   }, []);
 
   return (
     <>
-      <span ref={text1Ref} id="text1" />
+      <span ref={text1Ref} id="text1">
+        {texts[texts.length - 1]}
+      </span>
       <span ref={text2Ref} id="text2" />
     </>
   );

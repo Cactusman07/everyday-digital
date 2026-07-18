@@ -18,6 +18,7 @@ import type {
   WPTeam,
   WPTestimonial,
 } from "./types";
+import { sanitize } from "./sanitizeHtml";
 
 // Validates the WordPress URL is configured — fails fast with a helpful error
 // instead of a cryptic "fetch failed" at runtime.
@@ -68,52 +69,67 @@ async function fetchGraphQL<T>(
 
 export async function getPages(): Promise<WPPage[]> {
   const data = await fetchGraphQL<{ pages: { nodes: WPPage[] } }>(PAGES_QUERY);
-  return data.pages.nodes;
+  return data.pages.nodes.map((p) => ({ ...p, content: sanitize(p.content) }));
 }
 
 export async function getProjects(): Promise<WPProject[]> {
   const data = await fetchGraphQL<{ projects: { nodes: WPProject[] } }>(
     PROJECTS_QUERY,
   );
-  return data.projects.nodes;
+  return data.projects.nodes.map((p) => ({
+    ...p,
+    content: sanitize(p.content),
+    ...(p.excerpt !== undefined && { excerpt: sanitize(p.excerpt) }),
+  }));
 }
 
 export async function getServices(): Promise<WPService[]> {
   const data = await fetchGraphQL<{ services: { nodes: WPService[] } }>(
     SERVICES_QUERY,
   );
-  return data.services.nodes;
+  return data.services.nodes.map((s) => ({
+    ...s,
+    content: sanitize(s.content),
+    excerpt: sanitize(s.excerpt),
+  }));
 }
 
 export async function getPosts(): Promise<WPPost[]> {
   const data = await fetchGraphQL<{ posts: { nodes: WPPost[] } }>(POSTS_QUERY);
-  return data.posts.nodes;
+  return data.posts.nodes.map((p) => ({
+    ...p,
+    content: sanitize(p.content),
+    ...(p.excerpt !== undefined && { excerpt: sanitize(p.excerpt) }),
+  }));
 }
 
 export async function getTeams(): Promise<WPTeam[]> {
   const data = await fetchGraphQL<{ teams: { nodes: WPTeam[] } }>(TEAMS_QUERY);
-  return data.teams.nodes;
+  return data.teams.nodes.map((t) => ({
+    ...t,
+    content: sanitize(t.content),
+    excerpt: sanitize(t.excerpt),
+  }));
 }
 
 export async function getTestimonials(): Promise<WPTestimonial[]> {
   const data = await fetchGraphQL<{ testimonials: { nodes: WPTestimonial[] } }>(
     TESTIMONIALS_QUERY,
   );
-  return data.testimonials.nodes;
+  return data.testimonials.nodes.map((t) => ({
+    ...t,
+    content: sanitize(t.content),
+  }));
 }
 
 // Slug-based lookups — used by detail pages (blog/[slug], projects/[slug], etc.)
 
-export async function getPageBySlug(
-  slug: string,
-): Promise<WPPage | undefined> {
+export async function getPageBySlug(slug: string): Promise<WPPage | undefined> {
   const pages = await getPages();
   return pages.find((p) => p.uri === `/${slug}/` || p.uri === `/${slug}`);
 }
 
-export async function getPostBySlug(
-  slug: string,
-): Promise<WPPost | undefined> {
+export async function getPostBySlug(slug: string): Promise<WPPost | undefined> {
   const posts = await getPosts();
   return posts.find((p) => p.slug === slug);
 }
