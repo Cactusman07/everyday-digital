@@ -22,18 +22,24 @@ const SwiperSlide = dynamic(
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 
 export default function Testimonials({ data }: { data: WPTestimonial[] }) {
+  // Swiper's loop mode requires more slides than are shown at once; with only
+  // one or two testimonials, forcing slidesPerView={2}/loop breaks and the
+  // carousel renders blank. Fall back to a single, static slide instead.
+  const slidesPerView = Math.min(data?.length ?? 1, 2);
+  const canLoop = (data?.length ?? 0) > slidesPerView;
+
   return (
     <>
       {data?.length > 0 && (
         <div id="testimonials" className="mt-8 text-center">
           <h2>See what others think about us!</h2>
           <Swiper
-            autoplay={{ delay: 3000 }}
-            slidesPerView={2}
+            autoplay={data.length > 1 ? { delay: 3000 } : false}
+            slidesPerView={slidesPerView}
             spaceBetween={20}
-            loop={true}
-            pagination={{ clickable: true }}
-            navigation={true}
+            loop={canLoop}
+            pagination={data.length > 1 ? { clickable: true } : false}
+            navigation={data.length > 1}
             modules={[Autoplay, Pagination, Navigation]}
             className="mySwiper max-h-48 !h-48"
           >

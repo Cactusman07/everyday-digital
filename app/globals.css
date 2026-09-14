@@ -722,16 +722,9 @@ select:focus-visible {
 
 /* Projects */
 
-.swiper {
-  width: 320px;
-  height: 320px;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  margin-left: -150px !important;
-  margin-top: 40px !important;
-}
-
+/* Legacy fixed-size/absolute positioning removed — it applied to every
+   Swiper instance (including the testimonials carousel added later) since
+   Swiper always adds this base class to its root element. */
 .swiper-slide {
   background-position: center;
   background-size: cover;
@@ -868,6 +861,15 @@ select:focus-visible {
 /* Inner page layout ends */
 
 /* Testimonials */
+
+.testimonial h4 {
+  font-family: inherit;
+  font-size: 1rem;
+  letter-spacing: normal;
+  line-height: 1.4rem;
+  text-shadow: none;
+  margin: 0 0 0.25rem;
+}
 
 .testimonial-content p,
 .services-content p {
