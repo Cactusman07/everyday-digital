@@ -3,7 +3,6 @@ import ProjectContainer from "./ProjectContainer";
 import AboutSection from "./AboutSection";
 import AboutUsProfiles from "./AboutUsProfiles";
 import GeneralContentRenderer from "./GeneralContentRenderer";
-import Testimonials from "./Testimonials";
 import ContactForm from "./ContactForm";
 import Footer from "./Footer";
 import type {
@@ -14,6 +13,10 @@ import type {
   WPPost,
   WPTestimonial,
 } from "@/lib/types";
+
+// Swiper (used inside Testimonials) touches window/document at import time,
+// so it must never be evaluated during server rendering.
+import Testimonials from "./TestimonialsLoader";
 
 interface PageContentProps {
   content: string | null;

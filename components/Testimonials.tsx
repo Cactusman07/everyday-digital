@@ -1,25 +1,17 @@
 // "use client" — Swiper requires browser APIs (touch events, DOM measurement)
 "use client";
 
-// next/dynamic — Next.js version of React.lazy(). The { ssr: false } option means these
-// components are only loaded in the browser, never rendered on the server. This is needed
-// because Swiper accesses window/document on import, which would crash during SSR.
-import dynamic from "next/dynamic";
+// Swiper and SwiperSlide must be imported directly (not as separate next/dynamic
+// chunks) — Swiper's core JS lays out slides horizontally on init, and it needs
+// slides to be present as real children immediately or that layout never applies.
+// Callers instead load this whole component via next/dynamic({ ssr: false }).
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import type { WPTestimonial } from "@/lib/types";
 
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-
-const Swiper = dynamic(() => import("swiper/react").then((mod) => mod.Swiper), {
-  ssr: false,
-});
-const SwiperSlide = dynamic(
-  () => import("swiper/react").then((mod) => mod.SwiperSlide),
-  { ssr: false },
-);
-
-import { Autoplay, Pagination, Navigation } from "swiper/modules";
 
 export default function Testimonials({ data }: { data: WPTestimonial[] }) {
   // Swiper's loop mode requires more slides than are shown at once; with only
