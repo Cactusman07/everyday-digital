@@ -2,9 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    // Allow next/image to optimize images served from the WordPress Docker container.
-    // Without this, <Image src="http://localhost:8181/wp-content/uploads/..." /> would fail.
-    // In production, add your real WordPress domain here too.
+    // Allow next/image to optimize images served from WordPress.
+    // localhost covers the local Docker container; cms.everydaydigital.co.nz
+    // is the production headless backend on Cloudways.
     remotePatterns: [
       {
         protocol: "http",
@@ -14,7 +14,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "www.everydaydigital.co.nz",
+        hostname: "cms.everydaydigital.co.nz",
         pathname: "/wp-content/uploads/**",
       },
     ],
