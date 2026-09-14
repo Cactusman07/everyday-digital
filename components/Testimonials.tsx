@@ -1,52 +1,42 @@
-// "use client" — Swiper requires browser APIs (touch events, DOM measurement)
-"use client";
-
-// Swiper and SwiperSlide must be imported directly (not as separate next/dynamic
-// chunks) — Swiper's core JS lays out slides horizontally on init, and it needs
-// slides to be present as real children immediately or that layout never applies.
-// Callers instead load this whole component via next/dynamic({ ssr: false }).
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import type { WPTestimonial } from "@/lib/types";
 
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-
 export default function Testimonials({ data }: { data: WPTestimonial[] }) {
-  // Swiper's loop mode requires more slides than are shown at once; with only
-  // one or two testimonials, forcing slidesPerView={2}/loop breaks and the
-  // carousel renders blank. Fall back to a single, static slide instead.
-  const slidesPerView = Math.min(data?.length ?? 1, 2);
-  const canLoop = (data?.length ?? 0) > slidesPerView;
-
   return (
     <>
       {data?.length > 0 && (
-        <div id="testimonials" className="mt-8 text-center">
-          <h2>See what others think about us!</h2>
-          <Swiper
-            autoplay={data.length > 1 ? { delay: 3000 } : false}
-            slidesPerView={slidesPerView}
-            spaceBetween={20}
-            loop={canLoop}
-            pagination={data.length > 1 ? { clickable: true } : false}
-            navigation={data.length > 1}
-            modules={[Autoplay, Pagination, Navigation]}
-            className="mySwiper max-h-48 !h-48"
-          >
+        <div id="testimonials" className="mt-8">
+          <h2 className="text-center">See what others think about us!</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-8">
             {data.map((testimonial: WPTestimonial, index: number) => (
-              <SwiperSlide key={`${index}-testimonial`}>
-                <div className="testimonial text-left italic text-sm">
-                  <h4>{testimonial.title}</h4>
-                  <div
-                    className="testimonial-content"
-                    dangerouslySetInnerHTML={{ __html: testimonial.content }}
-                  />
+              <div
+                key={`${testimonial.title}-${index}`}
+                className="bg-[#1a1a1a] border border-white/8 rounded-xl p-5 flex flex-col gap-3"
+              >
+                <div className="flex items-center gap-3">
+                  <svg
+                    className="h-9 w-9 flex-shrink-0 text-[#4bafeb]"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <circle cx="12" cy="8" r="4" />
+                    <path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7" />
+                  </svg>
+                  <h4 className="text-white text-base font-semibold m-0">
+                    {testimonial.title}
+                  </h4>
                 </div>
-              </SwiperSlide>
+                <div
+                  className="testimonial-content text-white/60 text-sm leading-relaxed"
+                  dangerouslySetInnerHTML={{ __html: testimonial.content }}
+                />
+              </div>
             ))}
-          </Swiper>
+          </div>
         </div>
       )}
     </>

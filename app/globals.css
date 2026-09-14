@@ -722,27 +722,6 @@ select:focus-visible {
 
 /* Projects */
 
-/* Legacy fixed-size/absolute positioning removed — it applied to every
-   Swiper instance (including the testimonials carousel added later) since
-   Swiper always adds this base class to its root element. */
-.swiper-slide {
-  background-position: center;
-  background-size: cover;
-}
-
-.swiper-pagination-bullet {
-  background: rgba(255, 255, 255, 0.8) !important;
-}
-
-.swiper-pagination-bullet-active {
-  background: #4b6ceb !important;
-}
-
-.swiper-slide img {
-  display: block;
-  width: 100%;
-}
-
 @media screen and (max-width: 500px) {
   .project img {
     filter: grayscale(0%) !important;
@@ -861,15 +840,6 @@ select:focus-visible {
 /* Inner page layout ends */
 
 /* Testimonials */
-
-.testimonial h4 {
-  font-family: inherit;
-  font-size: 1rem;
-  letter-spacing: normal;
-  line-height: 1.4rem;
-  text-shadow: none;
-  margin: 0 0 0.25rem;
-}
 
 .testimonial-content p,
 .services-content p {

@@ -14,9 +14,7 @@ import type {
   WPTestimonial,
 } from "@/lib/types";
 
-// Swiper (used inside Testimonials) touches window/document at import time,
-// so it must never be evaluated during server rendering.
-import Testimonials from "./TestimonialsLoader";
+import Testimonials from "./Testimonials";
 
 interface PageContentProps {
   content: string | null;

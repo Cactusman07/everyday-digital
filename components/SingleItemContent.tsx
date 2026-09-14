@@ -3,9 +3,7 @@ import Link from "next/link";
 import Footer from "./Footer";
 import type { WPPost, WPProject, WPService, WPTestimonial } from "@/lib/types";
 
-// Swiper (used inside Testimonials) touches window/document at import time,
-// so it must never be evaluated during server rendering.
-import Testimonials from "./TestimonialsLoader";
+import Testimonials from "./Testimonials";
 
 const COVER_TAG = "cover";
 
