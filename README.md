@@ -8,7 +8,7 @@ A modern, server-rendered website for [Every Day Digital](https://everydaydigita
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) (includes Docker Compose)
 - [Node.js](https://nodejs.org/) (v18 or higher)
-- npm (included with Node.js)
+- [pnpm](https://pnpm.io/installation)
 
 ---
 
@@ -38,13 +38,13 @@ Browser → Next.js (port 3000) → WordPress GraphQL API (port 8181)
 ### 1. Install dependencies
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### 2. Start WordPress containers
 
 ```bash
-npm run wp:start
+pnpm run wp:start
 ```
 
 This creates a `wordpress/` directory alongside `docker-compose.yml` where WordPress files are stored.
@@ -78,7 +78,7 @@ Navigate to **http://localhost:8181** and follow the setup wizard.
 ### 7. Start the Next.js dev server
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 Open **http://localhost:3000** — the site will hot-reload on file changes.
@@ -88,8 +88,8 @@ Open **http://localhost:3000** — the site will hot-reload on file changes.
 ## Daily Development
 
 ```bash
-npm run wp:start   # Start WordPress containers
-npm run dev        # Start Next.js dev server
+pnpm run wp:start   # Start WordPress containers
+pnpm run dev        # Start Next.js dev server
 ```
 
 ---
@@ -97,8 +97,8 @@ npm run dev        # Start Next.js dev server
 ## Stopping & Removing Containers
 
 ```bash
-npm run wp:stop    # Stop containers (preserves data)
-npm run wp:remove  # Remove containers (preserves wordpress/ volume)
+pnpm run wp:stop    # Stop containers (preserves data)
+pnpm run wp:remove  # Remove containers (preserves wordpress/ volume)
 docker-compose down -v  # Remove everything including database volume
 ```
 
@@ -106,18 +106,18 @@ docker-compose down -v  # Remove everything including database volume
 
 ## Available Scripts
 
-| Script               | Description                              |
-| -------------------- | ---------------------------------------- |
-| `npm run dev`        | Start Next.js dev server with hot reload |
-| `npm run build`      | Production build (SSG + ISR)             |
-| `npm start`          | Serve production build on port 3000      |
-| `npm run lint`       | Run Next.js ESLint                       |
-| `npm test`           | Run Vitest test suite                    |
-| `npm run test:watch` | Run Vitest in watch mode                 |
-| `npm run test:e2e`   | Run Playwright E2E tests                 |
-| `npm run wp:start`   | Start Docker containers                  |
-| `npm run wp:stop`    | Stop Docker containers                   |
-| `npm run wp:remove`  | Remove Docker containers                 |
+| Script                | Description                              |
+| --------------------- | ---------------------------------------- |
+| `pnpm run dev`        | Start Next.js dev server with hot reload |
+| `pnpm run build`      | Production build (SSG + ISR)             |
+| `pnpm start`          | Serve production build on port 3000      |
+| `pnpm run lint`       | Run Next.js ESLint                       |
+| `pnpm test`           | Run Vitest test suite                    |
+| `pnpm run test:watch` | Run Vitest in watch mode                 |
+| `pnpm run test:e2e`   | Run Playwright E2E tests                 |
+| `pnpm run wp:start`   | Start Docker containers                  |
+| `pnpm run wp:stop`    | Stop Docker containers                   |
+| `pnpm run wp:remove`  | Remove Docker containers                 |
 
 ---
 
@@ -128,9 +128,9 @@ docker-compose down -v  # Remove everything including database volume
 Pre-commit hooks via [Husky](https://typicode.github.io/husky/) + [lint-staged](https://github.com/lint-staged/lint-staged) automatically run ESLint and related unit tests on every commit.
 
 ```bash
-npm test           # Run unit tests once
-npm run test:watch # Run unit tests in watch mode
-npm run test:e2e   # Run E2E tests (starts dev server automatically)
+pnpm test           # Run unit tests once
+pnpm run test:watch # Run unit tests in watch mode
+pnpm run test:e2e   # Run E2E tests (starts dev server automatically)
 ```
 
 ---
@@ -188,8 +188,8 @@ The site implements comprehensive SEO via the Next.js Metadata API:
 Next.js runs as its own server — it does **not** output a WordPress theme. For production:
 
 ```bash
-npm run build   # Generates optimized static pages + server bundle
-npm start       # Serves on port 3000
+pnpm run build   # Generates optimized static pages + server bundle
+pnpm start       # Serves on port 3000
 ```
 
 The build output lives in `.next/` (git-ignored). WordPress only needs to be reachable at the `WORDPRESS_GRAPHQL_URL` configured in `.env.local` for content fetching.

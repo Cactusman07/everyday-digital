@@ -13,8 +13,10 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "tidy": "npm run format && npm run lint && npm run typecheck && npm run test",
-    "tidy:check": "npm run format:check && npm run lint && npm run typecheck && npm run test",
+    "tidy": "pnpm run format && pnpm run lint && pnpm run typecheck && pnpm run test",
+    "tidy:check": "pnpm run format:check && pnpm run lint && pnpm run typecheck && pnpm run test",
+    "audit": "pnpm audit",
+    "audit:fix": "pnpm audit --fix=override",
     "prepare": "husky",
     "wp:start": "docker-compose up -d",
     "wp:stop": "docker-compose stop",
@@ -30,6 +32,7 @@
   ],
   "author": "Cactusman07",
   "license": "ISC",
+  "packageManager": "pnpm@11.9.0",
   "dependencies": {
     "@formspree/react": "^3.0.0",
     "@tailwindcss/postcss": "^4.3.1",
@@ -73,8 +76,5 @@
     "*.{json,css,md}": [
       "prettier --check"
     ]
-  },
-  "overrides": {
-    "postcss": "^8.5.10"
   }
 }
