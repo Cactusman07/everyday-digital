@@ -20,6 +20,24 @@ import type {
 } from "./types";
 import { sanitize } from "./sanitizeHtml";
 
+// Cache tags — one per content type. app/api/revalidate/route.ts calls
+// revalidateTag() with these when WordPress fires its publish hook, so a change
+// in the CMS reaches production within seconds instead of waiting on a timer.
+export const WP_TAGS = {
+  pages: "wp:pages",
+  projects: "wp:projects",
+  services: "wp:services",
+  posts: "wp:posts",
+  teams: "wp:teams",
+  testimonials: "wp:testimonials",
+} as const;
+
+export type WPTag = (typeof WP_TAGS)[keyof typeof WP_TAGS];
+
+// Safety net: even with on-demand revalidation, re-fetch at most once a day so
+// a missed webhook can never leave stale content up indefinitely.
+const FALLBACK_REVALIDATE_SECONDS = 60 * 60 * 24;
+
 // Validates the WordPress URL is configured — fails fast with a helpful error
 // instead of a cryptic "fetch failed" at runtime.
 function getGraphQLUrl(): string {
@@ -33,19 +51,16 @@ function getGraphQLUrl(): string {
   return url;
 }
 
-// Core GraphQL fetch helper. The `next: { revalidate: 60 }` option enables ISR
-// (Incremental Static Regeneration) — Next.js caches the response and re-fetches
-// from WordPress every 60 seconds. This means pages load instantly from cache but
-// content updates appear within a minute of being changed in WordPress.
 async function fetchGraphQL<T>(
   query: string,
+  tag: WPTag,
   variables?: Record<string, unknown>,
 ): Promise<T> {
   const res = await fetch(getGraphQLUrl(), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query, variables }),
-    next: { revalidate: 60 },
+    next: { revalidate: FALLBACK_REVALIDATE_SECONDS, tags: [tag] },
   });
 
   if (!res.ok) {
@@ -65,16 +80,19 @@ async function fetchGraphQL<T>(
 }
 
 // Typed fetch functions — each returns a specific WordPress content type.
-// These are called from Server Components (pages) and during build (generateStaticParams).
 
 export async function getPages(): Promise<WPPage[]> {
-  const data = await fetchGraphQL<{ pages: { nodes: WPPage[] } }>(PAGES_QUERY);
+  const data = await fetchGraphQL<{ pages: { nodes: WPPage[] } }>(
+    PAGES_QUERY,
+    WP_TAGS.pages,
+  );
   return data.pages.nodes.map((p) => ({ ...p, content: sanitize(p.content) }));
 }
 
 export async function getProjects(): Promise<WPProject[]> {
   const data = await fetchGraphQL<{ projects: { nodes: WPProject[] } }>(
     PROJECTS_QUERY,
+    WP_TAGS.projects,
   );
   return data.projects.nodes.map((p) => ({
     ...p,
@@ -86,6 +104,7 @@ export async function getProjects(): Promise<WPProject[]> {
 export async function getServices(): Promise<WPService[]> {
   const data = await fetchGraphQL<{ services: { nodes: WPService[] } }>(
     SERVICES_QUERY,
+    WP_TAGS.services,
   );
   return data.services.nodes.map((s) => ({
     ...s,
@@ -95,7 +114,10 @@ export async function getServices(): Promise<WPService[]> {
 }
 
 export async function getPosts(): Promise<WPPost[]> {
-  const data = await fetchGraphQL<{ posts: { nodes: WPPost[] } }>(POSTS_QUERY);
+  const data = await fetchGraphQL<{ posts: { nodes: WPPost[] } }>(
+    POSTS_QUERY,
+    WP_TAGS.posts,
+  );
   return data.posts.nodes.map((p) => ({
     ...p,
     content: sanitize(p.content),
@@ -104,7 +126,10 @@ export async function getPosts(): Promise<WPPost[]> {
 }
 
 export async function getTeams(): Promise<WPTeam[]> {
-  const data = await fetchGraphQL<{ teams: { nodes: WPTeam[] } }>(TEAMS_QUERY);
+  const data = await fetchGraphQL<{ teams: { nodes: WPTeam[] } }>(
+    TEAMS_QUERY,
+    WP_TAGS.teams,
+  );
   return data.teams.nodes.map((t) => ({
     ...t,
     content: sanitize(t.content),
@@ -115,11 +140,23 @@ export async function getTeams(): Promise<WPTeam[]> {
 export async function getTestimonials(): Promise<WPTestimonial[]> {
   const data = await fetchGraphQL<{ testimonials: { nodes: WPTestimonial[] } }>(
     TESTIMONIALS_QUERY,
+    WP_TAGS.testimonials,
   );
   return data.testimonials.nodes.map((t) => ({
     ...t,
     content: sanitize(t.content),
   }));
+}
+
+// "Safe" variants — return [] instead of throwing. Used by the home page and
+// other places where a WordPress outage should degrade to an empty section,
+// not a 404 for the whole site.
+export async function safe<T>(fn: () => Promise<T[]>): Promise<T[]> {
+  try {
+    return await fn();
+  } catch {
+    return [];
+  }
 }
 
 // Slug-based lookups — used by detail pages (blog/[slug], projects/[slug], etc.)

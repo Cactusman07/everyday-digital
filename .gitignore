@@ -12,3 +12,6 @@ test-results
 .env.development.local
 .env.production.local
 .env.test.local
+
+# Full-page captures are large; keep only the hero crops in git
+public/images/work/*-full.png

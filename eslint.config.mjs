@@ -12,6 +12,7 @@ const eslintConfig = tseslint.config(
       "EverydayDigitalTheme/**",
       "wpTheme/**",
       "**/*.config.*",
+      "scripts/**",
     ],
   },
   js.configs.recommended,
