@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getPages, getPosts, getProjects, getServices } from "@/lib/wordpress";
+import { FEATURED_SLUGS } from "@/lib/site";
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://everydaydigital.co.nz";
@@ -44,11 +45,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
 
     for (const project of projects) {
+      const featured = FEATURED_SLUGS.includes(project.slug);
       entries.push({
         url: `${SITE_URL}/projects/${project.slug}`,
         lastModified: project.date ? new Date(project.date) : undefined,
         changeFrequency: "monthly",
-        priority: 0.6,
+        priority: featured ? 0.8 : 0.6,
       });
     }
 

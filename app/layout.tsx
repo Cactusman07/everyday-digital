@@ -8,7 +8,8 @@ import HomeHero from "@/components/HomeHero";
 import NavMenu from "@/components/NavMenu";
 import NavMenuServer from "@/components/NavMenuServer";
 import SvgBackground from "@/components/SvgBackground";
-import { OrganizationJsonLd } from "@/components/JsonLd";
+import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/JsonLd";
+import { SITE } from "@/lib/site";
 
 // next/font/local self-hosts the font, generates the correct preload tag for
 // the actual file the browser will use (woff2), and applies font-display
@@ -28,11 +29,21 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_SITE_URL || "https://everydaydigital.co.nz",
   ),
   title: {
-    default: "Every Day Digital | Your Digital Partner",
+    default: "Every Day Digital | Web Design, Development & Hosting, Auckland",
     template: "%s | Every Day Digital",
   },
-  description:
-    "Every Day Digital is a digital studio that cares about you. We strive for quality every day. We help keep you running every day.",
+  description: SITE.description,
+  applicationName: SITE.name,
+  authors: [{ name: SITE.founder }],
+  creator: SITE.founder,
+  keywords: [
+    "web design auckland",
+    "wordpress developer auckland",
+    "shopify developer auckland",
+    "web hosting nz",
+    "business automation nz",
+  ],
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "en_NZ",
@@ -44,6 +55,12 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
 };
 
@@ -69,6 +86,7 @@ export default function RootLayout({
 
         {/* JSON-LD structured data for SEO — tells Google this is an Organization */}
         <OrganizationJsonLd />
+        <WebSiteJsonLd />
 
         {/* SVG NZ map background and hero section with nav */}
         <SvgBackground />

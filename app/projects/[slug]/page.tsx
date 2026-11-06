@@ -4,6 +4,7 @@ import { getProjects, getTestimonials } from "@/lib/wordpress";
 import { getCaseStudy, SITE } from "@/lib/site";
 import SingleItemContent from "@/components/SingleItemContent";
 import CaseStudy from "@/components/CaseStudy";
+import { BreadcrumbJsonLd } from "@/components/JsonLd";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -76,7 +77,16 @@ export default async function ProjectPage({ params }: PageProps) {
   const meta = getCaseStudy(slug);
   if (meta) {
     return (
-      <CaseStudy meta={meta} project={project} testimonials={testimonials} />
+      <>
+        <BreadcrumbJsonLd
+          items={[
+            { name: "Home", url: "/" },
+            { name: "Projects", url: "/projects/" },
+            { name: meta.client, url: `/projects/${slug}/` },
+          ]}
+        />
+        <CaseStudy meta={meta} project={project} testimonials={testimonials} />
+      </>
     );
   }
 

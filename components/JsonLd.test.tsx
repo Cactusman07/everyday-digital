@@ -30,9 +30,14 @@ describe("OrganizationJsonLd", () => {
     const { container } = render(<OrganizationJsonLd />);
     const data = getJsonLdData(container);
 
-    expect(data["@type"]).toBe("Organization");
+    // Multi-typed node: LocalBusiness for local pack, Organization for brand.
+    expect(data["@type"]).toEqual(
+      expect.arrayContaining(["Organization", "LocalBusiness"]),
+    );
     expect(data.name).toBe("Every Day Digital");
     expect(data.url).toBe("https://everydaydigital.co.nz");
+    expect(data["@id"]).toBe("https://everydaydigital.co.nz/#organization");
+    expect(data.address).toMatchObject({ addressLocality: "Auckland" });
     expect(data.contactPoint).toBeDefined();
   });
 });
@@ -81,9 +86,9 @@ describe("ServiceJsonLd", () => {
 
     expect(data["@type"]).toBe("Service");
     expect(data.name).toBe("Web Design");
+    // Provider references the site-wide organization node by @id.
     expect(data.provider).toEqual({
-      "@type": "Organization",
-      name: "Every Day Digital",
+      "@id": "https://everydaydigital.co.nz/#organization",
     });
   });
 });
