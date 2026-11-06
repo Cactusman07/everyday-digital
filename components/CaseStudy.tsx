@@ -4,6 +4,7 @@ import Reveal from "@/components/motion/Reveal";
 import Footer from "@/components/Footer";
 import JsonLd from "@/components/JsonLd";
 import { CASE_STUDIES, SITE, type CaseStudyMeta } from "@/lib/site";
+import { preferWp } from "@/lib/images";
 import type { WPProject, WPTestimonial } from "@/lib/types";
 
 // Case-study layout for the four focal projects. Structured facts come from
@@ -25,8 +26,10 @@ function stripTags(html: string) {
 }
 
 export default function CaseStudy({ meta, project, testimonials }: Props) {
-  const hero =
-    project.featuredImage?.node?.sourceUrl ?? `/images/work/${meta.slug}.png`;
+  const hero = preferWp(
+    project.featuredImage?.node?.sourceUrl,
+    `/images/work/${meta.slug}.png`,
+  );
   const results = meta.results.filter((r) => r.value);
   const related = CASE_STUDIES.filter((c) => c.slug !== meta.slug).slice(0, 3);
   // Match a testimonial to this client by name, if one exists in WP

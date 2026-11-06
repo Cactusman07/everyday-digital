@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Reveal from "@/components/motion/Reveal";
 import { CASE_STUDIES } from "@/lib/site";
+import { preferWp } from "@/lib/images";
 import type { WPProject } from "@/lib/types";
 
 // Featured work — the four focal clients, in order. Pulls the screenshot from
@@ -29,9 +30,8 @@ export default function FeaturedWork({ projects }: { projects: WPProject[] }) {
         <Reveal className="work-grid" as="ul">
           {CASE_STUDIES.map((cs) => {
             const wp = bySlug.get(cs.slug);
-            const wpImg = wp?.featuredImage?.node?.sourceUrl;
             const localImg = `/images/work/${cs.slug}.png`;
-            const src = wpImg ?? localImg;
+            const src = preferWp(wp?.featuredImage?.node?.sourceUrl, localImg);
             const headline = cs.results.find((r) => r.value)?.value;
             return (
               <li

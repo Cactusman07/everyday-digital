@@ -2288,3 +2288,130 @@ select:focus-visible {
     grid-template-columns: 1fr;
   }
 }
+
+/* ---- Landing pages (/lp/*) ---- */
+.lp-shell ~ #menu,
+body:has(.lp-shell) #menu,
+body:has(.lp-shell) > div.mx-8.my-5 {
+  display: none;
+}
+.lp {
+  position: relative;
+  z-index: 20;
+}
+.lp__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 22px;
+  padding-bottom: 10px;
+}
+.lp__hero {
+  padding-top: clamp(28px, 5vw, 64px);
+  padding-bottom: clamp(24px, 4vw, 48px);
+}
+.lp__title {
+  font-size: clamp(36px, 6.4vw, 84px);
+  max-width: 18ch;
+}
+.lp__lede {
+  font-size: clamp(17px, 1.6vw, 21px);
+  max-width: 58ch;
+}
+.lp__proof {
+  margin-top: 36px;
+  grid-template-columns: repeat(3, 1fr);
+}
+@media (max-width: 640px) {
+  .lp__proof {
+    grid-template-columns: 1fr;
+  }
+}
+.lp__proof b.stats__text {
+  font-size: clamp(30px, 4vw, 54px);
+  text-transform: none;
+}
+.lp__two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+@media (max-width: 860px) {
+  .lp__two {
+    grid-template-columns: 1fr;
+  }
+}
+.lp__fine {
+  margin-top: 14px;
+}
+.lp__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 16px;
+}
+.lp__steps li {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 14px;
+  align-items: start;
+}
+.lp__step-n {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--edd-accent);
+  color: var(--edd-accent);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+}
+.lp__steps b {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+.lp__steps p {
+  color: var(--edd-mute);
+  font-size: 14.5px;
+  line-height: 1.55;
+  margin: 0;
+}
+.lp__form .final-cta {
+  align-items: start;
+}
+.lp__form-title {
+  font-size: clamp(28px, 4vw, 52px);
+}
+.lp__form .contact-form {
+  margin-top: 0;
+}
+.lp__foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-top: 24px;
+  padding-bottom: 40px;
+  color: var(--edd-mute);
+  font-size: 13px;
+  border-top: 1px solid var(--edd-line);
+  position: relative;
+  z-index: 20;
+}
+.lp__foot a:hover {
+  color: #fff;
+}
+
+.lp .form-submit,
+.final-cta .form-submit {
+  background: var(--edd-accent);
+  color: var(--edd-accent-ink);
+  border-radius: 999px;
+  font-weight: 700;
+}
+.lp .form-submit:hover:not(:disabled),
+.final-cta .form-submit:hover:not(:disabled) {
+  background: #eaff77;
+}
