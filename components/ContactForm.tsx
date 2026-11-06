@@ -12,7 +12,20 @@ const SERVICES = [
   "Other",
 ];
 
-export default function ContactForm() {
+export default function ContactForm({
+  defaultService,
+  context,
+  compact = false,
+  submitLabel = "Send message",
+}: {
+  /** Pre-select the "What can we help with?" dropdown */
+  defaultService?: string;
+  /** Hidden field so the email says which page/package the lead came from */
+  context?: string;
+  /** Hide the phone/service row for landing pages */
+  compact?: boolean;
+  submitLabel?: string;
+} = {}) {
   const [state, handleSubmit] = useForm("mojzdnpq");
 
   if (state.succeeded) {
@@ -45,6 +58,7 @@ export default function ContactForm() {
 
   return (
     <form className="contact-form" onSubmit={handleSubmit} noValidate>
+      {context && <input type="hidden" name="context" value={context} />}
       <div className="form-row">
         <div className="form-group">
           <label htmlFor="name">
@@ -84,7 +98,10 @@ export default function ContactForm() {
         </div>
       </div>
 
-      <div className="form-row">
+      <div
+        className="form-row"
+        style={compact ? { display: "none" } : undefined}
+      >
         <div className="form-group">
           <label htmlFor="phone">
             Phone <span className="form-optional">(optional)</span>
@@ -98,7 +115,11 @@ export default function ContactForm() {
         </div>
         <div className="form-group">
           <label htmlFor="service">What can we help with?</label>
-          <select id="service" name="service">
+          <select
+            id="service"
+            name="service"
+            defaultValue={defaultService ?? ""}
+          >
             <option value="">Select a service...</option>
             {SERVICES.map((s) => (
               <option key={s} value={s}>
@@ -129,7 +150,7 @@ export default function ContactForm() {
       </div>
 
       <button type="submit" className="form-submit" disabled={state.submitting}>
-        {state.submitting ? "Sending…" : "Send message"}
+        {state.submitting ? "Sending…" : submitLabel}
       </button>
 
       <p className="form-note">
