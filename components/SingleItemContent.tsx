@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import Footer from "./Footer";
+import PageHeader from "./PageHeader";
+import ServiceIcon, { hasServiceIcon } from "./ServiceIcon";
 import type { WPPost, WPProject, WPService, WPTestimonial } from "@/lib/types";
 
 import Testimonials from "./Testimonials";
@@ -36,8 +38,15 @@ export default function SingleItemContent({
   const post = type === "blog" ? (item as WPPost) : null;
   const isCover = post?.tags?.nodes?.some((t) => t.name === COVER_TAG) ?? false;
   const tags = post?.tags?.nodes?.filter((t) => t.name !== COVER_TAG) ?? [];
-  const date = post?.date ? new Date(post.date).toLocaleDateString() : null;
+  const date = post?.date
+    ? new Date(post.date).toLocaleDateString("en-NZ", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      })
+    : null;
   const image = item.featuredImage?.node ?? null;
+  const slug = "slug" in item ? item.slug : null;
 
   const imageClass =
     type === "blog"
@@ -70,54 +79,49 @@ export default function SingleItemContent({
         {backLabel}
       </Link>
 
-      {isService ? (
-        <div className="flex items-center gap-4 mb-2">
-          {image?.sourceUrl && (
-            <Image
-              src={image.sourceUrl}
-              alt={image.altText || item.title}
-              width={40}
-              height={40}
-              className="w-10 h-10 object-contain content-icon-tint flex-shrink-0"
-            />
-          )}
-          <h2 className="m-0">{item.title}</h2>
+      {!isService && image?.sourceUrl && (
+        <div className="relative w-full h-64 md:h-96 overflow-hidden rounded-2xl mb-8 border border-white/10">
+          <Image
+            src={image.sourceUrl}
+            alt={image.altText || item.title}
+            fill
+            sizes="100vw"
+            className={imageClass}
+          />
         </div>
-      ) : (
-        <>
-          {image?.sourceUrl && (
-            <div className="relative w-full h-64 md:h-80 overflow-hidden rounded-xl mb-8">
+      )}
+      <PageHeader
+        title={item.title}
+        eyebrow={
+          type === "blog" ? "Blog" : type === "project" ? "Project" : "Service"
+        }
+        icon={
+          isService ? (
+            hasServiceIcon(slug) ? (
+              <ServiceIcon slug={slug!} size={64} className="mb-4" />
+            ) : image?.sourceUrl ? (
               <Image
                 src={image.sourceUrl}
-                alt={image.altText || item.title}
-                fill
-                sizes="100vw"
-                className={imageClass}
+                alt=""
+                width={56}
+                height={56}
+                className="w-14 h-14 object-contain content-icon-tint mb-4"
               />
-            </div>
-          )}
-          {date && (
-            <span className="text-white/40 text-xs block mb-2">{date}</span>
-          )}
-          <h2>{item.title}</h2>
-          {tags.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-6">
-              {tags.map((tag, i) => (
-                <span
-                  key={i}
-                  className="text-[#4bafeb] text-xs bg-[#4b6ceb]/10 px-2.5 py-1 rounded-full"
-                >
-                  {tag.name}
-                </span>
-              ))}
-            </div>
-          )}
-        </>
-      )}
+            ) : null
+          ) : null
+        }
+      >
+        {date && <span>{date}</span>}
+        {tags.map((tag, i) => (
+          <span key={i} className="chip" style={{ margin: 0 }}>
+            {tag.name}
+          </span>
+        ))}
+      </PageHeader>
 
       {item.content && (
         <div
-          className="project-panel__content"
+          className="project-panel__content prose-edd"
           dangerouslySetInnerHTML={{ __html: item.content }}
         />
       )}

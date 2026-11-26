@@ -210,7 +210,8 @@ export const PACKAGES: Package[] = [
 ];
 
 export const HOSTING = {
-  shared: { monthly: 30, annual: 300, label: "Shared hosting" },
+  shared: { monthly: 40, annual: 400, label: "Website hosting" },
+  ecommerce: { monthly: 50, label: "eCommerce hosting" },
   private: { from: 200, label: "Secure private hosting" },
   includes: [
     "SSL certificate",
@@ -219,7 +220,8 @@ export const HOSTING = {
     "Security and uptime monitoring",
     "Your own login to manage content",
   ],
-  support: `Work done is charged at $${SITE.hourlyRate}/hour or quoted per project.`,
+  support:
+    "Website hosting includes one hour of free updates each month. Pay annually and get two months free.",
 } as const;
 
 // Case-study metadata for the four focal clients. Keyed by the WordPress project
@@ -391,33 +393,133 @@ export const CREDENTIALS: Credential[] = [
 export const FAQ: { q: string; a: string }[] = [
   {
     q: "How much does a website cost?",
-    a: "A custom-designed business website is $2,350. A multi-page site with store or integration functionality is $4,750. A full Shopify or WooCommerce store with up to 30 products is $6,500. Anything beyond those is quoted at $140/hour or per project.",
+    a: "A simple website designed and developed in WordPress starts at $1500 + GST. Everything else is quoted at a fixed price after a free consultation and chat, so you know the cost before we start.",
   },
   {
     q: "What does hosting cost, and what's included?",
-    a: "Shared hosting is $30/month or $300/year. Secure private hosting is from $200/month. Both include SSL, daily backups, updates, monitoring and your own login to manage content. Changes you'd like us to make are charged at $140/hour.",
+    a: "Website hosting is $40 a month, which includes one hour of free updates each month. Pay annually and you get two months free ($400 a year). eCommerce hosting is $50 a month. Every plan includes SSL, automated backups, a firewall, a staging site and monitoring. Prices exclude GST.",
   },
   {
-    q: "Do you offer ongoing website management?",
-    a: "Not as a retainer. We host your site, keep it updated and secure, and you manage your own content. When you need work done, it's $140/hour or quoted per project — you only pay for what you use.",
+    q: "Can you manage my website or online store for me?",
+    a: "Yes. Digital Management is a fixed monthly fee to look after your website or eCommerce store: content and product updates, software updates, email, domains and hosting. We agree the scope with you first.",
   },
   {
     q: "Do you build on WordPress or Shopify?",
-    a: "Both, plus custom-built apps. WordPress for content-led sites, Shopify or WooCommerce for stores, and React/.NET on Azure when off-the-shelf software stops fitting.",
+    a: "Both. We specialise in WordPress and Shopify, including WooCommerce stores, and we build custom web applications when off-the-shelf software stops fitting.",
   },
   {
     q: "Can you take over a site someone else built?",
-    a: "Yes. We start with a $1,500 SEO and website audit, which gives you a written list of everything that needs fixing with up to four hours of fixes included, then a clear answer: fix it or rebuild it.",
+    a: "Yes. We usually start with a website review, which gives you a plain-English list of what needs fixing in priority order, then a clear answer: fix it or rebuild it.",
   },
   {
-    q: "What does automation actually mean here?",
-    a: "Looking at how work moves through your business, then connecting the systems that should already talk — Xero, Shopify, email, spreadsheets — and adding AI where it saves real hours. We audit first, then quote specific tasks.",
+    q: "What does AI and automation actually mean here?",
+    a: "Looking at how work moves through your business, then connecting the systems that should already talk to each other, such as your store, accounting, point-of-sale and email, and adding AI where it saves real hours.",
   },
   {
     q: "Where are you based, and who do you work with?",
     a: "Auckland, working with businesses across New Zealand. Most of the work is remote; we meet in person for kickoffs when it helps.",
   },
 ];
+
+// Headline pricing. The only published price points; everything else is
+// quoted at a fixed price after a free consultation.
+export const PRICING = {
+  simpleSiteFrom: 1500,
+  line: "A simple website designed & developed in WordPress starts at $1500 + GST.",
+  rest: "Everything else is quoted at a fixed price after a free consultation and chat.",
+} as const;
+
+// The services, in display order. `slug` matches the WordPress service slug so
+// cards can link to /services/<slug>/ and pick the right icon. `word` is the
+// hero word each service is paired with, and `colour` is that word's gradient
+// colour from the hero animation.
+export interface ServiceMeta {
+  slug: string;
+  title: string;
+  word: string;
+  colour: string;
+  summary: string;
+  tags: string[];
+}
+
+export const SERVICES: ServiceMeta[] = [
+  {
+    slug: "website-design",
+    title: "Website Design",
+    word: "Design",
+    colour: "#4b6ceb",
+    summary:
+      "Websites designed around your brand and your customers, and built so you can manage them yourself.",
+    tags: ["WordPress", "Shopify", "Mobile-first"],
+  },
+  {
+    slug: "development",
+    title: "Website Development",
+    word: "Digital",
+    colour: "#e34beb",
+    summary:
+      "WordPress and Shopify builds, through to custom web apps and integrations.",
+    tags: ["WordPress", "Shopify", "Custom apps"],
+  },
+  {
+    slug: "ecommerce",
+    title: "eCommerce",
+    word: "Innovation",
+    colour: "#9deb4b",
+    summary:
+      "Online stores set up properly, with payments, freight, GST and Google Shopping, and connected to the systems you already use.",
+    tags: ["Shopify", "WooCommerce", "POS sync"],
+  },
+  {
+    slug: "hosting",
+    title: "Web Hosting",
+    word: "Reliability",
+    colour: "#4bafeb",
+    summary:
+      "Managed cloud hosting with backups, firewall, SSL and staging. Websites $40 a month with an hour of free updates. eCommerce $50 a month.",
+    tags: ["Backups", "Firewall", "Staging"],
+  },
+  {
+    slug: "automation",
+    title: "AI & Automation Projects",
+    word: "Automation",
+    colour: "#834beb",
+    summary:
+      "We connect your systems, remove the manual steps, and put AI to work where it genuinely helps.",
+    tags: ["Integrations", "AI content", "Workflows"],
+  },
+  {
+    slug: "website-reviews",
+    title: "Website Reviews",
+    word: "Strategy",
+    colour: "#eb4b4b",
+    summary:
+      "A plain-English review of speed, search, security and conversions, with a prioritised list of what to fix.",
+    tags: ["SEO", "AI search", "Speed"],
+  },
+  {
+    slug: "digital-consulting",
+    title: "Digital Consulting",
+    word: "Mentoring",
+    colour: "#ebe74b",
+    summary:
+      "Independent, practical advice from someone who builds and runs online businesses every day.",
+    tags: ["Platform advice", "Migrations", "Strategy"],
+  },
+  {
+    slug: "digital-management",
+    title: "Digital Management",
+    word: "Support",
+    colour: "#4bebc8",
+    summary:
+      "Your website or online store looked after for a fixed monthly fee. Content, products, updates, email and domains, all handled.",
+    tags: ["Fixed monthly fee", "Websites", "Online stores"],
+  },
+];
+
+export function getServiceMeta(slug: string): ServiceMeta | undefined {
+  return SERVICES.find((s) => s.slug === slug);
+}
 
 export const STATS = [
   { value: 17, suffix: "", label: "sites hosted & maintained" },

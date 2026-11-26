@@ -4,8 +4,8 @@
 
 import {
   SITE,
-  FOCUS_AREAS,
-  PACKAGES,
+  PRICING,
+  SERVICES,
   HOSTING,
   CASE_STUDIES,
   FAQ,
@@ -26,23 +26,23 @@ export function GET() {
     `Founder: ${SITE.founder}. Contact: ${SITE.email}, ${SITE.phone}.`,
   );
   lines.push(
-    `Pricing model: fixed-price packages, otherwise $${SITE.hourlyRate}/hour or quoted per project. No retainers.`,
+    `Pricing model: ${PRICING.line} ${PRICING.rest} We specialise in WordPress and Shopify.`,
   );
   lines.push("");
   lines.push("## Services");
-  for (const f of FOCUS_AREAS) {
-    lines.push(`- ${f.title}: ${f.body} (${SITE.url}${f.href})`);
-  }
-  lines.push("");
-  lines.push("## Packages (NZD, excluding GST)");
-  for (const p of PACKAGES) {
+  for (const sv of SERVICES) {
     lines.push(
-      `- ${p.name} — ${p.priceLabel}: ${p.tagline} Includes: ${p.includes.join("; ")}.${p.fineprint ? " " + p.fineprint : ""}`,
+      `- ${sv.title}: ${sv.summary} (${SITE.url}/services/${sv.slug}/)`,
     );
   }
+  lines.push("");
+  lines.push("## Pricing (NZD, excluding GST)");
+  lines.push(`- ${PRICING.line}`);
+  lines.push(`- ${PRICING.rest}`);
   lines.push(
-    `- Hosting — shared $${HOSTING.shared.monthly}/month or $${HOSTING.shared.annual}/year; private from $${HOSTING.private.from}/month. Includes ${HOSTING.includes.join(", ").toLowerCase()}.`,
+    `- Website hosting: $${HOSTING.shared.monthly}/month or $${HOSTING.shared.annual}/year (two months free). ${HOSTING.support}`,
   );
+  lines.push(`- eCommerce hosting: $${HOSTING.ecommerce.monthly}/month.`);
   lines.push("");
   lines.push("## Selected work");
   for (const c of CASE_STUDIES) {

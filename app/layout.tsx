@@ -24,6 +24,12 @@ const bananaItalic = localFont({
 // Next.js Metadata API — this exported object sets default <head> tags for every page.
 // The `title.template` means child pages can export { title: "About" } and it becomes
 // "About | Every Day Digital" automatically. Child pages override; these are fallbacks.
+const anton = localFont({
+  src: "../public/fonts/Anton-Regular.woff2",
+  display: "swap",
+  variable: "--font-anton",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL || "https://everydaydigital.co.nz",
@@ -73,7 +79,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en-NZ" className={bananaItalic.variable}>
+    <html lang="en-NZ" className={`${bananaItalic.variable} ${anton.variable}`}>
       <body>
         {/* Background gradient divs — animated by BackgroundGradients client component */}
         <div id="background1" className="fullpage" />

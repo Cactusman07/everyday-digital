@@ -8,7 +8,7 @@ export default function FaqSection() {
   return (
     <section id="faq" className="home-section" aria-labelledby="faq-h">
       <div className="home-wrap home-wrap--narrow">
-        <p className="eyebrow">05 — Questions</p>
+        <p className="eyebrow">Questions</p>
         <h2 id="faq-h" className="display">
           Before you
           <br />

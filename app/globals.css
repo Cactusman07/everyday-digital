@@ -2415,3 +2415,642 @@ body:has(.lp-shell) > div.mx-8.my-5 {
 .final-cta .form-submit:hover:not(:disabled) {
   background: #eaff77;
 }
+
+/* ==========================================================================
+   Dive home page (Nov 2026). The hero is pinned behind the page; scrolling
+   grows the title, opens a light "iris", then runs through the manifesto,
+   stacked service cards, price, sideways work track, quotes and FAQ. The
+   last section is see-through so the hero gradient and NZ map return.
+   Scroll behaviour: components/home/DiveEffects.tsx
+   ========================================================================== */
+
+:root {
+  --edd-accent: #fff;
+  --edd-cream: #f4f1ea;
+  --font-display: var(--font-anton), Impact, "Arial Narrow", sans-serif;
+}
+.btn--accent:hover {
+  background: #e4e4e4;
+  border-color: #e4e4e4;
+}
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.005em;
+}
+.chip {
+  display: inline-block;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: 12.5px;
+  margin: 0 6px 6px 0;
+}
+
+/* Hero stays put on the home page while the content scrolls over it */
+body:has(.dive-intro) #header {
+  position: fixed;
+  inset: 0;
+  margin: 20px 32px;
+  height: auto;
+}
+body:has(.dive-intro) #title h1 {
+  transform-origin: 34% 56%;
+  will-change: transform;
+}
+#header > *,
+#header #title > a {
+  transition: opacity 0.4s;
+}
+#header.is-diving > *:not(#title):not(.fixed),
+#header.is-diving #title > a {
+  opacity: 0;
+  pointer-events: none;
+}
+#header.is-done {
+  visibility: hidden;
+}
+@media (max-width: 767px) {
+  #header.is-done > .fixed {
+    visibility: visible;
+  }
+}
+
+.dive-intro {
+  height: 240vh;
+  pointer-events: none;
+}
+.dive-intro__stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+.dive-intro__hint {
+  position: absolute;
+  left: 50%;
+  bottom: 96px;
+  transform: translateX(-50%);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.75;
+  white-space: nowrap;
+}
+.dive-iris {
+  position: absolute;
+  inset: 0;
+  background: var(--edd-cream);
+  color: #0b0b0b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  clip-path: circle(0% at 58% 54%);
+  will-change: clip-path;
+}
+.dive-iris p {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: clamp(44px, 9vw, 150px);
+  line-height: 0.9;
+  text-align: center;
+  margin: 0;
+}
+
+.dive-main {
+  position: relative;
+  background: #000;
+}
+.dive-main h2,
+.dive-main h3,
+.dive-outro h2 {
+  text-shadow: none;
+}
+.dive-h {
+  font-size: clamp(52px, 9vw, 150px);
+}
+.dive-h--sm {
+  font-size: clamp(40px, 6vw, 96px);
+  margin: 0;
+}
+.dive-center {
+  justify-content: center;
+}
+
+/* Manifesto */
+.dive-mani {
+  height: 230vh;
+  background: var(--edd-cream);
+  color: #0b0b0b;
+}
+.dive-mani__stick {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--edd-gutter);
+}
+.dive-mani p {
+  font-size: clamp(28px, 4.6vw, 76px);
+  line-height: 1.08;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  max-width: 22ch;
+  margin: 0;
+}
+.dive-mani .wd {
+  opacity: 0.13;
+  transition: opacity 0.25s;
+}
+.dive-mani .wd.on {
+  opacity: 1;
+}
+.dive-mani .wd.sc {
+  font-family: var(--font-banana-italic), cursive;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+/* Services: sticky cards stack */
+.dive-svc {
+  padding: 14vh var(--edd-gutter) 10vh;
+}
+.dive-svc .dive-h {
+  margin: 14px 0 8vh;
+}
+.dive-card {
+  position: sticky;
+  min-height: min(66vh, 540px);
+  border-radius: 26px;
+  background: #101010;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  margin-bottom: 5vh;
+  padding: clamp(22px, 3.4vw, 48px);
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 30px;
+  overflow: hidden;
+  transform-origin: 50% 0;
+  will-change: transform;
+}
+.dive-card__l {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
+}
+.dive-card__n {
+  font-family: var(--font-display);
+  font-size: 18px;
+  opacity: 0.5;
+}
+.dive-card__ed {
+  font-family: var(--font-banana-italic), cursive;
+  font-size: clamp(26px, 3vw, 44px);
+  line-height: 1;
+  margin: 6px 0 0;
+}
+.dive-card__ed b {
+  font-weight: 400;
+  color: var(--k);
+}
+.dive-card h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  font-size: clamp(34px, 5.2vw, 84px);
+  line-height: 0.92;
+  margin: 0 0 14px;
+}
+.dive-card p {
+  max-width: 42ch;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 16px;
+}
+.dive-card__more {
+  display: inline-block;
+  margin-top: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  border-bottom: 1px solid var(--k);
+}
+.dive-card__art {
+  border-radius: 18px;
+  background: linear-gradient(115deg, #000 30%, var(--k));
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  min-height: 160px;
+}
+.dive-card__art::after {
+  content: "";
+  position: absolute;
+  width: 70%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  right: -18%;
+  bottom: -28%;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow:
+    0 0 0 40px rgba(255, 255, 255, 0.06),
+    0 0 0 90px rgba(255, 255, 255, 0.04);
+}
+.dive-card__art .sicon {
+  position: relative;
+  z-index: 1;
+  width: clamp(84px, 11vw, 150px);
+  height: auto;
+}
+
+/* Service icons */
+.sicon {
+  color: #fff;
+  transition: color 0.3s;
+  flex: none;
+}
+.sicon .ac {
+  fill: var(--k);
+  fill-opacity: 0.35;
+  transition: fill-opacity 0.3s;
+}
+.has-sicon:hover .sicon {
+  color: var(--k);
+}
+.has-sicon:hover .sicon .ac {
+  fill-opacity: 0.75;
+}
+.dive-card:hover .sicon {
+  color: #fff;
+}
+
+/* Price */
+.dive-price {
+  padding: 16vh var(--edd-gutter);
+  text-align: center;
+}
+.dive-price__big {
+  font-family: var(--font-display);
+  font-size: clamp(110px, 26vw, 430px);
+  line-height: 0.86;
+  background: linear-gradient(115deg, #fff 30%, #e34beb);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.dive-price__gst {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 3vw, 44px);
+  text-transform: uppercase;
+}
+.dive-price__p {
+  max-width: 46ch;
+  margin: 26px auto 0;
+  font-size: clamp(17px, 1.6vw, 22px);
+  color: rgba(255, 255, 255, 0.82);
+}
+
+/* Work: sideways track */
+.dive-hz__stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.dive-hz__head {
+  padding: 0 var(--edd-gutter) 26px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 20px;
+}
+.dive-track {
+  display: flex;
+  gap: 4vw;
+  padding: 0 var(--edd-gutter);
+  margin: 0;
+  list-style: none;
+  will-change: transform;
+}
+.dive-pan {
+  flex: 0 0 min(62vw, 860px);
+}
+.dive-pan__shot {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  max-height: 52vh;
+  width: 100%;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.dive-pan__shot img {
+  object-fit: cover;
+  object-position: top;
+  transition: transform 0.8s var(--edd-ease);
+}
+.dive-pan a:hover img {
+  transform: scale(1.04);
+}
+.dive-pan h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  font-size: clamp(26px, 3.2vw, 48px);
+  line-height: 1;
+  margin: 16px 0 0;
+}
+.dive-pan small {
+  display: block;
+  opacity: 0.6;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 11.5px;
+  margin: 6px 0;
+}
+.dive-pan p {
+  max-width: 46ch;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+.dive-bar {
+  margin: 26px var(--edd-gutter) 0;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.15);
+}
+.dive-bar i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: #e34beb;
+}
+
+/* Quotes */
+.dive-qs {
+  padding: 16vh var(--edd-gutter) 8vh;
+  display: grid;
+  gap: 10vh;
+}
+.dive-qs blockquote {
+  font-size: clamp(26px, 3.8vw, 60px);
+  line-height: 1.1;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  max-width: 22ch;
+  margin: 0;
+}
+.dive-qs blockquote:nth-child(2) {
+  margin-left: auto;
+  text-align: right;
+}
+.dive-qs footer {
+  font-size: 14px;
+  opacity: 0.65;
+  margin-top: 16px;
+  letter-spacing: 0;
+  font-weight: 400;
+}
+
+/* Outro: see-through, so the pinned gradient and map show again */
+.dive-outro {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 40px;
+  padding: 110px var(--edd-gutter) 96px;
+}
+.dive-outro__huge {
+  font-family: var(--font-banana-italic), cursive;
+  font-size: clamp(70px, 17vw, 300px);
+  line-height: 0.9;
+  margin: 0;
+}
+.dive-outro__foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  font-size: 14px;
+}
+.dive-outro__foot nav {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.dive-outro__foot a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 760px) {
+  .dive-card {
+    grid-template-columns: 1fr;
+  }
+  .dive-card__art {
+    min-height: 120px;
+    order: -1;
+  }
+  .dive-pan {
+    flex-basis: 82vw;
+  }
+  .dive-mani {
+    height: 200vh;
+  }
+  .dive-hz__head .btn {
+    display: none;
+  }
+  .dive-outro {
+    padding-bottom: 140px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dive-mani .wd {
+    opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   Shared page style (Nov 2026): pages, blog posts, projects and services.
+   Same gradient, logo and script titles as before; cleaner type underneath.
+   Page title = script h1 with a colour bar. Headings inside content = Anton
+   capitals. Body copy sits in a readable column.
+   ========================================================================== */
+
+.pg-head {
+  margin: 0 0 clamp(24px, 4vw, 44px);
+}
+.pg-head .eyebrow {
+  margin-bottom: 4px;
+}
+.pg-title {
+  font-family: var(--font-banana-italic), cursive;
+  font-weight: 400;
+  font-size: clamp(46px, 8vw, 120px);
+  line-height: 1.02;
+  letter-spacing: 0.5px;
+  text-shadow: none;
+  margin: 0;
+}
+/* The script font has no numerals, so digits in titles use the display font */
+.pg-num {
+  font-family: var(--font-display);
+  font-size: 0.78em;
+  letter-spacing: 0.01em;
+}
+.pg-head::after {
+  content: "";
+  display: block;
+  width: min(220px, 40%);
+  height: 4px;
+  border-radius: 4px;
+  margin-top: 18px;
+  background: linear-gradient(
+    90deg,
+    #e34beb,
+    #834beb,
+    #4b6ceb,
+    #4bafeb,
+    #9deb4b,
+    #ebe74b,
+    #eb4b4b
+  );
+}
+.pg-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--edd-mute);
+}
+
+#content .prose-edd {
+  max-width: 74ch;
+  font-size: clamp(16px, 1.25vw, 18px);
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.86);
+}
+#content .prose-edd p {
+  margin: 0 0 1.1em;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+#content .prose-edd h1,
+#content .prose-edd h2,
+#content .prose-edd h3,
+#content .prose-edd h4,
+#content .prose-edd h5 {
+  font-family: var(--font-display) !important;
+  font-weight: 400;
+  text-transform: uppercase;
+  text-shadow: none;
+  letter-spacing: 0.01em !important;
+  color: #fff;
+  line-height: 1.02;
+  margin: 1.7em 0 0.5em;
+}
+#content .prose-edd h1,
+#content .prose-edd h2 {
+  font-size: clamp(28px, 3.4vw, 46px);
+}
+#content .prose-edd h3 {
+  font-size: clamp(23px, 2.5vw, 34px);
+}
+#content .prose-edd h4,
+#content .prose-edd h5 {
+  font-size: clamp(20px, 2vw, 26px);
+}
+#content .prose-edd > :first-child {
+  margin-top: 0;
+}
+#content .prose-edd a {
+  color: #4bafeb;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s;
+}
+#content .prose-edd a:hover {
+  color: #fff;
+}
+#content .prose-edd strong {
+  color: #fff;
+  font-weight: 600;
+}
+#content .prose-edd ul,
+#content .prose-edd ol {
+  margin: 0 0 1.2em;
+  padding-left: 1.3em;
+}
+#content .prose-edd ul {
+  list-style: disc;
+}
+#content .prose-edd ol {
+  list-style: decimal;
+}
+#content .prose-edd li {
+  margin: 0 0 0.5em;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+#content .prose-edd li::marker {
+  color: #4bafeb;
+}
+#content .prose-edd img {
+  border-radius: 14px;
+  height: auto;
+  max-width: 100%;
+  margin: 1.2em 0;
+}
+#content .prose-edd blockquote {
+  border-left: 3px solid #4b6ceb;
+  padding: 4px 0 4px 20px;
+  margin: 1.4em 0;
+  font-size: 1.15em;
+  color: #fff;
+}
+
+/* Cards used on the Services, Blog and Projects lists */
+.edd-card {
+  background: rgba(10, 10, 10, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  transition:
+    transform 0.35s var(--edd-ease),
+    border-color 0.3s,
+    background 0.3s;
+}
+.edd-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--k, #4bafeb);
+  background: rgba(16, 16, 16, 0.9);
+}
+.edd-card__title {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: 22px;
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+  margin: 0;
+}
+.edd-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  justify-content: center;
+  font-size: 13px;
+  color: var(--edd-mute);
+  margin: 0 0 14px;
+}
+.edd-foot a:hover {
+  color: #fff;
+}

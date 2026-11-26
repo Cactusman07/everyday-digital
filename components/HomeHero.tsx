@@ -69,7 +69,6 @@ export default function HomeHero({ menuSlot }: { menuSlot: React.ReactNode }) {
             <CTAS />
           </div>
           <div
-            style={{ opacity: !showHeader ? 0 : 1 }}
             id="title"
             className="transition-all duration-500 justify-center block text-7xl sm:text-8xl lg:text-[160px] xl:text-[210px] my-auto"
           >

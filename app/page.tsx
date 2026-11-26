@@ -5,27 +5,29 @@
 
 import type { Metadata } from "next";
 import { getProjects, getTestimonials, safe } from "@/lib/wordpress";
-import { SITE, FAQ, PACKAGES } from "@/lib/site";
+import { SITE, FAQ, PRICING, SERVICES } from "@/lib/site";
 import JsonLd from "@/components/JsonLd";
-import Marquee from "@/components/motion/Marquee";
-import FocusAreas from "@/components/home/FocusAreas";
-import Packages from "@/components/home/Packages";
-import FeaturedWork from "@/components/home/FeaturedWork";
-import Standing from "@/components/home/Standing";
-import TestimonialWall from "@/components/home/TestimonialWall";
 import FaqSection from "@/components/home/FaqSection";
-import FinalCta from "@/components/home/FinalCta";
-import Footer from "@/components/Footer";
+import DiveEffects from "@/components/home/DiveEffects";
+import {
+  DiveIntro,
+  Manifesto,
+  ServiceStack,
+  PriceCount,
+  WorkTrack,
+  Quotes,
+  Outro,
+} from "@/components/home/Dive";
 
 export const metadata: Metadata = {
   title: "Web Design, Development & Hosting in Auckland | Every Day Digital",
   description:
-    "Custom web design from $2,350, online stores from $6,500, hosting from $30/month. WordPress, Shopify and custom-built apps, plus automation and AI help. Auckland, working NZ-wide.",
+    "WordPress and Shopify websites, online stores, hosting, AI and automation for New Zealand businesses. A simple WordPress website starts at $1500 + GST. Auckland, working NZ-wide.",
   alternates: { canonical: "/" },
   openGraph: {
     title: "Every Day Digital — We keep you running.",
     description:
-      "Web design, development, hosting, and automation for New Zealand businesses. Priced up front, no retainers.",
+      "Web design, development, hosting, and automation for New Zealand businesses. Fixed prices, agreed before we start.",
     url: "/",
   },
 };
@@ -40,29 +42,17 @@ export default async function HomePage() {
     <>
       <HomeJsonLd />
 
-      <Marquee
-        items={[
-          "Hosting",
-          "Web design",
-          "Web development",
-          "Automation & AI",
-        ].map((t, i) => (
-          <span key={i} className={i % 2 ? "hi" : undefined}>
-            {t}
-          </span>
-        ))}
-        ariaLabel="What we do"
-        className="marquee--hero"
-      />
-
-      <FocusAreas />
-      <Packages />
-      <FeaturedWork projects={projects} />
-      <Standing />
-      <TestimonialWall data={testimonials} />
-      <FaqSection />
-      <FinalCta />
-      <Footer />
+      <DiveEffects />
+      <DiveIntro />
+      <div className="dive-main">
+        <Manifesto />
+        <ServiceStack />
+        <PriceCount />
+        <WorkTrack projects={projects} />
+        <Quotes data={testimonials} />
+        <FaqSection />
+      </div>
+      <Outro />
     </>
   );
 }
@@ -83,19 +73,27 @@ function HomeJsonLd() {
   const offers = {
     "@context": "https://schema.org",
     "@type": "OfferCatalog",
-    name: "Every Day Digital packages",
-    url: `${SITE.url}/#pricing`,
-    itemListElement: PACKAGES.filter((p) => p.price !== null).map((p) => ({
+    name: "Every Day Digital services",
+    url: `${SITE.url}/services/`,
+    itemListElement: SERVICES.map((s) => ({
       "@type": "Offer",
-      name: p.name,
-      description: p.tagline,
-      price: p.price,
-      priceCurrency: "NZD",
-      url: `${SITE.url}${p.ctaHref}`,
+      name: s.title,
+      description: s.summary,
+      url: `${SITE.url}/services/${s.slug}/`,
+      ...(s.slug === "website-design"
+        ? {
+            priceSpecification: {
+              "@type": "PriceSpecification",
+              minPrice: PRICING.simpleSiteFrom,
+              priceCurrency: "NZD",
+              valueAddedTaxIncluded: false,
+            },
+          }
+        : {}),
       seller: { "@type": "Organization", name: SITE.name, url: SITE.url },
       itemOffered: {
         "@type": "Service",
-        name: p.name,
+        name: s.title,
         provider: { "@type": "Organization", name: SITE.name },
       },
     })),

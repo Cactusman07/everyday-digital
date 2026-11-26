@@ -3,6 +3,8 @@
 import { useState, useCallback } from "react";
 import Image from "next/image";
 import DetailPanel from "./DetailPanel";
+import ServiceIcon, { hasServiceIcon } from "./ServiceIcon";
+import { getServiceMeta } from "@/lib/site";
 import type { WPService, WPPost } from "@/lib/types";
 
 type ContentItem = WPService | WPPost;
@@ -27,22 +29,29 @@ export default function GeneralContentRenderer({
             <div
               key={item.databaseId ?? `${item.title}-${index}`}
               onClick={() => setActive(item)}
-              className="bg-[#1a1a1a] border border-white/8 rounded-xl p-5 cursor-pointer hover:border-[#4b6ceb]/50 hover:bg-[#212121] transition-all duration-300 group flex flex-col gap-3"
+              style={
+                {
+                  "--k": getServiceMeta(item.slug)?.colour ?? "#4bafeb",
+                } as React.CSSProperties
+              }
+              className="edd-card has-sicon p-6 cursor-pointer group flex flex-col gap-3"
             >
-              {!!item.featuredImage?.node?.sourceUrl && (
-                <div className="text-[#4bafeb] mb-1">
-                  <Image
-                    src={item.featuredImage.node.sourceUrl}
-                    alt={item.featuredImage.node.altText ?? item.title}
-                    width={20}
-                    height={20}
-                    className="w-5 h-5 object-contain content-icon-tint"
-                  />
-                </div>
+              {hasServiceIcon(item.slug) ? (
+                <ServiceIcon slug={item.slug} size={44} className="mb-1" />
+              ) : (
+                !!item.featuredImage?.node?.sourceUrl && (
+                  <div className="text-[#4bafeb] mb-1">
+                    <Image
+                      src={item.featuredImage.node.sourceUrl}
+                      alt={item.featuredImage.node.altText ?? item.title}
+                      width={44}
+                      height={44}
+                      className="w-11 h-11 object-contain content-icon-tint"
+                    />
+                  </div>
+                )
               )}
-              <p className="text-white text-base font-medium m-0">
-                {item.title}
-              </p>
+              <p className="edd-card__title">{item.title}</p>
               <div
                 className="text-white/60 text-sm leading-relaxed services-content"
                 dangerouslySetInnerHTML={{ __html: item.excerpt ?? "" }}
@@ -84,7 +93,11 @@ export default function GeneralContentRenderer({
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-8">
         {data.map((item: ContentItem, index: number) => {
           const date = (item as WPPost)?.date
-            ? new Date((item as WPPost).date).toLocaleDateString()
+            ? new Date((item as WPPost).date).toLocaleDateString("en-NZ", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })
             : null;
           const allTags = (item as WPPost)?.tags?.nodes || [];
           const isCover = allTags.some((t) => t.name === COVER_TAG);
@@ -94,7 +107,7 @@ export default function GeneralContentRenderer({
             <div
               key={item.databaseId ?? `${item.title}-${date ?? index}`}
               onClick={() => setActive(item)}
-              className="bg-[#1a1a1a] border border-white/8 rounded-xl cursor-pointer hover:border-[#4b6ceb]/50 hover:bg-[#212121] transition-all duration-300 group flex flex-col overflow-hidden"
+              className="edd-card cursor-pointer group flex flex-col overflow-hidden"
             >
               {!!item.featuredImage?.node?.sourceUrl && (
                 <div className="relative w-full h-36 md:h-40 overflow-hidden flex-shrink-0 bg-white flex items-center justify-center">

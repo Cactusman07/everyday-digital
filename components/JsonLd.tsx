@@ -2,7 +2,7 @@
 // and answer engines use for rich results, knowledge panels and citations.
 // Each component renders an invisible <script type="application/ld+json">.
 
-import { SITE, PACKAGES } from "@/lib/site";
+import { SITE, PRICING } from "@/lib/site";
 
 interface JsonLdProps {
   data: Record<string, unknown>;
@@ -23,7 +23,7 @@ const sameAs = Object.values(SITE.social).filter(Boolean);
 // LocalBusiness subtype — it gets local-pack eligibility plus the service
 // vocabulary. @id lets other schema on the site reference this node.
 export function OrganizationJsonLd() {
-  const prices = PACKAGES.filter((p) => p.price !== null).map((p) => p.price!);
+  const prices = [PRICING.simpleSiteFrom];
   return (
     <JsonLd
       data={{

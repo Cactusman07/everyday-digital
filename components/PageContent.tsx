@@ -3,6 +3,7 @@ import ProjectContainer from "./ProjectContainer";
 import AboutSection from "./AboutSection";
 import AboutUsProfiles from "./AboutUsProfiles";
 import GeneralContentRenderer from "./GeneralContentRenderer";
+import PageHeader from "./PageHeader";
 import ContactForm from "./ContactForm";
 import Footer from "./Footer";
 import type {
@@ -30,9 +31,12 @@ interface PageContentProps {
 export default function PageContent(props: PageContentProps) {
   return (
     <div id="content" className="mt-12 mb-24 mx-8 relative z-0">
-      <h2>{props.title}</h2>
+      <PageHeader title={props.title ?? ""} eyebrow="Every Day Digital" />
       {!!props.content && !props.title?.toLowerCase().includes("contact") && (
-        <div dangerouslySetInnerHTML={{ __html: props.content }} />
+        <div
+          className="prose-edd"
+          dangerouslySetInnerHTML={{ __html: props.content }}
+        />
       )}
       {props.title?.toLowerCase().includes("contact") && (
         <>
