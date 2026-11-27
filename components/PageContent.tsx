@@ -4,6 +4,14 @@ import AboutSection from "./AboutSection";
 import AboutUsProfiles from "./AboutUsProfiles";
 import GeneralContentRenderer from "./GeneralContentRenderer";
 import PageHeader from "./PageHeader";
+import { SERVICES } from "@/lib/site";
+
+// Services show in the order set in lib/site.ts; anything new in WordPress
+// that isn't listed there goes at the end.
+const serviceRank = (slug?: string) => {
+  const i = SERVICES.findIndex((s) => s.slug === slug);
+  return i === -1 ? SERVICES.length : i;
+};
 import ContactForm from "./ContactForm";
 import Footer from "./Footer";
 import type {
@@ -112,7 +120,12 @@ export default function PageContent(props: PageContentProps) {
       )}
       {props.title === "Services" && (
         <>
-          <GeneralContentRenderer data={props.services} icons={true} />
+          <GeneralContentRenderer
+            data={[...props.services].sort(
+              (a, b) => serviceRank(a.slug) - serviceRank(b.slug),
+            )}
+            icons={true}
+          />
           <div className="mt-8 bg-white/5 border border-white/10 rounded-2xl p-6 flex items-center justify-between gap-6 flex-wrap">
             <p className="text-white/70 text-base leading-relaxed m-0">
               <strong className="text-white font-medium">
