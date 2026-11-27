@@ -74,12 +74,12 @@ function HomeJsonLd() {
     "@context": "https://schema.org",
     "@type": "OfferCatalog",
     name: "Every Day Digital services",
-    url: `${SITE.url}/services/`,
+    url: `${SITE.url}/services`,
     itemListElement: SERVICES.map((s) => ({
       "@type": "Offer",
       name: s.title,
       description: s.summary,
-      url: `${SITE.url}/services/${s.slug}/`,
+      url: `${SITE.url}/services/${s.slug}`,
       ...(s.slug === "website-design"
         ? {
             priceSpecification: {

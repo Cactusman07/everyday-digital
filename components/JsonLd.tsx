@@ -50,7 +50,7 @@ export function OrganizationJsonLd() {
           { "@type": "City", name: "Auckland" },
           { "@type": "Country", name: "New Zealand" },
         ],
-        priceRange: `NZ$${Math.min(...prices).toLocaleString()}–$${Math.max(...prices).toLocaleString()}`,
+        priceRange: `From NZ$${Math.min(...prices).toLocaleString()} + GST`,
         currenciesAccepted: "NZD",
         knowsAbout: [
           "Web design",

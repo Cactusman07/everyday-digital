@@ -49,7 +49,6 @@ export const metadata: Metadata = {
     "web hosting nz",
     "business automation nz",
   ],
-  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "en_NZ",

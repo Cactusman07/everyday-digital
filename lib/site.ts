@@ -48,7 +48,7 @@ export const FOCUS_AREAS: FocusArea[] = [
       "SSL, daily backups, updates and monitoring included",
       "Your own login — you manage your content",
     ],
-    href: "/services/hosting/",
+    href: "/services/hosting",
   },
   {
     id: "design",
@@ -61,7 +61,7 @@ export const FOCUS_AREAS: FocusArea[] = [
       "Brand-true — your logo and colours, done properly",
       "Content guidance so the words match the design",
     ],
-    href: "/services/web-design/",
+    href: "/services/web-design",
   },
   {
     id: "development",
@@ -74,7 +74,7 @@ export const FOCUS_AREAS: FocusArea[] = [
       "Custom web apps in React and .NET on Azure",
       "Migrations and rescues of sites someone else built",
     ],
-    href: "/services/development/",
+    href: "/services/development",
   },
   {
     id: "automation",
@@ -87,7 +87,7 @@ export const FOCUS_AREAS: FocusArea[] = [
       "AI-assisted content, data entry and reporting",
       "Quoted per project, no retainer required",
     ],
-    href: "/services/automation/",
+    href: "/services/automation",
   },
 ];
 
@@ -122,7 +122,7 @@ export const PACKAGES: Package[] = [
     fineprint:
       "Shared hosting $30/month or $300/year. Private hosting from $200/month.",
     cta: "Start a business website",
-    ctaHref: "/contact/?package=static-site",
+    ctaHref: "/contact?package=static-site",
   },
   {
     id: "multi-page",
@@ -139,7 +139,7 @@ export const PACKAGES: Package[] = [
     ],
     featured: true,
     cta: "Start a multi-page site",
-    ctaHref: "/contact/?package=multi-page",
+    ctaHref: "/contact?package=multi-page",
   },
   {
     id: "ecommerce",
@@ -157,7 +157,7 @@ export const PACKAGES: Package[] = [
     fineprint:
       "Additional products beyond 30 are built at the standard hourly rate.",
     cta: "Start an online store",
-    ctaHref: "/contact/?package=ecommerce",
+    ctaHref: "/contact?package=ecommerce",
   },
   {
     id: "seo-audit",
@@ -174,7 +174,7 @@ export const PACKAGES: Package[] = [
     ],
     fineprint: "Fixes beyond the included 4 hours are charged at $140/hour.",
     cta: "Book an audit",
-    ctaHref: "/contact/?package=seo-audit",
+    ctaHref: "/contact?package=seo-audit",
   },
   {
     id: "automation",
@@ -190,7 +190,7 @@ export const PACKAGES: Package[] = [
       "AI help where it saves real hours",
     ],
     cta: "Talk about automation",
-    ctaHref: "/contact/?package=automation",
+    ctaHref: "/contact?package=automation",
   },
   {
     id: "enterprise",
@@ -205,7 +205,7 @@ export const PACKAGES: Package[] = [
       "Ongoing management by arrangement",
     ],
     cta: "Start a conversation",
-    ctaHref: "/contact/?package=enterprise",
+    ctaHref: "/contact?package=enterprise",
   },
 ];
 
@@ -516,6 +516,43 @@ export const SERVICES: ServiceMeta[] = [
     tags: ["Fixed monthly fee", "Websites", "Online stores"],
   },
 ];
+
+// Search titles and descriptions for the main WordPress pages. The page body
+// still comes from WordPress; these only set the <title>, meta description and
+// social preview, which matter most for search and AI answers.
+export const PAGE_SEO: Record<string, { title: string; description: string }> =
+  {
+    services: {
+      title: "Website Design, Development, Hosting & Automation Services",
+      description:
+        "WordPress and Shopify website design and development, eCommerce, web hosting, website reviews, AI and automation, consulting and website management for New Zealand businesses.",
+    },
+    projects: {
+      title: "Projects — Websites, Online Stores and Portals We've Built",
+      description:
+        "Recent work from Every Day Digital: WooCommerce and Shopify stores, WordPress websites and custom business portals for New Zealand businesses.",
+    },
+    blog: {
+      title: "Blog — Websites, eCommerce and Automation in Plain English",
+      description:
+        "Practical articles on websites, online stores, hosting, AI and automation for small and growing New Zealand businesses.",
+    },
+    about: {
+      title: "About Every Day Digital — Auckland Web Design & Development",
+      description:
+        "Every Day Digital is an Auckland web design, development and hosting business. We build and run websites, online stores and automation for New Zealand businesses.",
+    },
+    contact: {
+      title: "Contact — Book a Free Consultation",
+      description:
+        "Get in touch with Every Day Digital for a free consultation and a fixed-price quote on your website, online store, hosting or automation project.",
+    },
+    terms: {
+      title: "Terms & Conditions",
+      description:
+        "Terms and conditions for Every Day Digital's website design, development, hosting, automation and consulting services, and for using this website.",
+    },
+  };
 
 export function getServiceMeta(slug: string): ServiceMeta | undefined {
   return SERVICES.find((s) => s.slug === slug);

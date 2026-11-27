@@ -10,6 +10,7 @@ import {
 } from "@/lib/wordpress";
 import type { WPProject, WPTeam, WPService, WPPost } from "@/lib/types";
 import PageContent from "@/components/PageContent";
+import { PAGE_SEO } from "@/lib/site";
 
 // PageContent.tsx only renders one of projects/team/services/posts per page,
 // picked by the WordPress page's title (Testimonials render on every page).
@@ -61,8 +62,22 @@ export async function generateMetadata({
       (p) => p.uri === `/${slug}/` || p.uri === `/${slug}`,
     );
     if (!page) return {};
+    const seo = PAGE_SEO[slug];
+    const description =
+      seo?.description ??
+      (page.content
+        ? page.content
+            .replace(/<[^>]*>/g, " ")
+            .replace(/\s+/g, " ")
+            .trim()
+            .slice(0, 158)
+        : undefined);
+    const title = seo?.title ?? page.title;
     return {
-      title: page.title,
+      title,
+      description,
+      alternates: { canonical: `/${slug}` },
+      openGraph: { title, description, url: `/${slug}` },
     };
   } catch {
     return {};

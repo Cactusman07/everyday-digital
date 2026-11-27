@@ -20,7 +20,7 @@ export default function CTAS() {
           <span className="button-text">CONTACT US</span>
         </button>
       </Link>
-      <Link href="/services/">
+      <Link href="/services">
         <button
           className={`${
             isDesktopResolution ? "" : "cta-mobile"

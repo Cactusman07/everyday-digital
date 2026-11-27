@@ -42,12 +42,12 @@ export async function generateMetadata({
     return {
       title,
       description,
-      alternates: { canonical: `/projects/${slug}/` },
+      alternates: { canonical: `/projects/${slug}` },
       openGraph: {
         title,
         description,
         type: "article",
-        url: `/projects/${slug}/`,
+        url: `/projects/${slug}`,
         images: image ? [{ url: image }] : [],
       },
     };
@@ -81,8 +81,8 @@ export default async function ProjectPage({ params }: PageProps) {
         <BreadcrumbJsonLd
           items={[
             { name: "Home", url: "/" },
-            { name: "Projects", url: "/projects/" },
-            { name: meta.client, url: `/projects/${slug}/` },
+            { name: "Projects", url: "/projects" },
+            { name: meta.client, url: `/projects/${slug}` },
           ]}
         />
         <CaseStudy meta={meta} project={project} testimonials={testimonials} />

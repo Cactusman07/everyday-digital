@@ -14,7 +14,7 @@ export default function ProjectContainer({ data }: { data: WPProject[] }) {
     return (
       <p className="mt-4 text-white/60">
         Your project could be here...{" "}
-        <Link href="/contact/" className="text-[#a89cf7] hover:underline">
+        <Link href="/contact" className="text-[#a89cf7] hover:underline">
           Get in touch →
         </Link>
       </p>
@@ -34,7 +34,7 @@ export default function ProjectContainer({ data }: { data: WPProject[] }) {
         </p>
         <p className="text-white/40 text-sm mt-3 mb-0">
           Your project could be next.{" "}
-          <Link href="/contact/" className="projects-cta-link">
+          <Link href="/contact" className="projects-cta-link">
             Get in touch →
           </Link>
         </p>
@@ -74,7 +74,7 @@ export default function ProjectContainer({ data }: { data: WPProject[] }) {
           We&apos;d love to hear about your project — no commitment, just a
           conversation.
         </p>
-        <Link href="/contact/">
+        <Link href="/contact">
           <button className="bg-[#4b6ceb] hover:bg-[#4bafeb] transition-colors duration-300 text-white rounded-xl px-5 py-2.5 text-sm font-medium whitespace-nowrap cursor-pointer">
             Get in touch
           </button>

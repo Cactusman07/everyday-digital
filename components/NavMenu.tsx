@@ -20,7 +20,7 @@ export default function NavMenu({ menu }: { menu: WPPage[] | null }) {
         >
           <Link
             onClick={() => setIsNavOpen(false)}
-            href={mi.uri}
+            href={mi.uri.length > 1 ? mi.uri.replace(/\/$/, "") : mi.uri}
             className="py-2 text-white hover:text-[#4bafeb]"
           >
             {mi.title}

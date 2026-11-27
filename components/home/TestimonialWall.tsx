@@ -47,7 +47,7 @@ export default function TestimonialWall({ data }: { data: WPTestimonial[] }) {
         )}
 
         <div className="section-actions">
-          <Link href="/contact/" className="btn btn--accent">
+          <Link href="/contact" className="btn btn--accent">
             Work with us
           </Link>
         </div>

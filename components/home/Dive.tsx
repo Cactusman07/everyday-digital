@@ -88,7 +88,7 @@ export function ServiceStack() {
                     </span>
                   ))}
                 </div>
-                <Link href={`/services/${s.slug}/`} className="dive-card__more">
+                <Link href={`/services/${s.slug}`} className="dive-card__more">
                   More about {s.title.toLowerCase()} →
                 </Link>
               </div>
@@ -119,7 +119,7 @@ export function PriceCount() {
         {PRICING.line} {PRICING.rest}
       </p>
       <div className="section-actions dive-center">
-        <Link href="/contact/" className="btn btn--accent btn--lg">
+        <Link href="/contact" className="btn btn--accent btn--lg">
           Book a free consultation
         </Link>
       </div>
@@ -143,7 +143,7 @@ export function WorkTrack({ projects }: { projects: WPProject[] }) {
             <br />
             still running.
           </h2>
-          <Link href="/projects/" className="btn">
+          <Link href="/projects" className="btn">
             All projects
           </Link>
         </div>
@@ -155,7 +155,7 @@ export function WorkTrack({ projects }: { projects: WPProject[] }) {
             );
             return (
               <li key={cs.slug} className="dive-pan">
-                <Link href={`/projects/${cs.slug}/`}>
+                <Link href={`/projects/${cs.slug}`}>
                   <div className="dive-pan__shot">
                     <Image
                       src={src}
@@ -219,7 +219,7 @@ export function Outro() {
       <div>
         <p className="dive-outro__huge">Every Day.</p>
         <div className="section-actions">
-          <Link href="/contact/" className="btn btn--accent btn--lg">
+          <Link href="/contact" className="btn btn--accent btn--lg">
             Start with a free chat
           </Link>
           <a href={`mailto:${SITE.email}`} className="btn btn--lg">
@@ -232,10 +232,10 @@ export function Outro() {
           © {year} {SITE.legalName} · {SITE.city}, New Zealand
         </span>
         <nav aria-label="Footer">
-          <Link href="/services/">Services</Link>
-          <Link href="/projects/">Projects</Link>
-          <Link href="/blog/">Blog</Link>
-          <Link href="/terms/">Terms &amp; Conditions</Link>
+          <Link href="/services">Services</Link>
+          <Link href="/projects">Projects</Link>
+          <Link href="/blog">Blog</Link>
+          <Link href="/terms">Terms &amp; Conditions</Link>
           <a href={SITE.social.linkedin}>LinkedIn</a>
           <a href={SITE.social.facebook}>Facebook</a>
           <a href={SITE.social.instagram}>Instagram</a>

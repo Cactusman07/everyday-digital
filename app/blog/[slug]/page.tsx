@@ -29,12 +29,19 @@ export async function generateMetadata({
     const post = posts.find((p) => p.slug === slug);
     if (!post) return {};
     const description = post.excerpt
-      ? post.excerpt.replace(/<[^>]*>/g, "").slice(0, 160)
+      ? post.excerpt
+          .replace(/<[^>]*>/g, "")
+          .replace(/&[a-z#0-9]+;/g, " ")
+          .replace(/\s+/g, " ")
+          .trim()
+          .slice(0, 158)
       : undefined;
     return {
       title: post.title,
       description,
+      alternates: { canonical: `/blog/${slug}` },
       openGraph: {
+        url: `/blog/${slug}`,
         title: post.title,
         description,
         images: post.featuredImage
@@ -69,7 +76,12 @@ export default async function BlogPostPage({ params }: PageProps) {
           (author, date, image) in search listings for this blog post */}
       <ArticleJsonLd
         title={post.title}
-        description={post.excerpt?.replace(/<[^>]*>/g, "").slice(0, 160)}
+        description={post.excerpt
+          ?.replace(/<[^>]*>/g, "")
+          .replace(/&[a-z#0-9]+;/g, " ")
+          .replace(/\s+/g, " ")
+          .trim()
+          .slice(0, 158)}
         datePublished={post.date}
         image={post.featuredImage?.node?.sourceUrl}
         url={`${SITE_URL}/blog/${post.slug}`}

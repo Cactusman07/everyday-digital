@@ -22,7 +22,7 @@ export default function FinalCta() {
             </p>
           </div>
           <div className="final-cta__actions">
-            <Link href="/contact/" className="btn btn--accent btn--lg">
+            <Link href="/contact" className="btn btn--accent btn--lg">
               Start a project
             </Link>
             <a

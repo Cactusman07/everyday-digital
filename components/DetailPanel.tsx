@@ -100,7 +100,7 @@ export default function DetailPanel({
         </div>
 
         {type === "service" && (
-          <Link href="/contact/" onClick={onClose}>
+          <Link href="/contact" onClick={onClose}>
             <div className="absolute bottom-0 left-0 right-0 px-8 py-5 bg-gradient-to-r from-[#4b6ceb] to-[#4bafeb] flex items-center justify-between group cursor-pointer">
               <div>
                 <p className="text-white font-semibold uppercase tracking-widest text-sm m-0">

@@ -24,13 +24,13 @@ export default function SingleItemContent({
   let backLabel: string;
 
   if (type === "blog") {
-    backPath = "/blog/";
+    backPath = "/blog";
     backLabel = "Back to Blog";
   } else if (type === "project") {
-    backPath = "/projects/";
+    backPath = "/projects";
     backLabel = "Back to Projects";
   } else {
-    backPath = "/services/";
+    backPath = "/services";
     backLabel = "Back to Services";
   }
 
@@ -127,7 +127,7 @@ export default function SingleItemContent({
       )}
 
       {isService && (
-        <Link href="/contact/">
+        <Link href="/contact">
           <div className="mt-8 px-8 py-5 bg-gradient-to-r from-[#4b6ceb] to-[#4bafeb] flex items-center justify-between rounded-xl group cursor-pointer">
             <div>
               <p className="text-white font-semibold uppercase tracking-widest text-sm m-0">

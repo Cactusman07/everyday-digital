@@ -80,7 +80,7 @@ export default function HomeHero({ menuSlot }: { menuSlot: React.ReactNode }) {
               </span>
             </h1>
             <Link
-              href="/about/"
+              href="/about"
               className="absolute flex items-center gap-3 group"
               style={{ top: "64%", left: 0 }}
             >

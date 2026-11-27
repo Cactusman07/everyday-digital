@@ -26,12 +26,19 @@ export async function generateMetadata({
     const service = services.find((s) => s.slug === slug);
     if (!service) return {};
     const description = service.excerpt
-      ? service.excerpt.replace(/<[^>]*>/g, "").slice(0, 160)
+      ? service.excerpt
+          .replace(/<[^>]*>/g, "")
+          .replace(/&[a-z#0-9]+;/g, " ")
+          .replace(/\s+/g, " ")
+          .trim()
+          .slice(0, 158)
       : undefined;
     return {
       title: service.title,
       description,
+      alternates: { canonical: `/services/${slug}` },
       openGraph: {
+        url: `/services/${slug}`,
         title: service.title,
         description,
         images: service.featuredImage
@@ -68,7 +75,12 @@ export default async function ServicePage({ params }: PageProps) {
       {/* ServiceJsonLd tells search engines this page describes a service offering */}
       <ServiceJsonLd
         name={service.title}
-        description={service.excerpt?.replace(/<[^>]*>/g, "").slice(0, 160)}
+        description={service.excerpt
+          ?.replace(/<[^>]*>/g, "")
+          .replace(/&[a-z#0-9]+;/g, " ")
+          .replace(/\s+/g, " ")
+          .trim()
+          .slice(0, 158)}
         url={`${SITE_URL}/services/${service.slug}`}
       />
       <SingleItemContent

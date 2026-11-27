@@ -45,7 +45,7 @@ export default function CaseStudy({ meta, project, testimonials }: Props) {
           "@context": "https://schema.org",
           "@type": "CreativeWork",
           name: `${meta.client} — case study`,
-          url: `${SITE.url}/projects/${meta.slug}/`,
+          url: `${SITE.url}/projects/${meta.slug}`,
           about: { "@type": "Organization", name: meta.client, url: meta.url },
           creator: { "@type": "Organization", name: SITE.name, url: SITE.url },
           description: meta.summary,
@@ -54,7 +54,7 @@ export default function CaseStudy({ meta, project, testimonials }: Props) {
       />
 
       <div className="home-wrap">
-        <Link href="/projects/" className="case__back">
+        <Link href="/projects" className="case__back">
           <svg
             viewBox="0 0 24 24"
             fill="none"
@@ -83,7 +83,7 @@ export default function CaseStudy({ meta, project, testimonials }: Props) {
             <a href={meta.url} target="_blank" rel="noreferrer" className="btn">
               Visit {meta.url.replace(/^https?:\/\//, "")}
             </a>
-            <Link href="/contact/" className="btn btn--accent">
+            <Link href="/contact" className="btn btn--accent">
               Start a project like this
             </Link>
           </div>
@@ -173,7 +173,7 @@ export default function CaseStudy({ meta, project, testimonials }: Props) {
                 key={r.slug}
                 className={`work-card ${r.ownBusiness ? "work-card--own" : ""}`}
               >
-                <Link href={`/projects/${r.slug}/`} className="work-card__link">
+                <Link href={`/projects/${r.slug}`} className="work-card__link">
                   <div className="work-card__media">
                     <Image
                       src={`/images/work/${r.slug}.png`}

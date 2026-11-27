@@ -61,7 +61,7 @@ export default function Packages() {
             <p className="hosting-strip__inc">{HOSTING.includes.join(" · ")}</p>
             <p className="hosting-strip__sup">{HOSTING.support}</p>
           </div>
-          <Link href="/services/hosting/" className="btn">
+          <Link href="/services/hosting" className="btn">
             Hosting details
           </Link>
         </div>

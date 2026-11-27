@@ -34,11 +34,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     robots: lp.indexable
       ? { index: true, follow: true }
       : { index: false, follow: false },
-    alternates: { canonical: `/lp/${lp.slug}/` },
+    alternates: { canonical: `/lp/${lp.slug}` },
     openGraph: {
       title: lp.title,
       description: lp.description,
-      url: `/lp/${lp.slug}/`,
+      url: `/lp/${lp.slug}`,
     },
   };
 }
@@ -80,7 +80,7 @@ export default async function LandingPage({ params, searchParams }: Props) {
             description: pkg.tagline,
             price: pkg.price,
             priceCurrency: "NZD",
-            url: `${SITE.url}/lp/${lp.slug}/`,
+            url: `${SITE.url}/lp/${lp.slug}`,
             seller: { "@id": `${SITE.url}/#organization` },
           }}
         />
@@ -164,7 +164,7 @@ export default async function LandingPage({ params, searchParams }: Props) {
                 key={c.slug}
                 className={`work-card ${c.ownBusiness ? "work-card--own" : ""}`}
               >
-                <Link href={`/projects/${c.slug}/`} className="work-card__link">
+                <Link href={`/projects/${c.slug}`} className="work-card__link">
                   <div className="work-card__media">
                     <Image
                       src={`/images/work/${c.slug}.png`}

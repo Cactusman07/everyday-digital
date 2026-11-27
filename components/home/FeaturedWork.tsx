@@ -38,10 +38,7 @@ export default function FeaturedWork({ projects }: { projects: WPProject[] }) {
                 key={cs.slug}
                 className={`work-card ${cs.ownBusiness ? "work-card--own" : ""}`}
               >
-                <Link
-                  href={`/projects/${cs.slug}/`}
-                  className="work-card__link"
-                >
+                <Link href={`/projects/${cs.slug}`} className="work-card__link">
                   <div className="work-card__media">
                     <Image
                       src={src}
@@ -84,10 +81,10 @@ export default function FeaturedWork({ projects }: { projects: WPProject[] }) {
         </Reveal>
 
         <div className="section-actions">
-          <Link href="/projects/" className="btn">
+          <Link href="/projects" className="btn">
             All projects
           </Link>
-          <Link href="/contact/" className="btn btn--accent">
+          <Link href="/contact" className="btn btn--accent">
             Start a project
           </Link>
         </div>
