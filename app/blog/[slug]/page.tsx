@@ -83,10 +83,19 @@ export default async function BlogPostPage({ params }: PageProps) {
           .trim()
           .slice(0, 158)}
         datePublished={post.date}
+        dateModified={post.modified}
+        keywords={post.tags?.nodes
+          ?.map((t) => t.name)
+          .filter((n) => n !== "cover")}
         image={post.featuredImage?.node?.sourceUrl}
         url={`${SITE_URL}/blog/${post.slug}`}
       />
-      <SingleItemContent type="blog" item={post} testimonials={testimonials} />
+      <SingleItemContent
+        type="blog"
+        item={post}
+        testimonials={testimonials}
+        siblings={posts}
+      />
     </div>
   );
 }

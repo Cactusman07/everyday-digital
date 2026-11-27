@@ -4,6 +4,11 @@
 // version-controlled alongside the code that renders them. WordPress remains the
 // source for projects, testimonials, blog posts and long-form page content.
 
+// IndexNow key (public by design — it just proves we own the domain). The
+// matching file is public/<key>.txt. Bing, Yandex, Seznam and others use it to
+// pick up new and changed pages within minutes; ChatGPT search leans on Bing.
+export const INDEXNOW_KEY = "9fde70914894c907d453df0bc5778216";
+
 export const SITE = {
   name: "Every Day Digital",
   legalName: "Every Day Digital Limited",
@@ -283,7 +288,7 @@ export const CASE_STUDIES: CaseStudyMeta[] = [
     order: 1,
   },
   {
-    slug: "ride-rotorua-store-new-website",
+    slug: "ride-rotorua-store-website",
     client: "Ride Rotorua Store",
     url: "https://riderotoruastore.co.nz",
     sector: "Bike retail · Tourism",

@@ -1,44 +1,63 @@
+// Client testimonials for inner pages: full quotes, each with a clear header
+// (initials, name, business). Shares its card styles with the home page.
+
+import Link from "next/link";
+import type { CSSProperties } from "react";
+import { parseTestimonial } from "@/lib/content";
 import type { WPTestimonial } from "@/lib/types";
 
+const AVATAR = [
+  "#e34beb",
+  "#4bafeb",
+  "#9deb4b",
+  "#ebe74b",
+  "#834beb",
+  "#eb4b4b",
+];
+
 export default function Testimonials({ data }: { data: WPTestimonial[] }) {
+  if (!data?.length) return null;
+  const items = data.map(parseTestimonial);
   return (
-    <>
-      {data?.length > 0 && (
-        <div id="testimonials" className="mt-8">
-          <h2 className="text-center">See what others think about us!</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-8">
-            {data.map((testimonial: WPTestimonial, index: number) => (
-              <div
-                key={`${testimonial.title}-${index}`}
-                className="bg-[#1a1a1a] border border-white/8 rounded-xl p-5 flex flex-col gap-3"
-              >
-                <div className="flex items-center gap-3">
-                  <svg
-                    className="h-9 w-9 flex-shrink-0 text-[#4bafeb]"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden="true"
-                  >
-                    <circle cx="12" cy="8" r="4" />
-                    <path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7" />
-                  </svg>
-                  <h4 className="text-white text-base font-semibold m-0">
-                    {testimonial.title}
-                  </h4>
-                </div>
-                <div
-                  className="testimonial-content text-white/60 text-sm leading-relaxed"
-                  dangerouslySetInnerHTML={{ __html: testimonial.content }}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </>
+    <section
+      id="testimonials"
+      className="tst-band"
+      aria-labelledby="tst-band-h"
+    >
+      <h2 id="tst-band-h" className="tst-band__title">
+        <span>In their</span>{" "}
+        <span className="tst-band__script">own words.</span>
+      </h2>
+      <div className="tst-band__grid">
+        {items.map((t, i) => (
+          <figure
+            key={t.name + i}
+            className="tst"
+            style={{ "--k": AVATAR[i % AVATAR.length] } as CSSProperties}
+          >
+            <figcaption className="tst__who">
+              <span className="tst__av" aria-hidden="true">
+                {t.initials}
+              </span>
+              <span>
+                <span className="tst__name">{t.name}</span>
+                <span className="tst__co">{t.company}</span>
+              </span>
+            </figcaption>
+            <blockquote className="tst__q">
+              <p className="tst__lead">{t.lead}</p>
+              {t.rest.map((p, j) => (
+                <p key={j}>{p}</p>
+              ))}
+            </blockquote>
+            {t.caseStudy && (
+              <Link href={t.caseStudy} className="tst__more">
+                Read the {t.company} case study →
+              </Link>
+            )}
+          </figure>
+        ))}
+      </div>
+    </section>
   );
 }

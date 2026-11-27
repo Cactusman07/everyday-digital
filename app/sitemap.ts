@@ -38,7 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     for (const post of posts) {
       entries.push({
         url: `${SITE_URL}/blog/${post.slug}`,
-        lastModified: post.date ? new Date(post.date) : undefined,
+        lastModified: new Date(post.modified ?? post.date),
         changeFrequency: "monthly",
         priority: 0.6,
       });
@@ -48,7 +48,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       const featured = FEATURED_SLUGS.includes(project.slug);
       entries.push({
         url: `${SITE_URL}/projects/${project.slug}`,
-        lastModified: project.date ? new Date(project.date) : undefined,
+        lastModified:
+          (project.modified ?? project.date)
+            ? new Date((project.modified ?? project.date)!)
+            : undefined,
         changeFrequency: "monthly",
         priority: featured ? 0.8 : 0.6,
       });

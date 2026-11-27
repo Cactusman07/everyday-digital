@@ -87,6 +87,7 @@ export default async function ServicePage({ params }: PageProps) {
         type="service"
         item={service}
         testimonials={testimonials}
+        siblings={services}
       />
     </div>
   );

@@ -4,18 +4,21 @@
 // sections if the CMS is unreachable, so the home page never 404s.
 
 import type { Metadata } from "next";
-import { getProjects, getTestimonials, safe } from "@/lib/wordpress";
+import { getProjects, getTestimonials, getPosts, safe } from "@/lib/wordpress";
 import { SITE, FAQ, PRICING, SERVICES } from "@/lib/site";
 import JsonLd from "@/components/JsonLd";
 import FaqSection from "@/components/home/FaqSection";
 import DiveEffects from "@/components/home/DiveEffects";
 import {
+  DiveChrome,
   DiveIntro,
   Manifesto,
   ServiceStack,
+  PlatformMarquee,
   PriceCount,
   WorkTrack,
-  Quotes,
+  Testimonials,
+  LatestPosts,
   Outro,
 } from "@/components/home/Dive";
 
@@ -33,9 +36,10 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const [projects, testimonials] = await Promise.all([
+  const [projects, testimonials, posts] = await Promise.all([
     safe(getProjects),
     safe(getTestimonials),
+    safe(getPosts),
   ]);
 
   return (
@@ -43,13 +47,16 @@ export default async function HomePage() {
       <HomeJsonLd />
 
       <DiveEffects />
+      <DiveChrome />
       <DiveIntro />
       <div className="dive-main">
         <Manifesto />
         <ServiceStack />
+        <PlatformMarquee />
         <PriceCount />
         <WorkTrack projects={projects} />
-        <Quotes data={testimonials} />
+        <Testimonials data={testimonials} />
+        <LatestPosts posts={posts} />
         <FaqSection />
       </div>
       <Outro />

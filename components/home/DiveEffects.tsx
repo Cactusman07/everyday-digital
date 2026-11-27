@@ -1,10 +1,11 @@
 "use client";
 
 // Scroll effects for the Dive home page. One requestAnimationFrame loop reads
-// the scroll position and updates the pinned hero, the iris, the manifesto
-// words, the stacked service cards, the price counter and the sideways work
-// track. Markup lives in Dive.tsx (server-rendered); this only animates it.
-// With reduced motion on, transforms are skipped and content stays readable.
+// the scroll position and updates: the pinned hero and iris, the manifesto
+// words, the stacked service cards, the platform marquee, the price counter,
+// the sideways work track, the progress bar and the rope climber. Markup lives
+// in Dive.tsx (server-rendered); this only animates it. With reduced motion
+// on, movement is skipped and content stays readable.
 
 import { useEffect } from "react";
 
@@ -23,8 +24,10 @@ function vis(el: Element) {
 
 export default function DiveEffects() {
   useEffect(() => {
-    const q = <T extends HTMLElement>(s: string) =>
-      document.querySelector<T>(s);
+    const q = <T extends Element = HTMLElement>(s: string) =>
+      document.querySelector(s) as T | null;
+    const qa = <T extends Element = HTMLElement>(s: string) =>
+      Array.from(document.querySelectorAll(s)) as T[];
     const reduce = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
@@ -35,29 +38,88 @@ export default function DiveEffects() {
     const intro = q("[data-dive-intro]");
     const iris = q("[data-dive-iris]");
     const mani = q("[data-dive-mani]");
-    const words = Array.from(
-      document.querySelectorAll<HTMLElement>("[data-dive-mani] .wd"),
-    );
-    const cards = Array.from(
-      document.querySelectorAll<HTMLElement>("[data-dive-card]"),
-    );
+    const words = qa("[data-dive-mani] .wd");
+    const svc = q("[data-dive-svc]");
+    const svcHead = q("[data-dive-svc-head]");
+    const cards = qa("[data-dive-card]");
+    const mqRows = qa("[data-dive-mq]");
     const price = q("[data-dive-price]");
     const num = q("[data-dive-num]");
     const hz = q("[data-dive-hz]");
     const track = q("[data-dive-track]");
     const bar = q("[data-dive-bar]");
+    const progress = q("[data-dive-progress]");
+    const outro = q("[data-dive-outro]");
+    const climber = q("[data-climber]");
+    const rope = q("[data-climber-rope]");
+    const fig = q("[data-climber-fig]");
+    const armL = q<SVGPolylineElement>('[data-arm="l"]');
+    const armR = q<SVGPolylineElement>('[data-arm="r"]');
+    const handL = q<SVGCircleElement>('[data-hand="l"]');
+    const handR = q<SVGCircleElement>('[data-hand="r"]');
+    const legL = q<SVGPolylineElement>('[data-leg="l"]');
+    const legR = q<SVGPolylineElement>('[data-leg="r"]');
     const target = Number(num?.dataset.diveNum ?? 0);
 
     document.body.classList.add("dive-home");
 
     const size = () => {
-      if (!hz || !track) return;
-      hz.style.height = `${track.scrollWidth - window.innerWidth + window.innerHeight}px`;
+      if (hz && track)
+        hz.style.height = `${track.scrollWidth - window.innerWidth + window.innerHeight}px`;
+      if (svc && svcHead)
+        svc.style.setProperty("--svc-head", `${svcHead.offsetHeight + 16}px`);
+    };
+
+    // Reveal-on-view for testimonials, blog and the waving figure
+    const io = new IntersectionObserver(
+      (es) =>
+        es.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("is-in");
+            io.unobserve(e.target);
+          }
+        }),
+      { threshold: 0.2 },
+    );
+    qa("[data-reveal], [data-waver]").forEach((el) => io.observe(el));
+
+    let lastY = window.scrollY;
+    let phase = 0;
+    let idleTimer = 0;
+
+    const drawClimber = () => {
+      const s = Math.sin(phase);
+      const c = Math.cos(phase);
+      // Hands take turns on the rope (x = 40), elbows bow outwards
+      const hl = 24 + 7 * s;
+      const hr = 24 - 7 * s;
+      armL?.setAttribute(
+        "points",
+        `36,62 ${26 - 3 * c},${(62 + hl) / 2} 40,${hl}`,
+      );
+      armR?.setAttribute(
+        "points",
+        `44,62 ${54 + 3 * c},${(62 + hr) / 2} 40,${hr}`,
+      );
+      handL?.setAttribute("cy", String(hl));
+      handR?.setAttribute("cy", String(hr));
+      // Legs swing a little in time
+      legL?.setAttribute("points", `36,96 ${31 + 4 * s},118 ${27 + 6 * s},140`);
+      legR?.setAttribute("points", `44,96 ${49 - 4 * s},118 ${53 - 6 * s},140`);
     };
 
     let raf = 0;
     const frame = () => {
       raf = 0;
+      const vh = window.innerHeight;
+      const y = window.scrollY;
+      const max = Math.max(1, document.documentElement.scrollHeight - vh);
+      const P = clamp(y / max);
+      const dy = y - lastY;
+      lastY = y;
+
+      if (progress) progress.style.transform = `scaleX(${P})`;
+
       // 1. Hero: the title grows, then the iris opens over it
       if (intro && header) {
         const p = pin(intro);
@@ -71,11 +133,13 @@ export default function DiveEffects() {
         if (iris)
           iris.style.clipPath = `circle(${clamp((p - 0.28) / 0.64) * 150}% at 58% 54%)`;
       }
+
       // 2. Manifesto: words light up in order
       if (mani && words.length) {
         const k = Math.round(clamp(pin(mani) / 0.85) * words.length);
         words.forEach((w, i) => w.classList.toggle("on", i < k));
       }
+
       // 3. Service cards: the card underneath shrinks back as the next covers it
       if (!reduce)
         cards.forEach((c, i) => {
@@ -85,20 +149,55 @@ export default function DiveEffects() {
           const b = n.getBoundingClientRect();
           const d = clamp(1 - (b.top - a.top) / a.height);
           c.style.transform = `scale(${1 - d * 0.06})`;
-          c.style.filter = `brightness(${1 - d * 0.45})`;
+          c.style.filter = `brightness(${1 - d * 0.5})`;
         });
-      // 4. Price: counts up as it comes into view
+
+      // 4. Platform marquee: rows slide in opposite directions with the scroll
+      if (!reduce)
+        mqRows.forEach((r) => {
+          const dir = Number(r.dataset.diveMq);
+          const w = r.scrollWidth / 2;
+          const x = (((y * 0.45 * dir) % w) + w) % w;
+          r.style.transform = `translateX(${-x}px)`;
+        });
+
+      // 5. Price: counts up as it comes into view
       if (price && num) {
         const v = reduce ? 1 : clamp((vis(price) - 0.18) / 0.3);
         num.textContent = `$${Math.round((v * target) / 10) * 10}`;
       }
-      // 5. Work: vertical scroll moves the track sideways
+
+      // 6. Work: vertical scroll moves the track sideways
       if (hz && track) {
         const h = pin(hz);
         track.style.transform = `translateX(${-h * (track.scrollWidth - window.innerWidth)}px)`;
         if (bar) bar.style.width = `${h * 100}%`;
       }
+
+      // 7. Climber: drops in once you start scrolling, then lowers himself
+      // down the rope with the page. Hands it over to the waving figure
+      // when the closing section arrives.
+      if (climber && fig && rope) {
+        const entry = clamp(y / (vh * 0.7));
+        const top = -170 + entry * (vh * 0.14 + 170) + P * vh * 0.52;
+        const o = outro ? outro.getBoundingClientRect().top / vh : 2;
+        const leave = clamp((0.95 - o) / 0.35);
+        fig.style.transform = `translateY(${top + leave * 60}px)`;
+        rope.style.height = `${Math.max(0, top + 24)}px`;
+        climber.style.opacity = String(1 - leave);
+        if (!reduce && Math.abs(dy) > 0) {
+          phase += dy * 0.045;
+          drawClimber();
+          climber.classList.add("is-moving");
+          window.clearTimeout(idleTimer);
+          idleTimer = window.setTimeout(
+            () => climber.classList.remove("is-moving"),
+            180,
+          );
+        }
+      }
     };
+
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(frame);
     };
@@ -108,15 +207,19 @@ export default function DiveEffects() {
     };
 
     size();
+    drawClimber();
     frame();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize);
     window.addEventListener("load", onResize);
+    document.fonts?.ready.then(onResize);
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
       window.removeEventListener("load", onResize);
       if (raf) cancelAnimationFrame(raf);
+      window.clearTimeout(idleTimer);
+      io.disconnect();
       document.body.classList.remove("dive-home");
       header?.classList.remove("is-diving", "is-done");
       if (h1) h1.style.transform = "";

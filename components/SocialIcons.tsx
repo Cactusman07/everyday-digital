@@ -1,13 +1,27 @@
-// No "use client" — this is a Server Component (the default in App Router).
-// It renders on the server and sends pure HTML to the browser. No JavaScript
-// is shipped for this component. Server Components can use static image imports
-// but cannot use hooks, state, or browser APIs.
+// Facebook, Instagram and LinkedIn links. Inline SVG so all three match.
 
-import Image from "next/image";
-// Static imports — Next.js reads these files at build time to get dimensions
-// and generate optimised versions (WebP, multiple sizes).
-import fbIcon from "@/public/images/facebook-4-64.png";
-import liIcon from "@/public/images/linkedin-4-64.png";
+import { SITE } from "@/lib/site";
+
+const ICONS = [
+  {
+    id: "facebook",
+    href: SITE.social.facebook,
+    label: "Every Day Digital on Facebook",
+    path: "M13.5 21v-7.5h2.5l.4-3h-2.9V8.6c0-.9.3-1.5 1.5-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H8v3h2.4V21h3.1z",
+  },
+  {
+    id: "instagram",
+    href: SITE.social.instagram,
+    label: "Every Day Digital on Instagram",
+    path: "M12 7.4a4.6 4.6 0 100 9.2 4.6 4.6 0 000-9.2zm0 7.6a3 3 0 110-6 3 3 0 010 6zm4.8-8.9a1.1 1.1 0 100 2.2 1.1 1.1 0 000-2.2zM21 8.3c0-1.3-.3-2.4-1.2-3.3S17.8 3.9 16.5 3.8C15.2 3.7 8.8 3.7 7.5 3.8 6.2 3.9 5.1 4.2 4.2 5.1S3.9 7 3.8 8.3c-.1 1.3-.1 7.7 0 9 .1 1.3.3 2.4 1.2 3.3s2 1.1 3.3 1.2c1.3.1 7.7.1 9 0 1.3-.1 2.4-.3 3.3-1.2s1.1-2 1.2-3.3c.1-1.3.1-7.7.1-9zm-2 10.4a2.6 2.6 0 01-1.5 1.5c-1 .4-3.4.3-4.5.3s-3.5.1-4.5-.3a2.6 2.6 0 01-1.5-1.5c-.4-1-.3-3.4-.3-4.5s-.1-3.5.3-4.5A2.6 2.6 0 016.5 7.2c1-.4 3.4-.3 4.5-.3s3.5-.1 4.5.3c.7.3 1.2.8 1.5 1.5.4 1 .3 3.4.3 4.5s.1 3.5-.3 4.5z",
+  },
+  {
+    id: "linkedin",
+    href: SITE.social.linkedin,
+    label: "Every Day Digital on LinkedIn",
+    path: "M6.9 8.8H3.8V20h3.1V8.8zM5.3 4a1.8 1.8 0 100 3.6 1.8 1.8 0 000-3.6zM20.2 13.6c0-3-.6-5.1-4.1-5.1-1.7 0-2.8.9-3.2 1.8h-.1V8.8h-3V20h3.1v-5.5c0-1.5.3-2.9 2.1-2.9s1.8 1.7 1.8 3V20h3.1l.3-6.4z",
+  },
+];
 
 export default function SocialIcons({
   absolutePos,
@@ -17,36 +31,23 @@ export default function SocialIcons({
   return (
     <div
       id="social"
-      className={`flex md:block ${
-        absolutePos ? "absolute" : "relative"
-      } bottom-0 left-0 md:left-5`}
+      className={`flex md:block ${absolutePos ? "absolute" : "relative"} bottom-0 left-0 md:left-5 z-20`}
     >
-      <a
-        className="md:mb-3 mr-3"
-        target="_blank"
-        rel="noreferrer"
-        href="https://www.facebook.com/every.day.digital.2023"
-      >
-        <Image
-          id="facebook"
-          className="w-8 md:w-10 animate-invert"
-          src={fbIcon}
-          alt="Every Day Digital Facebook Page"
-        />
-      </a>
-      <a
-        className="md:mb-3 mr-3"
-        target="_blank"
-        rel="noreferrer"
-        href="https://www.linkedin.com/company/every-day-digital/"
-      >
-        <Image
-          id="linkedin"
-          className="w-8 md:w-10 animate-invert"
-          src={liIcon}
-          alt="Every Day Digital LinkedIn Page"
-        />
-      </a>
+      {ICONS.map((i) => (
+        <a
+          key={i.id}
+          id={i.id}
+          className="social-icon md:mb-3 mr-3"
+          target="_blank"
+          rel="noreferrer"
+          href={i.href}
+          aria-label={i.label}
+        >
+          <svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true">
+            <path d={i.path} fill="currentColor" />
+          </svg>
+        </a>
+      ))}
     </div>
   );
 }

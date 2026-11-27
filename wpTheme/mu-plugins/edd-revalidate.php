@@ -27,7 +27,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class EDD_Revalidate {
 
 	/** Post types that drive the Next.js site. Anything else is ignored. */
-	private const TYPES = array( 'post', 'page', 'project', 'service', 'team', 'testimonial' );
+	// Post type keys as registered on cms.everydaydigital.co.nz (projects, services and
+	// testimonials are plural there). Singular forms kept in case they're renamed.
+	private const TYPES = array( 'post', 'page', 'projects', 'project', 'services', 'service', 'team', 'testimonials', 'testimonial' );
 
 	private const OPTION_LAST = 'edd_revalidate_last';
 

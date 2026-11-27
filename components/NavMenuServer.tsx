@@ -9,7 +9,10 @@ export default async function NavMenuServer() {
   let menu: WPPage[] | null = null;
   try {
     const pages = await getPages();
-    menu = pages.filter((p: WPPage) => !p.isFrontPage);
+    // Terms & Conditions lives in the footer only, not the main menu
+    menu = pages.filter(
+      (p: WPPage) => !p.isFrontPage && !/^\/terms\/?$/.test(p.uri),
+    );
   } catch {
     // WordPress may not be running during build — gracefully degrade to no menu
   }

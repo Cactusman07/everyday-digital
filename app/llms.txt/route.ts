@@ -2,6 +2,8 @@
 // emerging llms.txt convention (https://llmstxt.org). Generated from lib/site.ts
 // so it can never drift from the published offer.
 
+import { getPosts, getProjects, safe } from "@/lib/wordpress";
+import { excerptText, stripHtml } from "@/lib/content";
 import {
   SITE,
   PRICING,
@@ -11,9 +13,9 @@ import {
   FAQ,
 } from "@/lib/site";
 
-export const dynamic = "force-static";
+export const revalidate = 3600;
 
-export function GET() {
+export async function GET() {
   const lines: string[] = [];
   lines.push(`# ${SITE.name}`);
   lines.push("");
@@ -47,7 +49,27 @@ export function GET() {
   lines.push("## Selected work");
   for (const c of CASE_STUDIES) {
     lines.push(
-      `- ${c.client} (${c.sector}): ${c.summary} Built with ${c.stack.join(", ")}. ${SITE.url}/projects/${c.slug}/`,
+      `- ${c.client} (${c.sector}): ${c.summary} Built with ${c.stack.join(", ")}. ${SITE.url}/projects/${c.slug}`,
+    );
+  }
+  lines.push("");
+  const [posts, projects] = await Promise.all([
+    safe(getPosts),
+    safe(getProjects),
+  ]);
+  lines.push("## Latest articles");
+  for (const p of [...posts]
+    .sort((a, b) => +new Date(b.date) - +new Date(a.date))
+    .slice(0, 12)) {
+    lines.push(
+      `- [${stripHtml(p.title)}](${SITE.url}/blog/${p.slug}) (${p.date.slice(0, 10)}): ${excerptText(p.excerpt || p.content, 200)}`,
+    );
+  }
+  lines.push("");
+  lines.push("## All projects");
+  for (const p of projects) {
+    lines.push(
+      `- [${stripHtml(p.title)}](${SITE.url}/projects/${p.slug}): ${excerptText(p.excerpt || p.content, 160)}`,
     );
   }
   lines.push("");
@@ -60,8 +82,11 @@ export function GET() {
   lines.push("## Links");
   lines.push(`- Home: ${SITE.url}/`);
   lines.push(`- Pricing: ${SITE.url}/#pricing`);
-  lines.push(`- Projects: ${SITE.url}/projects/`);
-  lines.push(`- Contact: ${SITE.url}/contact/`);
+  lines.push(`- Services: ${SITE.url}/services`);
+  lines.push(`- Projects: ${SITE.url}/projects`);
+  lines.push(`- Blog: ${SITE.url}/blog`);
+  lines.push(`- RSS feed: ${SITE.url}/feed.xml`);
+  lines.push(`- Contact: ${SITE.url}/contact`);
   lines.push(`- Sitemap: ${SITE.url}/sitemap.xml`);
 
   return new Response(lines.join("\n") + "\n", {

@@ -9,6 +9,7 @@
 
 import { revalidateTag, revalidatePath } from "next/cache";
 import { NextResponse, type NextRequest } from "next/server";
+import { INDEXNOW_KEY, SITE } from "@/lib/site";
 import { timingSafeEqual } from "node:crypto";
 import { WP_TAGS, type WPTag } from "@/lib/wordpress";
 
@@ -102,10 +103,36 @@ export async function POST(req: NextRequest) {
   }
   for (const p of paths) revalidatePath(p);
 
+  // Tell IndexNow search engines (Bing and friends) about the changed pages.
+  // Production only, so preview deployments never submit URLs.
+  let indexnow: number | string = "skipped";
+  if (process.env.VERCEL_ENV === "production" && !body.all && body.type) {
+    const urlList = [...paths]
+      .filter((p) => p !== "/sitemap.xml")
+      .map((p) => `${SITE.url}${p === "/" ? "" : p}`);
+    try {
+      const res = await fetch("https://api.indexnow.org/indexnow", {
+        method: "POST",
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        body: JSON.stringify({
+          host: new URL(SITE.url).host,
+          key: INDEXNOW_KEY,
+          keyLocation: `${SITE.url}/${INDEXNOW_KEY}.txt`,
+          urlList,
+        }),
+        signal: AbortSignal.timeout(5000),
+      });
+      indexnow = res.status;
+    } catch (e) {
+      indexnow = e instanceof Error ? e.message : "failed";
+    }
+  }
+
   return NextResponse.json({
     ok: true,
     revalidated,
     paths: [...paths],
+    indexnow,
     at: new Date().toISOString(),
   });
 }

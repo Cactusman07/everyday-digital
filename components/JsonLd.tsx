@@ -124,28 +124,40 @@ export function ArticleJsonLd({
   title,
   description,
   datePublished,
+  dateModified,
   image,
   url,
+  keywords,
 }: {
   title: string;
   description?: string;
   datePublished?: string;
+  dateModified?: string;
   image?: string;
   url: string;
+  keywords?: string[];
 }) {
   return (
     <JsonLd
       data={{
         "@context": "https://schema.org",
-        "@type": "Article",
+        "@type": "BlogPosting",
         headline: title,
         description,
         datePublished,
+        dateModified: dateModified ?? datePublished,
+        keywords: keywords?.length ? keywords.join(", ") : undefined,
         image: image ? [image] : undefined,
         url,
         mainEntityOfPage: url,
         inLanguage: "en-NZ",
-        author: { "@type": "Person", name: SITE.founder },
+        author: {
+          "@type": "Person",
+          name: SITE.founder,
+          jobTitle: "Founder",
+          url: `${SITE.url}/about`,
+          worksFor: { "@id": `${SITE.url}/#organization` },
+        },
         publisher: { "@id": `${SITE.url}/#organization` },
       }}
     />

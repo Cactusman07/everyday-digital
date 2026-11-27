@@ -2,6 +2,7 @@
 // Used by pages, blog posts, projects and services so they all open the same way.
 
 import type { ReactNode } from "react";
+import ScriptTitle from "./ScriptTitle";
 
 export default function PageHeader({
   title,
@@ -19,15 +20,7 @@ export default function PageHeader({
       {icon}
       {eyebrow && <p className="eyebrow">{eyebrow}</p>}
       <h1 className="pg-title">
-        {title.split(/([0-9$%][0-9$%,.]*)/).map((part, i) =>
-          i % 2 ? (
-            <span key={i} className="pg-num">
-              {part}
-            </span>
-          ) : (
-            part
-          ),
-        )}
+        <ScriptTitle text={title} />
       </h1>
       {children && <div className="pg-meta">{children}</div>}
     </header>

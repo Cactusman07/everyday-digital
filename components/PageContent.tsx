@@ -1,19 +1,21 @@
+// Standard WordPress pages (About, Services, Projects, Blog, Contact, Terms…).
+// Every page opens with the shared page header; the CMS content follows, then
+// any list that belongs on that page, a call to action, testimonials and the
+// footer.
+
 import Link from "next/link";
 import ProjectContainer from "./ProjectContainer";
 import AboutSection from "./AboutSection";
 import AboutUsProfiles from "./AboutUsProfiles";
 import GeneralContentRenderer from "./GeneralContentRenderer";
 import PageHeader from "./PageHeader";
-import { SERVICES } from "@/lib/site";
-
-// Services show in the order set in lib/site.ts; anything new in WordPress
-// that isn't listed there goes at the end.
-const serviceRank = (slug?: string) => {
-  const i = SERVICES.findIndex((s) => s.slug === slug);
-  return i === -1 ? SERVICES.length : i;
-};
 import ContactForm from "./ContactForm";
 import Footer from "./Footer";
+import Testimonials from "./Testimonials";
+import ReadingProgress from "./show/ReadingProgress";
+import TocSpy from "./show/TocSpy";
+import { SERVICES, SITE } from "@/lib/site";
+import { withHeadingIds } from "@/lib/content";
 import type {
   WPFeaturedImage,
   WPProject,
@@ -23,7 +25,10 @@ import type {
   WPTestimonial,
 } from "@/lib/types";
 
-import Testimonials from "./Testimonials";
+const serviceRank = (slug?: string) => {
+  const i = SERVICES.findIndex((s) => s.slug === slug);
+  return i === -1 ? SERVICES.length : i;
+};
 
 interface PageContentProps {
   content: string | null;
@@ -36,89 +41,125 @@ interface PageContentProps {
   testimonials: WPTestimonial[];
 }
 
-export default function PageContent(props: PageContentProps) {
+// Short intro line under the title on the list pages
+const INTROS: Record<string, { eyebrow: string; text: string }> = {
+  Services: {
+    eyebrow: "What we do",
+    text: "",
+  },
+  Projects: {
+    eyebrow: "Our work",
+    text: "Websites, online stores and custom portals for New Zealand businesses — plus two businesses we run ourselves.",
+  },
+  Blog: {
+    eyebrow: "The blog",
+    text: "The latest digital trends, news and project updates, in plain English. Websites, online stores, AI search and automation for small and growing NZ businesses.",
+  },
+  Contact: {
+    eyebrow: "Get in touch",
+    text: "Whether you've got a clear brief or just an idea, we're here to help. Fill in the form and we'll get back to you within one business day.",
+  },
+};
+
+function CtaBand({
+  heading,
+  text,
+  label = "Start with a free chat",
+}: {
+  heading: string;
+  text: string;
+  label?: string;
+}) {
   return (
-    <div id="content" className="mt-12 mb-24 mx-8 relative z-0">
-      <PageHeader title={props.title ?? ""} eyebrow="Every Day Digital" />
-      {!!props.content && !props.title?.toLowerCase().includes("contact") && (
-        <div
-          className="prose-edd"
-          dangerouslySetInnerHTML={{ __html: props.content }}
-        />
+    <section className="show__cta">
+      <p className="show__cta-script">Every Day.</p>
+      <div>
+        <p className="show__cta-h">{heading}</p>
+        <p>{text}</p>
+      </div>
+      <Link href="/contact" className="btn btn--accent btn--lg">
+        {label}
+      </Link>
+    </section>
+  );
+}
+
+export default function PageContent(props: PageContentProps) {
+  const title = props.title ?? "";
+  const isContact = title.toLowerCase().includes("contact");
+  const intro = INTROS[title] ?? (isContact ? INTROS.Contact : undefined);
+  const { html, toc } = withHeadingIds(props.content ?? "");
+  // Long text pages (Terms, About) get the contents list and progress bar
+  const isLongRead = toc.length >= 4;
+
+  return (
+    <div id="content" className="page-wrap">
+      {isLongRead && <ReadingProgress />}
+      <PageHeader
+        title={title}
+        eyebrow={intro?.eyebrow ?? "Every Day Digital"}
+      />
+      {intro?.text && <p className="page-intro">{intro.text}</p>}
+
+      {!!props.content && !isContact && (
+        <div className={`show__body${isLongRead ? "" : " show__body--solo"}`}>
+          {isLongRead && <TocSpy items={toc} />}
+          <div
+            className="prose-edd show__article"
+            data-article
+            dangerouslySetInnerHTML={{ __html: html }}
+          />
+        </div>
       )}
-      {props.title?.toLowerCase().includes("contact") && (
+
+      {isContact && (
         <>
-          <div className="border-l-4 border-[#4b6ceb] rounded-r-xl bg-white/5 px-6 py-5 mb-2">
-            <p className="text-[#4bafeb] text-[32px] font-bold mt-0 mb-3">
-              Let&apos;s Talk
-            </p>
-            <p className="text-white/70 text-base leading-relaxed m-0">
-              Whether you&apos;ve got a clear brief or just an idea — we&apos;re
-              here to help. Fill in the form and we&apos;ll get back to you
-              within one business day.
-            </p>
-            <p className="text-white/40 text-sm mt-3 mb-0">
-              Prefer to reach us another way?{" "}
-              <a href="tel:0211759457" className="projects-cta-link">
-                021 175 9457
-              </a>{" "}
-              or{" "}
-              <a
-                href="mailto:hello@everydaydigital.co.nz"
-                className="projects-cta-link"
-              >
-                hello@everydaydigital.co.nz
-              </a>
-            </p>
-          </div>
+          <p className="page-intro page-intro--small">
+            Prefer another way? Call{" "}
+            <a
+              href={`tel:${SITE.phone.replace(/\s/g, "")}`}
+              className="projects-cta-link"
+            >
+              {SITE.phone}
+            </a>{" "}
+            or email{" "}
+            <a href={`mailto:${SITE.email}`} className="projects-cta-link">
+              {SITE.email}
+            </a>
+            .
+          </p>
           <ContactForm />
         </>
       )}
-      {props.title === "Projects" && <ProjectContainer data={props.projects} />}
-      {props.title?.toLowerCase().includes("about") && (
+
+      {title === "Projects" && (
+        <>
+          <ProjectContainer data={props.projects} />
+          <CtaBand
+            heading="Like what you see?"
+            text="We'd love to hear about your project. No commitment, just a conversation."
+          />
+        </>
+      )}
+
+      {title.toLowerCase().includes("about") && (
         <>
           <AboutSection />
           <AboutUsProfiles data={props.team} />
         </>
       )}
-      {props.title === "Blog" && (
+
+      {title === "Blog" && (
         <>
-          <div className="border-l-4 border-[#4b6ceb] rounded-r-xl bg-white/5 px-6 py-5 mb-2">
-            <p className="text-[#4bafeb] text-[32px] font-bold mt-0 mb-3">
-              Digital Thinking, Every Day
-            </p>
-            <p className="text-white/70 text-base leading-relaxed m-0">
-              Practical tips, honest opinions, and ideas from the team at Every
-              Day Digital — covering websites, automation, digital strategy, and
-              what&apos;s actually working for small and growing businesses in
-              New Zealand.
-            </p>
-            <p className="text-white/40 text-sm mt-3 mb-0">
-              Have a topic you&apos;d like us to cover?{" "}
-              <Link href="/contact" className="projects-cta-link">
-                Get in touch →
-              </Link>
-            </p>
-          </div>
           <GeneralContentRenderer data={props.posts} icons={false} />
-          <div className="mt-8 bg-white/5 border border-white/10 rounded-2xl p-6 flex items-center justify-between gap-6 flex-wrap">
-            <p className="text-white/70 text-base leading-relaxed m-0">
-              <strong className="text-white font-medium">
-                Ready to put these ideas into practice?
-              </strong>
-              <br />
-              We work with businesses across New Zealand to make digital less
-              complicated and more effective.
-            </p>
-            <Link href="/contact">
-              <button className="bg-[#4b6ceb] hover:bg-[#4bafeb] transition-colors duration-300 text-white rounded-xl px-5 py-2.5 text-sm font-medium whitespace-nowrap cursor-pointer">
-                Get in touch
-              </button>
-            </Link>
-          </div>
+          <CtaBand
+            heading="Ready to put these ideas into practice?"
+            text="We work with businesses across New Zealand to make digital less complicated and more effective."
+          />
         </>
       )}
-      {props.title === "Services" && (
+
+      {title === "Services" && (
         <>
           <GeneralContentRenderer
             data={[...props.services].sort(
@@ -126,24 +167,14 @@ export default function PageContent(props: PageContentProps) {
             )}
             icons={true}
           />
-          <div className="mt-8 bg-white/5 border border-white/10 rounded-2xl p-6 flex items-center justify-between gap-6 flex-wrap">
-            <p className="text-white/70 text-base leading-relaxed m-0">
-              <strong className="text-white font-medium">
-                Ready to get started?
-              </strong>
-              <br />
-              Whether you know exactly what you need or you&apos;re still
-              figuring it out — we&apos;re easy to talk to and happy to help
-              with no pressure.
-            </p>
-            <Link href="/contact">
-              <button className="bg-[#4b6ceb] hover:bg-[#4bafeb] transition-colors duration-300 text-white rounded-xl px-5 py-2.5 text-sm font-medium whitespace-nowrap cursor-pointer">
-                Contact us
-              </button>
-            </Link>
-          </div>
+          <CtaBand
+            heading="Not sure which one you need?"
+            text="Most projects mix two or three of these. Tell us what you're trying to do and we'll come back with a fixed-price quote."
+            label="Book a free consultation"
+          />
         </>
       )}
+
       <Testimonials data={props.testimonials} />
       <Footer />
     </div>

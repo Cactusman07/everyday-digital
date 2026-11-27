@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Reveal from "@/components/motion/Reveal";
 import Footer from "@/components/Footer";
+import ReadingProgress from "@/components/show/ReadingProgress";
 import JsonLd from "@/components/JsonLd";
 import { CASE_STUDIES, SITE, type CaseStudyMeta } from "@/lib/site";
 import { preferWp } from "@/lib/images";
@@ -40,6 +41,7 @@ export default function CaseStudy({ meta, project, testimonials }: Props) {
 
   return (
     <div id="content" className="case mt-40 mb-24 relative z-20">
+      <ReadingProgress />
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -147,7 +149,8 @@ export default function CaseStudy({ meta, project, testimonials }: Props) {
         {project.content && (
           <Reveal className="case__body">
             <div
-              className="project-panel__content"
+              className="project-panel__content prose-edd"
+              data-article
               dangerouslySetInnerHTML={{ __html: project.content }}
             />
           </Reveal>

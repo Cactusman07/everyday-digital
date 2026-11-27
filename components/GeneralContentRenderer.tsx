@@ -1,174 +1,140 @@
-"use client";
+// Lists for the Services and Blog pages. Every card is a real link to its own
+// full page (good for visitors and for search engines, which follow links but
+// not click handlers).
 
-import { useState, useCallback } from "react";
 import Image from "next/image";
-import DetailPanel from "./DetailPanel";
+import Link from "next/link";
+import type { CSSProperties } from "react";
 import ServiceIcon, { hasServiceIcon } from "./ServiceIcon";
 import { getServiceMeta } from "@/lib/site";
+import { excerptText, formatDate, readingMinutes } from "@/lib/content";
 import type { WPService, WPPost } from "@/lib/types";
 
-type ContentItem = WPService | WPPost;
-
 const COVER_TAG = "cover";
+
+function ServiceGrid({ data }: { data: WPService[] }) {
+  return (
+    <ul className="svc-grid">
+      {data.map((item, i) => {
+        const meta = getServiceMeta(item.slug);
+        return (
+          <li key={item.databaseId ?? item.slug}>
+            <Link
+              href={`/services/${item.slug}`}
+              className="edd-card svc-grid__card has-sicon"
+              style={{ "--k": meta?.colour ?? "#4bafeb" } as CSSProperties}
+            >
+              <span className="svc-grid__n">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              {hasServiceIcon(item.slug) ? (
+                <ServiceIcon slug={item.slug} size={48} />
+              ) : (
+                !!item.featuredImage?.node?.sourceUrl && (
+                  <Image
+                    src={item.featuredImage.node.sourceUrl}
+                    alt=""
+                    width={48}
+                    height={48}
+                    className="w-12 h-12 object-contain content-icon-tint"
+                  />
+                )
+              )}
+              <span className="edd-card__title">{item.title}</span>
+              {meta && (
+                <span className="svc-grid__word">Every Day {meta.word}</span>
+              )}
+              <span className="svc-grid__text">
+                {excerptText(item.excerpt || item.content, 170)}
+              </span>
+              <span className="svc-grid__go">Find out more →</span>
+            </Link>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+function PostCard({ post, big = false }: { post: WPPost; big?: boolean }) {
+  const tags = post.tags?.nodes ?? [];
+  const isCover = tags.some((t) => t.name === COVER_TAG);
+  const shown = tags.filter((t) => t.name !== COVER_TAG).slice(0, 3);
+  const img = post.featuredImage?.node;
+  return (
+    <Link
+      href={`/blog/${post.slug}`}
+      className={`edd-card post-card${big ? " post-card--big" : ""}`}
+    >
+      {img?.sourceUrl && (
+        <div
+          className={`post-card__img${isCover ? "" : " post-card__img--contain"}`}
+        >
+          <Image
+            src={img.sourceUrl}
+            alt={img.altText || post.title}
+            fill
+            sizes={
+              big
+                ? "(max-width: 900px) 100vw, 60vw"
+                : "(max-width: 768px) 100vw, 33vw"
+            }
+          />
+        </div>
+      )}
+      <div className="post-card__body">
+        <span className="post-card__meta">
+          {big && <b>Latest · </b>}
+          {formatDate(post.date)} · {readingMinutes(post.content)} min read
+        </span>
+        <span className="post-card__title">{post.title}</span>
+        <span className="post-card__text">
+          {excerptText(post.excerpt || post.content, big ? 220 : 140)}
+        </span>
+        {shown.length > 0 && (
+          <span className="post-card__tags">
+            {shown.map((t) => (
+              <span key={t.name} className="chip">
+                {t.name}
+              </span>
+            ))}
+          </span>
+        )}
+      </div>
+    </Link>
+  );
+}
+
+function PostGrid({ data }: { data: WPPost[] }) {
+  const sorted = [...data].sort(
+    (a, b) => +new Date(b.date) - +new Date(a.date),
+  );
+  const [first, ...rest] = sorted;
+  if (!first) return null;
+  return (
+    <div className="post-grid">
+      <PostCard post={first} big />
+      <ul className="post-grid__list">
+        {rest.map((p) => (
+          <li key={p.slug}>
+            <PostCard post={p} />
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 export default function GeneralContentRenderer({
   data,
   icons,
 }: {
-  data: ContentItem[];
+  data: (WPService | WPPost)[];
   icons: boolean;
 }) {
-  const [active, setActive] = useState<ContentItem | null>(null);
-  const close = useCallback(() => setActive(null), []);
-
-  if (icons) {
-    return (
-      <>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-8">
-          {data.map((item: ContentItem, index: number) => (
-            <div
-              key={item.databaseId ?? `${item.title}-${index}`}
-              onClick={() => setActive(item)}
-              style={
-                {
-                  "--k": getServiceMeta(item.slug)?.colour ?? "#4bafeb",
-                } as React.CSSProperties
-              }
-              className="edd-card has-sicon p-6 cursor-pointer group flex flex-col gap-3"
-            >
-              {hasServiceIcon(item.slug) ? (
-                <ServiceIcon slug={item.slug} size={44} className="mb-1" />
-              ) : (
-                !!item.featuredImage?.node?.sourceUrl && (
-                  <div className="text-[#4bafeb] mb-1">
-                    <Image
-                      src={item.featuredImage.node.sourceUrl}
-                      alt={item.featuredImage.node.altText ?? item.title}
-                      width={44}
-                      height={44}
-                      className="w-11 h-11 object-contain content-icon-tint"
-                    />
-                  </div>
-                )
-              )}
-              <p className="edd-card__title">{item.title}</p>
-              <div
-                className="text-white/60 text-sm leading-relaxed services-content"
-                dangerouslySetInnerHTML={{ __html: item.excerpt ?? "" }}
-              />
-              <span className="text-[#4bafeb] text-xs uppercase tracking-widest mt-1 flex items-center gap-1.5 group-hover:gap-2.5 transition-all duration-200">
-                Find out more
-                <svg
-                  className="h-3 w-3"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <line x1="5" y1="12" x2="19" y2="12" />
-                  <polyline points="12 5 19 12 12 19" />
-                </svg>
-              </span>
-            </div>
-          ))}
-        </div>
-
-        {active && (
-          <DetailPanel
-            title={active.title}
-            content={active.content ?? ""}
-            image={active.featuredImage?.node ?? null}
-            type="service"
-            onClose={close}
-          />
-        )}
-      </>
-    );
-  }
-
-  return (
-    <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-8">
-        {data.map((item: ContentItem, index: number) => {
-          const date = (item as WPPost)?.date
-            ? new Date((item as WPPost).date).toLocaleDateString("en-NZ", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              })
-            : null;
-          const allTags = (item as WPPost)?.tags?.nodes || [];
-          const isCover = allTags.some((t) => t.name === COVER_TAG);
-          const tags = allTags.filter((t) => t.name !== COVER_TAG);
-
-          return (
-            <div
-              key={item.databaseId ?? `${item.title}-${date ?? index}`}
-              onClick={() => setActive(item)}
-              className="edd-card cursor-pointer group flex flex-col overflow-hidden"
-            >
-              {!!item.featuredImage?.node?.sourceUrl && (
-                <div className="relative w-full h-36 md:h-40 overflow-hidden flex-shrink-0 bg-white flex items-center justify-center">
-                  <Image
-                    src={item.featuredImage.node.sourceUrl}
-                    alt={item.featuredImage.node.altText ?? item.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className={
-                      isCover
-                        ? "object-cover transition duration-300 group-hover:scale-[1.02]"
-                        : "object-contain transition duration-300 group-hover:scale-[1.02]"
-                    }
-                  />
-                </div>
-              )}
-              <div className="p-5 flex flex-col gap-2 flex-1">
-                {!!date && (
-                  <span className="text-white/40 text-xs">{date}</span>
-                )}
-                <p className="text-white text-base font-medium m-0">
-                  {item.title}
-                </p>
-                <div
-                  className="text-white/60 text-sm leading-relaxed services-content"
-                  dangerouslySetInnerHTML={{
-                    __html: item.excerpt || item.content,
-                  }}
-                />
-              </div>
-              {tags.length > 0 && (
-                <div className="px-5 pb-5 pt-0 flex flex-wrap gap-2">
-                  {tags.map((tag, tagIndex) => (
-                    <span
-                      key={tagIndex}
-                      className="text-[#4bafeb] text-xs bg-[#4b6ceb]/10 px-2.5 py-1 rounded-full"
-                    >
-                      {tag.name}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
-
-      {active && (
-        <DetailPanel
-          title={active.title}
-          content={active.content ?? ""}
-          image={active.featuredImage?.node ?? null}
-          type="project"
-          coverImage={
-            (active as WPPost)?.tags?.nodes?.some(
-              (t) => t.name === COVER_TAG,
-            ) ?? false
-          }
-          onClose={close}
-        />
-      )}
-    </>
+  return icons ? (
+    <ServiceGrid data={data as WPService[]} />
+  ) : (
+    <PostGrid data={data as WPPost[]} />
   );
 }

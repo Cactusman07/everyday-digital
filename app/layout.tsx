@@ -57,6 +57,19 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
   },
+  alternates: {
+    types: {
+      "application/rss+xml": [{ url: "/feed.xml", title: "Every Day Digital" }],
+    },
+  },
+  verification: {
+    // Paste the codes from Google Search Console and Bing Webmaster Tools
+    // into Vercel env vars to verify ownership without touching DNS.
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+    other: process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
+      ? { "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION }
+      : undefined,
+  },
   robots: {
     index: true,
     follow: true,

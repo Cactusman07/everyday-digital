@@ -55,7 +55,7 @@ describe("ArticleJsonLd", () => {
     );
     const data = getJsonLdData(container);
 
-    expect(data["@type"]).toBe("Article");
+    expect(data["@type"]).toBe("BlogPosting");
     expect(data.headline).toBe("Test Article");
     expect(data.description).toBe("A test");
     expect(data.datePublished).toBe("2024-01-01");

@@ -24,11 +24,12 @@ export const PAGES_QUERY = `
 
 export const PROJECTS_QUERY = `
   query Projects {
-    projects {
+    projects(first: 100) {
       nodes {
         databaseId
         content
         date
+        modified
         excerpt
         featuredImage {
           node {
@@ -46,7 +47,7 @@ export const PROJECTS_QUERY = `
 
 export const SERVICES_QUERY = `
   query Services {
-    services {
+    services(first: 100) {
       nodes {
         databaseId
         featuredImage {
@@ -69,11 +70,12 @@ export const SERVICES_QUERY = `
 
 export const POSTS_QUERY = `
   query Posts {
-    posts {
+    posts(first: 100) {
       nodes {
         databaseId
         content(format: RENDERED)
         date
+        modified
         excerpt
         featuredImage {
           node {
@@ -98,7 +100,7 @@ export const POSTS_QUERY = `
 
 export const TEAMS_QUERY = `
   query Teams {
-    teams {
+    teams(first: 100) {
       nodes {
         databaseId
         featuredImage {
@@ -120,7 +122,7 @@ export const TEAMS_QUERY = `
 
 export const TESTIMONIALS_QUERY = `
   query Testimonials {
-    testimonials {
+    testimonials(first: 100) {
       nodes {
         content(format: RENDERED)
         title
@@ -150,11 +152,12 @@ export const ALL_CONTENT_QUERY = `
         isFrontPage
       }
     }
-    projects {
+    projects(first: 100) {
       nodes {
         databaseId
         content
         date
+        modified
         excerpt
         featuredImage {
           node {
@@ -167,7 +170,7 @@ export const ALL_CONTENT_QUERY = `
         slug
       }
     }
-    services {
+    services(first: 100) {
       nodes {
         databaseId
         featuredImage {
@@ -185,13 +188,13 @@ export const ALL_CONTENT_QUERY = `
         slug
       }
     }
-    testimonials {
+    testimonials(first: 100) {
       nodes {
         content(format: RENDERED)
         title
       }
     }
-    teams {
+    teams(first: 100) {
       nodes {
         databaseId
         featuredImage {
@@ -208,11 +211,12 @@ export const ALL_CONTENT_QUERY = `
         title
       }
     }
-    posts {
+    posts(first: 100) {
       nodes {
         databaseId
         content(format: RENDERED)
         date
+        modified
         excerpt
         featuredImage {
           node {

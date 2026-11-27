@@ -24,6 +24,7 @@ export interface WPProject {
   databaseId?: number;
   content: string;
   date?: string;
+  modified?: string;
   excerpt?: string;
   featuredImage?: WPFeaturedImage;
   title: string;
@@ -51,6 +52,7 @@ export interface WPPost {
   databaseId?: number;
   content: string;
   date: string;
+  modified?: string;
   excerpt?: string;
   featuredImage?: WPFeaturedImage;
   title: string;

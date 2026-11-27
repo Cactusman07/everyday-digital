@@ -96,6 +96,7 @@ export default async function ProjectPage({ params }: PageProps) {
         type="project"
         item={project}
         testimonials={testimonials}
+        siblings={projects}
       />
     </div>
   );
