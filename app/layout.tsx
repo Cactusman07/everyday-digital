@@ -50,11 +50,6 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
   },
-  alternates: {
-    types: {
-      "application/rss+xml": [{ url: "/feed.xml", title: "Every Day Digital" }],
-    },
-  },
   verification: {
     // Paste the codes from Google Search Console and Bing Webmaster Tools
     // into Vercel env vars to verify ownership without touching DNS.
@@ -83,6 +78,14 @@ export default function RootLayout({
   return (
     <html lang="en-NZ" className={`${bananaItalic.variable} ${anton.variable}`}>
       <body>
+        {/* Page metadata replaces the layout's `alternates`, so the feed link
+            is rendered here instead; React moves it into <head>. */}
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="Every Day Digital"
+          href="/feed.xml"
+        />
         {/* Gradient layers, animated by BackgroundGradients */}
         <div id="background1" className="fullpage" />
         <div id="background2" className="fullpage" />
