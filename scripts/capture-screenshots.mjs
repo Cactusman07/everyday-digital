@@ -6,8 +6,9 @@ import { mkdir } from "node:fs/promises";
 
 const SITES = [
   ["nz-in-pictures", "https://nzinpictures.co.nz"],
-  ["ride-rotorua-store", "https://riderotoruastore.co.nz"],
-  ["plow-foods", "https://plowfoods.co.nz"],
+  ["ride-rotorua-store-new-website", "https://riderotoruastore.co.nz"],
+  // Plow Foods portal is behind a login; its image is a masked screenshot
+  // committed by hand (public/images/work/plow-foods-portal/).
   ["home-office-space", "https://homeofficespace.co.nz"],
 ];
 

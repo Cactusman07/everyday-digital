@@ -283,7 +283,7 @@ export const CASE_STUDIES: CaseStudyMeta[] = [
     order: 1,
   },
   {
-    slug: "ride-rotorua-store",
+    slug: "ride-rotorua-store-new-website",
     client: "Ride Rotorua Store",
     url: "https://riderotoruastore.co.nz",
     sector: "Bike retail · Tourism",
@@ -309,7 +309,7 @@ export const CASE_STUDIES: CaseStudyMeta[] = [
     order: 2,
   },
   {
-    slug: "plow-foods",
+    slug: "plow-foods-operations-portal",
     client: "Plow Foods",
     url: "https://plowfoods.co.nz",
     sector: "Food manufacturing · FMCG",
