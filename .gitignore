@@ -15,3 +15,6 @@ test-results
 
 # Full-page captures are large; keep only the hero crops in git
 public/images/work/*-full.png
+
+# TypeScript incremental build cache
+*.tsbuildinfo
