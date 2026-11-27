@@ -44,9 +44,9 @@ WP "Publish"/"Update"/"Trash"
   → next request for that page is rebuilt from fresh WordPress data
 ```
 
-Covered post types: `post`, `page`, `project`, `service`, `team`, `testimonial`. Menu changes also trigger a full purge.
+Covered post types: `post`, `page`, `projects`, `services`, `team`, `testimonials` (the plural names this WordPress uses). Menu changes also trigger a full purge. Publishing also pings IndexNow (production only).
 
-Fallback: every fetch still has a 24-hour revalidation, so a missed webhook can never leave stale content up for more than a day. (Previously the site re-fetched every 60 seconds whether or not anything changed.)
+Fallback: every fetch also refreshes at most every 5 minutes, so content still appears if the publish call is missed or not set up yet.
 
 ## 5. Testing the route by hand
 

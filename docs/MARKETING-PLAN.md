@@ -1,5 +1,7 @@
 # Every Day Digital — social and advertising plan
 
+> **Updated 28 Nov 2026:** the fixed packages below ($2,350 / $4,750 / $6,500 / $1,500 audit, $30 hosting) were replaced. Current pricing: a simple WordPress website from $1500 + GST; everything else a fixed-price quote after a free consultation; website hosting $40/month (one hour of updates included, two months free annually); eCommerce hosting $50/month. Landing pages are now `/lp/wordpress-website`, `/lp/website-review` and `/lp/online-store`. The channel advice still stands; swap the prices in the example messages.
+
 Date: 7 Nov 2026. Companion to `docs/SEO-GEO-AEO-AUDIT.md` and the three landing pages at `/lp/*`.
 
 ## What's changed since the 90-day plan
@@ -16,12 +18,12 @@ The plan's "stop selling websites, sell running stores" line is now partly wrong
 
 This is still where the first ten clients come from. Nothing below replaces it; everything below feeds it.
 
-| List                             | Who                                                                                    | Message                                                                                                                                                                | Landing page                          |
-| -------------------------------- | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
-| A — already paid you             | Every past client                                                                      | "I've repriced everything into fixed packages. Your site is on $X hosting; here's what's included now, and here's the $1,500 audit if you want to know what it needs." | `/` (pricing anchor)                  |
-| B — warm network                 | Ex-colleagues, Plow Foods suppliers/distributors/retailers, Home Office Space contacts | "I build websites and automation for NZ businesses. Here's the price list. If your site is more than three years old, the audit is the place to start."                | `/lp/seo-audit`                       |
-| C — referral partners            | Marketing/brand studios without dev, accountants, business advisors                    | "White-label or 10% referral — your choice. Fixed prices so you can quote your client without calling me."                                                             | `/` + a one-page PDF of the packages  |
-| D — stores with fixable problems | NZ Shopify/Woo stores that are slow, broken on mobile, or abandoned                    | "Your store [specific thing]. I run one myself, so I know what that costs you. $6,500 rebuilds it, or $1,500 tells you exactly what's wrong first."                    | `/lp/shopify-6500` or `/lp/seo-audit` |
+| List                             | Who                                                                                    | Message                                                                                                                                                                | Landing page                               |
+| -------------------------------- | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| A — already paid you             | Every past client                                                                      | "I've repriced everything into fixed packages. Your site is on $X hosting; here's what's included now, and here's the $1,500 audit if you want to know what it needs." | `/` (pricing anchor)                       |
+| B — warm network                 | Ex-colleagues, Plow Foods suppliers/distributors/retailers, Home Office Space contacts | "I build websites and automation for NZ businesses. Here's the price list. If your site is more than three years old, the audit is the place to start."                | `/lp/website-review`                       |
+| C — referral partners            | Marketing/brand studios without dev, accountants, business advisors                    | "White-label or 10% referral — your choice. Fixed prices so you can quote your client without calling me."                                                             | `/` + a one-page PDF of the packages       |
+| D — stores with fixable problems | NZ Shopify/Woo stores that are slow, broken on mobile, or abandoned                    | "Your store [specific thing]. I run one myself, so I know what that costs you. $6,500 rebuilds it, or $1,500 tells you exactly what's wrong first."                    | `/lp/online-store` or `/lp/website-review` |
 
 Cadence from the plan: Mon 90 min send ten, Wed 60 min follow up, Thu 60 min one call or coffee. Keep it.
 
@@ -33,7 +35,7 @@ Business owners and managers who approve a $4,750 website are on LinkedIn, not I
 
 - Headline: `Web design, development & automation for NZ businesses · WordPress · Shopify · Custom apps · Founder, Every Day Digital`
 - About: three short paragraphs — what you build, who for, the fact you run two businesses yourself. End with the price list in one line and a link.
-- Featured: the home page, one case study, `/lp/seo-audit`.
+- Featured: the home page, one case study, `/lp/website-review`.
 - Experience: Every Day Digital entry rewritten to the four focus areas. Plow Foods GM and Home Office Space listed — they're credentials, not distractions.
 
 **Company page.** Tagline = "We keep you running. Web design, development, hosting and automation for NZ businesses." Pin the pricing post. Logo and banner from the OG image.
@@ -45,7 +47,7 @@ Business owners and managers who approve a $4,750 website are on LinkedIn, not I
 | 1    | Price transparency      | "Here's exactly what a website costs from us, and why we publish it." Screenshot of the packages section.               | `/#pricing`             |
 | 2    | Case study              | One client, one problem, one result, two screenshots. Start with Home Office Space or Plow Foods — you own the numbers. | `/projects/<slug>`      |
 | 3    | Build note              | A screenshot of something shipped this week and two sentences on why. Automation wins work best here.                   | none, or the case study |
-| 4    | Plain-English explainer | "Shared hosting vs private hosting, and which one you actually need." "What an SEO audit finds that you can't see."     | `/lp/seo-audit`         |
+| 4    | Plain-English explainer | "Shared hosting vs private hosting, and which one you actually need." "What an SEO audit finds that you can't see."     | `/lp/website-review`    |
 
 **The daily ten minutes.** Comment on three posts from NZ business owners, Xero advisors, Shopify partners, or the Plow Foods/food-industry network. Specific, useful, no pitch. This is where the DMs come from, and it costs less than a post.
 
@@ -74,15 +76,15 @@ Once that's done, two tests, four weeks each, NZ-realistic budgets:
 
 ### Google Search — intent capture
 
-|                   |                                                                                                                                                                                    |
-| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Budget            | $20/day ($600/month) for the test                                                                                                                                                  |
-| Campaign 1        | "website audit" terms → `/lp/seo-audit`. Keywords: `website audit nz`, `seo audit auckland`, `why is my website slow`, `website not showing on google`. Exact + phrase match only. |
-| Campaign 2        | "website cost" terms → `/lp/website-2350`. Keywords: `website design cost nz`, `how much does a website cost nz`, `small business website auckland`.                               |
-| Negative keywords | `free`, `template`, `wix`, `squarespace`, `course`, `job`, `diy`, `tutorial`                                                                                                       |
-| Location          | Auckland + 50 km, then NZ-wide if CPL is good                                                                                                                                      |
-| Ad copy           | Lead with the price. "Website audit — $1,500. Every issue listed, first 4 hours fixed." Price in the headline filters out the tyre-kickers before they cost you a click.           |
-| Success           | Cost per enquiry under $150 on the audit page; under $250 on the website page. If it's double that after four weeks, stop.                                                         |
+|                   |                                                                                                                                                                                         |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Budget            | $20/day ($600/month) for the test                                                                                                                                                       |
+| Campaign 1        | "website audit" terms → `/lp/website-review`. Keywords: `website audit nz`, `seo audit auckland`, `why is my website slow`, `website not showing on google`. Exact + phrase match only. |
+| Campaign 2        | "website cost" terms → `/lp/wordpress-website`. Keywords: `website design cost nz`, `how much does a website cost nz`, `small business website auckland`.                               |
+| Negative keywords | `free`, `template`, `wix`, `squarespace`, `course`, `job`, `diy`, `tutorial`                                                                                                            |
+| Location          | Auckland + 50 km, then NZ-wide if CPL is good                                                                                                                                           |
+| Ad copy           | Lead with the price. "Website audit — $1,500. Every issue listed, first 4 hours fixed." Price in the headline filters out the tyre-kickers before they cost you a click.                |
+| Success           | Cost per enquiry under $150 on the audit page; under $250 on the website page. If it's double that after four weeks, stop.                                                              |
 
 Why audit first: it's the lowest-commitment purchase, it's a product no competitor in the review set sells as a fixed price, and every audit is a scoped pipeline into a $2,350–$6,500 build.
 

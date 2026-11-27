@@ -35,7 +35,10 @@ export function excerptText(html = "", max = 160) {
   const text = stripHtml(html);
   if (text.length <= max) return text;
   const cut = text.slice(0, max);
-  return cut.slice(0, cut.lastIndexOf(" ")).replace(/[,.;:–—-]+$/, "") + "…";
+  const space = cut.lastIndexOf(" ");
+  return (
+    (space > 0 ? cut.slice(0, space) : cut).replace(/[,.;:–—-]+$/, "") + "…"
+  );
 }
 
 // Minutes to read at 220 words a minute, never less than 1
@@ -110,6 +113,7 @@ export function parseTestimonial(t: WPTestimonial): Testimonial {
     .filter(
       (p) =>
         !(
+          !!name.trim() &&
           p.includes(name.trim()) &&
           (/www\.|\.co\.nz|\.com/.test(p) || p.length < 80)
         ),

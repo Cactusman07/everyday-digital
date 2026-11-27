@@ -1,9 +1,6 @@
-// "use client" — this component still needs the DOM to animate the hero's rotating
-// word and background gradients, but it no longer drives that animation with a
-// requestAnimationFrame loop. That loop ran a JS callback on every single frame
-// (~60x/second) for as long as the page was open, competing with the main thread
-// for every tap/scroll. Instead we let the browser's own CSS transition engine
-// interpolate blur/opacity, and only touch JS twice per ~2.5s cycle to flip state.
+// Animates the hero's rotating word and gradients. The browser's CSS
+// transitions do the blur/fade; JS only swaps the word every ~2.5s (an
+// earlier requestAnimationFrame loop ran every frame and slowed scrolling).
 "use client";
 
 import { useEffect, useRef } from "react";

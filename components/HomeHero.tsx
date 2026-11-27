@@ -1,18 +1,8 @@
-// "use client" — marks this as a Client Component. Required because it uses browser APIs
-// (useState, useEffect, window.addEventListener) that don't exist on the server.
-// Server Components (the default) can't use hooks or browser APIs.
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-// next/link — replaces <a> tags for internal navigation. Provides client-side routing
-// (no full page reload), automatic prefetching on hover, and scroll restoration.
 import Link from "next/link";
-// next/image — replaces <img> tags. Automatically optimises images: resizes, converts
-// to WebP, lazy-loads, and serves responsive srcsets. Static imports (like below)
-// get their dimensions at build time, so no layout shift.
 import Image from "next/image";
-// usePathname — Next.js hook that returns the current URL path (e.g. "/" or "/about").
-// Replaces react-router-dom's useLocation().
 import { usePathname } from "next/navigation";
 
 import CTAS from "./CTAS";
@@ -20,15 +10,12 @@ import SocialIcons from "./SocialIcons";
 import BackgroundGradients from "./BackgroundGradients";
 import useMatchMedia from "@/hooks/useMatchMedia";
 
-// Static image import — Next.js analyses this at build time to get width/height/blur placeholder.
-// The image file lives in public/images/ and is served from the Next.js static file server.
 import logo from "@/public/images/EveryDayDigital_Logo_reversed.png";
 
 export default function HomeHero({ menuSlot }: { menuSlot: React.ReactNode }) {
   const isDesktopResolution = useMatchMedia("(min-width:768px)", true);
   const pathname = usePathname();
 
-  // Derived directly from pathname — no useEffect needed since pathname is reactive
   const isHomePage = pathname === "/";
   const [showHeader, setShowHeader] = useState(true);
 
@@ -40,8 +27,6 @@ export default function HomeHero({ menuSlot }: { menuSlot: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
-    // passive: true tells the browser this handler never calls preventDefault(),
-    // so it can start compositing the scroll immediately instead of waiting on JS.
     window.addEventListener("scroll", listenToScroll, { passive: true });
     return () => window.removeEventListener("scroll", listenToScroll);
   }, [listenToScroll]);

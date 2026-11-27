@@ -170,10 +170,8 @@ export default function AboutSection() {
           Coffee, call, or email — we&apos;re easy to reach and happy to chat,
           no commitment needed.
         </p>
-        <Link href="/contact">
-          <button className="bg-[#4b6ceb] hover:bg-[#4bafeb] transition-colors duration-300 text-white rounded-xl px-5 py-2.5 text-sm font-medium whitespace-nowrap cursor-pointer">
-            Get in touch
-          </button>
+        <Link href="/contact" className="btn btn--accent">
+          Get in touch
         </Link>
       </div>
     </div>

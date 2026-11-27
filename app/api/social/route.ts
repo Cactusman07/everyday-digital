@@ -214,7 +214,12 @@ async function linkedInThumbnail(
       (await init.json()) as { value?: { uploadUrl: string; image: string } }
     ).value;
     if (!v) return undefined;
-    const img = await fetch(image);
+    // Only ever fetch from our own CMS
+    const cms = new URL(
+      env("WORDPRESS_GRAPHQL_URL") ?? "https://cms.everydaydigital.co.nz",
+    ).host;
+    if (new URL(image).host !== cms) return undefined;
+    const img = await fetch(image, { signal: AbortSignal.timeout(10000) });
     const put = await fetch(v.uploadUrl, {
       method: "PUT",
       headers: { Authorization: headers.Authorization },

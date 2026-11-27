@@ -1,6 +1,4 @@
-// Data fetching layer — all WordPress GraphQL queries go through here.
-// These functions run on the server (in Server Components), so API credentials
-// and WordPress URLs are never exposed to the browser.
+// All WordPress GraphQL queries. Server-side only.
 
 import {
   PAGES_QUERY,
@@ -34,12 +32,10 @@ export const WP_TAGS = {
 
 export type WPTag = (typeof WP_TAGS)[keyof typeof WP_TAGS];
 
-// Safety net: even with on-demand revalidation, re-fetch at most once a day so
-// a missed webhook can never leave stale content up indefinitely.
-const FALLBACK_REVALIDATE_SECONDS = 60 * 60 * 24;
+// Publishing in WordPress refreshes the site straight away (see
+// app/api/revalidate). This is the safety net if that call ever fails.
+const FALLBACK_REVALIDATE_SECONDS = 60 * 5;
 
-// Validates the WordPress URL is configured — fails fast with a helpful error
-// instead of a cryptic "fetch failed" at runtime.
 function getGraphQLUrl(): string {
   const url = process.env.WORDPRESS_GRAPHQL_URL;
   if (!url) {
@@ -78,8 +74,6 @@ async function fetchGraphQL<T>(
   }
   return json.data;
 }
-
-// Typed fetch functions — each returns a specific WordPress content type.
 
 export async function getPages(): Promise<WPPage[]> {
   const data = await fetchGraphQL<{ pages: { nodes: WPPage[] } }>(

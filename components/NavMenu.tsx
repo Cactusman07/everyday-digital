@@ -34,20 +34,26 @@ export default function NavMenu({ menu }: { menu: WPPage[] | null }) {
   return (
     <div className="flex items-center justify-between py-4 pr-4">
       <nav>
-        <section
+        <button
+          type="button"
           className="MOBILE-MENU flex cursor-pointer w-8 h-7 z-20 relative"
           onClick={() => setIsNavOpen((prev) => !prev)}
+          aria-label="Open menu"
+          aria-expanded={isNavOpen}
+          aria-controls="navMenu"
         >
           <div className="HAMBURGER-ICON space-y-2 grid cursor-pointer">
             <span className="block h-0.5 w-8 animate-pulse bg-white"></span>
             <span className="block h-0.5 w-5 justify-self-end animate-pulse bg-white"></span>
             <span className="block h-0.5 w-8 animate-pulse bg-white"></span>
           </div>
-        </section>
+        </button>
         <div id="navMenu" className={isNavOpen ? "showMenuNav" : "hideMenuNav"}>
-          <div
+          <button
+            type="button"
             className="absolute top-0 right-0 pl-4 pt-8 pr-8"
             onClick={() => setIsNavOpen(false)}
+            aria-label="Close menu"
           >
             <svg
               className="h-8 w-8 text-white cursor-pointer animate-pulse"
@@ -61,7 +67,7 @@ export default function NavMenu({ menu }: { menu: WPPage[] | null }) {
               <line x1="18" y1="6" x2="6" y2="18" />
               <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
-          </div>
+          </button>
           <ul className="flex flex-col items-center justify-between min-h-[250px] text-xl">
             {menuItems}
           </ul>

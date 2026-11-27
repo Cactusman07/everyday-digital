@@ -72,7 +72,6 @@ export default async function ServicePage({ params }: PageProps) {
 
   return (
     <div className="inner-page">
-      {/* ServiceJsonLd tells search engines this page describes a service offering */}
       <ServiceJsonLd
         name={service.title}
         description={service.excerpt

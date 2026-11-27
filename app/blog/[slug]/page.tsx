@@ -18,8 +18,6 @@ export async function generateStaticParams() {
   }
 }
 
-// Per-post SEO metadata — sets title, description, and Open Graph image from WordPress data.
-// The description strips HTML tags from the excerpt and truncates to 160 chars (Google's limit).
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
@@ -72,8 +70,6 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   return (
     <div className="inner-page">
-      {/* ArticleJsonLd outputs structured data so Google can show rich results
-          (author, date, image) in search listings for this blog post */}
       <ArticleJsonLd
         title={post.title}
         description={post.excerpt

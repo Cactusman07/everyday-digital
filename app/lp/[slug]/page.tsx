@@ -8,7 +8,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { LANDING_PAGES, getLandingPage } from "@/lib/landing";
-import { PACKAGES, SITE, CASE_STUDIES } from "@/lib/site";
+import { SITE, CASE_STUDIES } from "@/lib/site";
 import { getTestimonials, safe } from "@/lib/wordpress";
 import ContactForm from "@/components/ContactForm";
 import Reveal from "@/components/motion/Reveal";
@@ -62,23 +62,20 @@ export default async function LandingPage({ params, searchParams }: Props) {
     .join("&");
   const context = `lp:${lp.slug}${utm ? ` | ${utm}` : ""}`;
 
-  const pkg = lp.packageId
-    ? PACKAGES.find((p) => p.id === lp.packageId)
-    : undefined;
   const testimonials = await safe(getTestimonials);
   const quote = testimonials[0];
   const work = CASE_STUDIES.slice(0, 2);
 
   return (
     <div className={`lp lp--${lp.layout}`}>
-      {pkg?.price && (
+      {lp.price && (
         <JsonLd
           data={{
             "@context": "https://schema.org",
             "@type": "Offer",
-            name: pkg.name,
-            description: pkg.tagline,
-            price: pkg.price,
+            name: lp.title,
+            description: lp.description,
+            price: lp.price,
             priceCurrency: "NZD",
             url: `${SITE.url}/lp/${lp.slug}`,
             seller: { "@id": `${SITE.url}/#organization` },
@@ -133,9 +130,7 @@ export default async function LandingPage({ params, searchParams }: Props) {
               <li key={b}>{b}</li>
             ))}
           </ul>
-          {pkg?.fineprint && (
-            <p className="pkg__fine lp__fine">{pkg.fineprint}</p>
-          )}
+          {lp.fineprint && <p className="pkg__fine lp__fine">{lp.fineprint}</p>}
         </Reveal>
         {lp.steps && (
           <Reveal>

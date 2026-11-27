@@ -212,8 +212,10 @@ export default function DiveEffects() {
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize);
     window.addEventListener("load", onResize);
-    document.fonts?.ready.then(onResize);
+    let alive = true;
+    document.fonts?.ready.then(() => alive && onResize());
     return () => {
+      alive = false;
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
       window.removeEventListener("load", onResize);

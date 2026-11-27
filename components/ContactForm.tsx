@@ -1,16 +1,9 @@
 "use client";
 
+import { SERVICES } from "@/lib/site";
 import { useForm, ValidationError } from "@formspree/react";
 
-const SERVICES = [
-  "Website design",
-  "Development",
-  "Website hosting",
-  "Social media management",
-  "Automation",
-  "Print & media design",
-  "Other",
-];
+const SERVICE_OPTIONS = [...SERVICES.map((s) => s.title), "Something else"];
 
 export default function ContactForm({
   defaultService,
@@ -121,7 +114,7 @@ export default function ContactForm({
             defaultValue={defaultService ?? ""}
           >
             <option value="">Select a service...</option>
-            {SERVICES.map((s) => (
+            {SERVICE_OPTIONS.map((s) => (
               <option key={s} value={s}>
                 {s}
               </option>

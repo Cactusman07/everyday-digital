@@ -5,9 +5,7 @@ import { FEATURED_SLUGS } from "@/lib/site";
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://everydaydigital.co.nz";
 
-// Next.js Sitemap API — exporting a default function from app/sitemap.ts automatically
-// generates /sitemap.xml. Search engines use this to discover all pages on the site.
-// This fetches all content from WordPress and builds the sitemap dynamically.
+// /sitemap.xml, built from WordPress content.
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = [
     {

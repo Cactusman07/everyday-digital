@@ -16,6 +16,7 @@ import type { WPProject, WPTestimonial } from "@/lib/types";
 interface Props {
   meta: CaseStudyMeta;
   project: WPProject;
+  projects: WPProject[];
   testimonials: WPTestimonial[];
 }
 
@@ -26,7 +27,12 @@ function stripTags(html: string) {
     .trim();
 }
 
-export default function CaseStudy({ meta, project, testimonials }: Props) {
+export default function CaseStudy({
+  meta,
+  project,
+  projects,
+  testimonials,
+}: Props) {
   const hero = preferWp(
     project.featuredImage?.node?.sourceUrl,
     `/images/work/${meta.slug}.png`,
@@ -179,7 +185,11 @@ export default function CaseStudy({ meta, project, testimonials }: Props) {
                 <Link href={`/projects/${r.slug}`} className="work-card__link">
                   <div className="work-card__media">
                     <Image
-                      src={`/images/work/${r.slug}.png`}
+                      src={preferWp(
+                        projects.find((p) => p.slug === r.slug)?.featuredImage
+                          ?.node?.sourceUrl,
+                        `/images/work/${r.slug}.png`,
+                      )}
                       alt={`${r.client} website`}
                       fill
                       sizes="(max-width: 760px) 100vw, 33vw"

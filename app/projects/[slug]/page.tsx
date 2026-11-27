@@ -85,7 +85,12 @@ export default async function ProjectPage({ params }: PageProps) {
             { name: meta.client, url: `/projects/${slug}` },
           ]}
         />
-        <CaseStudy meta={meta} project={project} testimonials={testimonials} />
+        <CaseStudy
+          meta={meta}
+          project={project}
+          projects={projects}
+          testimonials={testimonials}
+        />
       </>
     );
   }

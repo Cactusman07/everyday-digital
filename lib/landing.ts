@@ -1,14 +1,11 @@
-// Landing page definitions for paid and social traffic. Each entry renders at
-// /lp/<slug>. Pages are noindex by default (they exist to convert a specific
-// ad or post, not to rank) and carry a single primary action.
+// Landing pages for paid and social traffic, rendered at /lp/<slug>. They're
+// noindex by default (they exist to convert one ad or post, not to rank) and
+// have a single action. Add an entry here to add a page; no new route needed.
 //
-// To add a landing page: add an object here. No new route or component needed.
-// Three layouts:
-//   "offer"     — one package, price up front, what's included, FAQ, form
-//   "audit"     — problem-led, what you get, sample findings, form
-//   "migration" — before/after, risks we remove, process, form
-
-import { PACKAGES, type Package } from "./site";
+// Layouts:
+//   "offer"     — price up front, what's included, steps, FAQ, form
+//   "audit"     — problem-led, what we check, steps, FAQ, form
+//   "migration" — platform choice, what's included, steps, FAQ, form
 
 export type LandingLayout = "offer" | "audit" | "migration";
 
@@ -16,174 +13,186 @@ export interface LandingPage {
   slug: string;
   layout: LandingLayout;
   title: string; // <title> and H1
-  description: string; // meta description + sub-headline
+  description: string; // meta description and sub-headline
   eyebrow: string;
-  packageId?: Package["id"];
-  proof: { value: string; label: string }[]; // 3 short proof points
-  bullets: string[]; // what you get
-  steps?: { title: string; body: string }[]; // process (migration/offer)
+  price?: number; // NZD excl. GST, only when there's a published price
+  fineprint?: string;
+  proof: { value: string; label: string }[]; // three short proof points
+  bullets: string[];
+  steps?: { title: string; body: string }[];
   faq: { q: string; a: string }[];
   cta: string;
   formService: string; // pre-selects the contact form's service dropdown
-  indexable?: boolean; // default false
+  indexable?: boolean;
 }
 
-const pkg = (id: Package["id"]) => PACKAGES.find((p) => p.id === id)!;
+const HOSTING_FAQ = {
+  q: "What does hosting cost after launch?",
+  a: "Website hosting is $40 a month, including one hour of free updates each month, or pay annually and get two months free. eCommerce hosting is $50 a month. Prices exclude GST.",
+};
 
 export const LANDING_PAGES: LandingPage[] = [
   {
-    slug: "website-2350",
+    slug: "wordpress-website",
     layout: "offer",
-    eyebrow: "Business website · $2,350 + GST",
-    title: "A custom-designed business website for $2,350",
+    eyebrow: "WordPress website · from $1500 + GST",
+    title: "A simple WordPress website, designed and built, from $1500",
     description:
-      "Not a template. A website designed around your business, built fast, hosted from $30/month. Auckland-based, working NZ-wide.",
-    packageId: "static-site",
+      "A website designed around your business, built in WordPress so you can update it yourself. Auckland-based, working NZ-wide.",
+    price: 1500,
+    fineprint:
+      "Bigger sites, online stores and integrations are quoted at a fixed price after a free consultation.",
     proof: [
-      { value: "17", label: "sites hosted & maintained" },
-      { value: "$2,350", label: "fixed price, no surprises" },
-      { value: "Same day", label: "reply on every enquiry" },
+      { value: "$1500", label: "+ GST for a simple WordPress site" },
+      { value: "Fixed", label: "price, agreed before we start" },
+      { value: "$40/mo", label: "hosting with an hour of updates" },
     ],
-    bullets: pkg("static-site").includes,
+    bullets: [
+      "A design built around your brand, not a stock template",
+      "Mobile-first, fast and accessible",
+      "Contact form, Google Maps and social links",
+      "Search basics set up: titles, descriptions, sitemap, business schema",
+      "Your own login to update pages and blog posts",
+      "Launch, SSL and backups handled",
+    ],
     steps: [
       {
-        title: "Brief",
-        body: "A 20-minute call. We write back the same day with what we heard and a start date.",
+        title: "Chat",
+        body: "A free 20-minute call about your business and what the site needs to do.",
       },
       {
         title: "Design",
-        body: "A custom concept for your home page. You see it before anything is built.",
+        body: "A design for your home page. You see it before anything is built.",
       },
       {
         title: "Build",
-        body: "Fast, mobile-first, accessible. You review on a staging link.",
+        body: "We build it on a private staging link so you can click through the real thing.",
       },
       {
         title: "Launch",
-        body: "Domain, SSL, analytics, backups — handled. Your own login to edit content.",
+        body: "Domain, SSL, analytics and backups set up, and a quick walk-through of editing it yourself.",
       },
     ],
     faq: [
       {
-        q: "What's the $2,350 for, exactly?",
-        a: "A custom design concept and a quality static website — typically a home page with the sections your business needs, built to be fast. Multi-page sites with stores or integrations are the $4,750 package.",
+        q: "What counts as a simple website?",
+        a: "A handful of pages, such as home, about, services and contact, with your content and images. If you need a store, bookings or integrations, we'll quote a fixed price after a chat.",
       },
-      {
-        q: "What does hosting cost after launch?",
-        a: "Shared hosting is $30/month or $300/year. Secure private hosting is from $200/month. Both include SSL, backups, updates and monitoring.",
-      },
+      HOSTING_FAQ,
       {
         q: "Can I update it myself?",
-        a: "Yes. You get your own login. If you'd rather we make changes, that's $140/hour — no retainer.",
+        a: "Yes. It's WordPress, so you get your own login and we show you how. Or use your free hour of updates each month.",
       },
       {
         q: "How long does it take?",
-        a: "Most business websites launch within three to four weeks of receiving your content.",
+        a: "Most simple sites launch within three to four weeks of us receiving your content.",
       },
     ],
     cta: "Start my website",
-    formService: "Website design",
+    formService: "Website Design",
   },
   {
-    slug: "seo-audit",
+    slug: "website-review",
     layout: "audit",
-    eyebrow: "SEO & website audit · $1,500 + GST",
+    eyebrow: "Website review · fixed price",
     title: "Find out exactly what's holding your website back",
     description:
-      "A one-off audit of your website's search visibility, speed and conversion — a written list of everything that needs fixing, with the first four hours of fixes done.",
-    packageId: "seo-audit",
+      "A plain-English review of your website's search visibility, AI search readiness, speed and security, with every issue listed in the order to fix it.",
     proof: [
-      { value: "4 hrs", label: "of fixes included" },
       { value: "1 list", label: "every issue, prioritised" },
-      { value: "$140/hr", label: "for anything beyond that" },
+      { value: "Plain", label: "English, no jargon" },
+      { value: "Fixed", label: "price, agreed after a free chat" },
     ],
     bullets: [
       "Search visibility: titles, descriptions, headings, schema, sitemap, indexing",
-      "Speed: Core Web Vitals on mobile and desktop, image weight, scripts",
-      "Conversion: calls to action, forms, mobile usability, trust signals",
-      "Security and hosting: SSL, updates, backups, uptime",
-      "Content: what's missing against what people actually search for",
-      "A prioritised written report, then four hours of the fixes done directly",
+      "AI search readiness: whether ChatGPT, Gemini and Google AI Overviews can find and understand you",
+      "Speed: load times on mobile and desktop, images, scripts and hosting",
+      "Security and upkeep: SSL, updates, backups and plugins",
+      "Usability: navigation, mobile, forms and calls to action",
+      "A written report, in priority order, that you can hand to any developer",
     ],
     steps: [
       {
-        title: "Access",
-        body: "You give us read access to Search Console and Analytics (we'll show you how).",
+        title: "Chat",
+        body: "A free call about your site and what you want from it. We agree a fixed price.",
       },
       {
-        title: "Audit",
-        body: "Five working days. We test, measure and write it up in plain English.",
+        title: "Review",
+        body: "We test, measure and check the site, Search Console and your Google profile.",
       },
       {
-        title: "Fix",
-        body: "The four hours start with whatever moves the needle most. You get a before/after.",
+        title: "Report",
+        body: "You get the list in plain English. Fix it yourself, hand it on, or ask us to quote.",
       },
     ],
     faq: [
       {
         q: "Do I need to be hosted with you?",
-        a: "No. We audit any site on any platform. If you'd like us to make the fixes, we need admin access to the site; otherwise we hand the list to your developer.",
+        a: "No. We review any site on any platform, though WordPress and Shopify are what we know best.",
       },
       {
         q: "Will you try to sell me a new website?",
-        a: "Only if the audit says you need one, and we'll say so plainly. Most sites need fixing, not replacing.",
+        a: "Only if the review says you need one, and we'll say so plainly. Most sites need fixing, not replacing.",
       },
       {
-        q: "What if there's more than four hours of work?",
-        a: "The report tells you what's left and what it costs. You decide. Anything further is $140/hour or quoted as a project.",
+        q: "Can you make the fixes too?",
+        a: "Yes. The report shows what each fix involves, and we can quote a fixed price for the lot or just the important ones.",
       },
     ],
-    cta: "Book my audit",
-    formService: "Other",
+    cta: "Book my review",
+    formService: "Website Reviews",
   },
   {
-    slug: "shopify-6500",
+    slug: "online-store",
     layout: "migration",
-    eyebrow: "Full online store · $6,500 + GST",
-    title: "A Shopify or WooCommerce store, built properly, for $6,500",
+    eyebrow: "Online store · Shopify or WooCommerce",
+    title: "An online store, set up properly, at a fixed price",
     description:
-      "Full design concept, up to 30 products, payments, freight and tax set up. We run our own Shopify store, so we build yours knowing what breaks.",
-    packageId: "ecommerce",
+      "Shopify or WooCommerce, with payments, freight, GST and Google Shopping sorted, and connected to the systems you already use. We run an online store ourselves.",
     proof: [
-      { value: "30", label: "products built in" },
-      { value: "2", label: "stores we run ourselves" },
-      { value: "$6,500", label: "fixed, including design" },
+      { value: "2", label: "platforms we specialise in" },
+      { value: "$50/mo", label: "eCommerce hosting" },
+      { value: "Fixed", label: "price, agreed after a free chat" },
     ],
-    bullets: pkg("ecommerce").includes,
+    bullets: [
+      "Store design built around your brand and products",
+      "Products, variants, collections and brands set up or imported",
+      "Payments, Afterpay, freight rules and NZ GST tested with real orders",
+      "Google Merchant Center and free product listings",
+      "Point-of-sale, accounting or inventory sync where you need it",
+      "Training, so your team can run it day to day",
+    ],
     steps: [
       {
         title: "Platform",
-        body: "Shopify or WooCommerce — we'll recommend one based on your products, volumes and what else you run.",
+        body: "Shopify or WooCommerce: we'll recommend one based on your products, volumes and what else you run.",
       },
       {
         title: "Design",
-        body: "A full concept rework. Your brand, your products, a checkout people finish.",
+        body: "Your brand, your products, and a checkout people actually finish.",
       },
       {
         title: "Build",
-        body: "Products, variants, payments, freight rules, NZ GST. Tested with real orders.",
+        body: "Built on a staging site, tested with real orders before launch.",
       },
       {
-        title: "Launch & hand over",
-        body: "Launch checklist, training, and you own everything. Hosting and support on request, no retainer.",
+        title: "Launch",
+        body: "Redirects from your old site, Google set up, and you own everything.",
       },
     ],
     faq: [
       {
-        q: "Moving from Wix, Squarespace or an old WooCommerce store?",
-        a: "Yes — migration of products, customers and orders is scoped into the build. Redirects are set up so you don't lose search rankings.",
+        q: "Moving from Wix, Squarespace or an old store?",
+        a: "Yes. Moving products, customers and orders is part of the quote, with redirects so you keep your search rankings.",
       },
       {
-        q: "More than 30 products?",
-        a: "Additional products are built at the standard hourly rate, or we set you up to bulk-import them yourself.",
+        q: "Can you connect it to Xero or our point-of-sale?",
+        a: "Yes. Syncing a store with accounting, point-of-sale or inventory systems is one of our most common jobs.",
       },
-      {
-        q: "Can you connect it to Xero?",
-        a: "Yes. Store-to-Xero sync is one of our most common automation jobs. It's quoted separately so you only pay for it if you want it.",
-      },
+      HOSTING_FAQ,
     ],
     cta: "Start my store",
-    formService: "Development",
+    formService: "eCommerce",
   },
 ];
 

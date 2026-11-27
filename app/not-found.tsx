@@ -1,8 +1,5 @@
 import Link from "next/link";
 
-// Next.js not-found.tsx — rendered when notFound() is called from any page, or when
-// a user visits a URL that doesn't match any route. Next.js automatically returns
-// a 404 HTTP status code. Uses next/link for client-side navigation (no full page reload).
 export default function NotFound() {
   return (
     <div className="inner-page">
