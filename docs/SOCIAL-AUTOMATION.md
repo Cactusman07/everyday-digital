@@ -123,9 +123,13 @@ Suite for those, and let this pipeline handle new content only.
 ## Troubleshooting
 
 - WordPress box says "EDD_SOCIAL_URL / EDD_SOCIAL_SECRET not set": wp-config constants missing.
-- `Unauthorized`: the two secrets don't match.
+- `SOCIAL_WEBHOOK_SECRET is not configured` (HTTP 500): the secret isn't set in Vercel, so the route refuses every request.
+- `Unauthorized` (HTTP 401): the two secrets don't match.
+- `The site returned HTTP …`: the route didn't answer with its own JSON (a timeout or an error page from Vercel). Check the function logs.
 - `type must be "post" or "project"` (HTTP 400): a hand-built payload is missing `type`.
 - Facebook `(#200) ... permission`: the token is a user token, not a Page token, or lacks `pages_manage_posts`.
 - Instagram "needs a JPEG featured image": set a .jpg featured image.
+- Instagram "still processing the image after 20s": Instagram was slow to fetch the image. Use **Share again now** in a few minutes.
+- Each call to Facebook, Instagram or LinkedIn is abandoned after 15 seconds, so one slow channel can't use up the route's 60-second limit.
 - LinkedIn `HTTP 401`: token expired (60 days). Regenerate it.
 - Nothing happens at all: WP-Cron isn't running (see step 5.4).

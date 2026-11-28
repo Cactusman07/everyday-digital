@@ -67,7 +67,13 @@
       "date": "2026-11-01T09:00:00",
       "dateGmt": "2026-10-31T20:00:00",
       "modifiedGmt": "2026-11-02T20:00:00",
-      "tags": { "nodes": [{ "name": "SEO" }] }
+      "tags": {
+        "nodes": [
+          {
+            "name": "SEO"
+          }
+        ]
+      }
     }
   ],
   "projects": [
@@ -92,7 +98,14 @@
       "modifiedGmt": "2026-11-01T00:00:00"
     }
   ],
-  "teams": [],
+  "teams": [
+    {
+      "databaseId": 40,
+      "title": "Test Person",
+      "content": "<p>Builds and runs websites for NZ businesses.</p>",
+      "excerpt": "<p>Web developer.</p>"
+    }
+  ],
   "testimonials": [
     {
       "title": "David Kerr - NZ In Pictures",

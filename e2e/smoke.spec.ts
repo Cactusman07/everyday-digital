@@ -15,6 +15,19 @@ test.describe("Smoke tests", () => {
     await expect(menu.getByRole("link", { name: /services/i })).toBeVisible();
   });
 
+  test("a team profile opens in a dialog and Escape closes it", async ({
+    page,
+  }) => {
+    await page.goto("/about");
+    const card = page.getByRole("button", { name: /Test Person/ });
+    await card.click();
+    const dialog = page.getByRole("dialog", { name: "Test Person" });
+    await expect(dialog).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(dialog).toBeHidden();
+    await expect(card).toBeFocused();
+  });
+
   test("unknown routes get the 404 page", async ({ page }) => {
     const response = await page.goto("/this-page-does-not-exist-12345");
     expect(response?.status()).toBe(404);

@@ -15,13 +15,14 @@ Browser → Next.js on Vercel → WPGraphQL on WordPress (cms.everydaydigital.co
 
 Each testimonial is linked to its project with the **Project** box in its WordPress editor; the site uses that link (never the names) to connect a quote to its case study.
 
-Facts that need to be exact live in code under `lib/`: prices, services, case studies, the FAQ and contact details.
+Facts that need to be exact live in code under `lib/`: prices (`pricing.ts`), which price each service shows (`services.ts`), case studies, the FAQ, and contact details and the Calendly booking link (`site.ts`).
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/) 20.9 or later (CI uses 24)
+- [Node.js](https://nodejs.org/) 22.12 or later (CI uses 24)
 - [pnpm](https://pnpm.io/installation)
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/), for local WordPress
+- PHP 7.4 or later on the WordPress host (the theme and mu-plugins need it; `lint:php` uses a local `php` if there is one)
 
 ## First-time setup
 
@@ -38,6 +39,8 @@ Facts that need to be exact live in code under `lib/`: prices, services, case st
 | WordPress  | http://localhost:8181 |
 | phpMyAdmin | http://localhost:8180 |
 | MariaDB    | localhost:3306        |
+
+The ports are bound to `127.0.0.1`, so they aren't reachable from the rest of your network. WP-CLI runs on demand: `docker compose run --rm wordpress-cli wp <command>`.
 
 ## Scripts
 
@@ -72,7 +75,8 @@ Facts that need to be exact live in code under `lib/`: prices, services, case st
   Formatting fixes are re-staged automatically. If you staged part of a file with `git add -p`, the rest of that file is staged too.
 
 - **CI** (`.github/workflows/ci.yml`): `tidy:check` and a production build on every push and pull request to `main`, plus the Playwright smoke tests against a production build. The build reads the CMS at the `WORDPRESS_GRAPHQL_URL` repository variable; the smoke tests use a mock WordPress (`scripts/mock-wordpress.mjs` with `e2e/fixtures/wordpress.json`), so the CMS's bot protection can't fail them.
-- **Unit tests** sit next to the code they test (`*.test.ts`).
+- **Unit tests** sit next to the code they test (`*.test.ts`, `*.test.tsx`). They run in Node; a test that renders React starts with `// @vitest-environment jsdom`.
+- **ESLint** includes the React Hooks and jsx-a11y rules, so missing alt text, unlabelled controls and broken hook dependencies fail the commit.
 
 ## Project structure
 
@@ -104,7 +108,7 @@ lib/
   pricing.ts               The published prices, and every sentence that quotes them
   services.ts, case-studies.ts, faq.ts, pages.ts, landing.ts, navigation.ts
   seo.ts, og.tsx, llms.ts  Page metadata, share images, llms.txt sections
-  html.ts, dates.ts, testimonials.ts, brand.ts, scroll.ts, auth.ts
+  html.ts, dates.ts, testimonials.ts, brand.ts, scroll.ts, auth.ts, env.ts
   social/                  Captions and channel posting for /api/social
 wpTheme/                   WordPress theme (post types) and mu-plugins (revalidate, social)
 e2e/                       Playwright smoke tests and the mock WordPress fixture
@@ -127,3 +131,17 @@ docs/                      Deployment, social automation, SEO audit, marketing p
 - **IndexNow:** pinged when content changes.
 
 The full audit is in [docs/SEO-GEO-AEO-AUDIT.md](docs/SEO-GEO-AEO-AUDIT.md).
+
+## Accessibility
+
+The site aims for WCAG 2.2 AA:
+
+- A skip link to the main content and one `<main>` landmark per page.
+- The menu is `inert` while closed. Open, it traps focus, closes on Esc and returns focus to its button.
+- The team profiles open in a native `<dialog>`.
+- Visible focus rings, text contrast of at least 4.5:1, and no animation for visitors who ask for reduced motion (including the hero's word cycle, which can also be paused).
+- Form errors and success messages are announced to screen readers.
+
+## Security
+
+`next.config.ts` sends baseline security headers on every response: HSTS, `X-Content-Type-Options`, `Referrer-Policy`, `X-Frame-Options` and a `Permissions-Policy`. There is no Content Security Policy yet. The two webhook routes check a bearer secret in constant time (`lib/auth.ts`) and refuse every request when their secret isn't set.

@@ -54,7 +54,7 @@ WP Publish / Update / Unpublish / Trash / Restore, or deleting a published item
 - `type` is the canonical key: `post`, `page`, `project`, `service`, `team` or `testimonial`. The plugin maps WordPress's post types (`projects`, `services`, `testimonials`) to these.
 - A trashed item still sends its real slug, so its live URL is purged.
 - Pages also send their `uri`, e.g. `"uri": "/about/"`, and that path is purged.
-- An unknown or missing `type` purges every tag. So does `{ "all": true }`, which is what the admin-bar **↻ Refresh live site** button sends.
+- An unknown or missing `type` purges every tag. So does `{ "all": true }`, which is what the admin-bar **↻ Refresh live site** button sends. The button is shown to Editors and Administrators (the `edit_others_posts` capability), not Authors.
 - IndexNow (Bing and others) is told about the changed URLs in production only, and only for a typed change.
 - Menu changes don't ping anything. The site's menu is built from the published pages, so publishing a page covers it.
 
