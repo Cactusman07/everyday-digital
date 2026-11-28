@@ -119,7 +119,7 @@ export const CASE_STUDIES: CaseStudyMeta[] = [
       "Price automation",
       "Social media automation",
     ],
-    stack: ["Shopify", "Azure Logic Apps", "Outlook", "AI"],
+    stack: ["Shopify", "Azure Logic Apps", "AI"],
     timeline: null,
     results: [
       { label: "Orders", value: null },
