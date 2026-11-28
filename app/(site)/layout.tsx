@@ -13,7 +13,9 @@ export default function SiteLayout({
     <>
       <InnerHeader />
       <SiteMenu />
-      <div id="root">{children}</div>
+      <main id="root" tabIndex={-1}>
+        {children}
+      </main>
     </>
   );
 }

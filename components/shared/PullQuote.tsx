@@ -1,4 +1,5 @@
-// One testimonial as a large pull quote, for landing pages and case studies.
+// The opening line of a testimonial as a large pull quote, for landing pages
+// and case studies. (The full quote is in the testimonial cards.)
 
 import type { Testimonial } from "@/lib/testimonials";
 
@@ -9,14 +10,16 @@ export default function PullQuote({
   testimonial: Testimonial;
   className?: string;
 }) {
-  const { text, name, company } = testimonial;
+  const { lead, name, company } = testimonial;
   return (
-    <blockquote className={`quote-lead ${className}`.trim()}>
-      <p>“{text}”</p>
-      <footer>
+    <figure className={`quote-lead ${className}`.trim()}>
+      <blockquote>
+        <p>“{lead}”</p>
+      </blockquote>
+      <figcaption>
         — {name}
         {company && `, ${company}`}
-      </footer>
-    </blockquote>
+      </figcaption>
+    </figure>
   );
 }

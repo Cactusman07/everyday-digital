@@ -2,7 +2,9 @@
    .display heading (Anton capitals) and the .lede intro paragraph. Used across
    the home, case study, landing and showcase pages. */
 
+/* Also used on section headings (h2), so it sets its own font */
 .eyebrow {
+  font-family: inherit;
   font-size: 11px;
   letter-spacing: 0.16em;
   text-transform: uppercase;

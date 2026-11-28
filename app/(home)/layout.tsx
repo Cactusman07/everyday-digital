@@ -14,7 +14,9 @@ export default function HomeLayout({
     <>
       <HomeHero />
       <SiteMenu />
-      <div id="root">{children}</div>
+      <main id="root" tabIndex={-1}>
+        {children}
+      </main>
     </>
   );
 }

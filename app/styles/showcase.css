@@ -13,6 +13,10 @@
   color: var(--edd-mute);
   margin-bottom: clamp(20px, 4vh, 40px);
 }
+.show__crumbs a {
+  display: inline-block;
+  padding-block: 10px;
+}
 .show__crumbs a:hover {
   color: #fff;
 }

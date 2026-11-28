@@ -135,8 +135,10 @@
   max-width: 22ch;
   margin: 0;
 }
+/* Unlit words stay at 3:1 contrast (WCAG large text) so the manifesto is
+   readable before it lights up */
 .manifesto .manifesto__word {
-  opacity: 0.13;
+  opacity: 0.5;
   transition: opacity 0.25s;
 }
 .manifesto .manifesto__word.on {
@@ -576,6 +578,10 @@
   display: flex;
   gap: 18px;
   flex-wrap: wrap;
+}
+.dive-outro__foot a {
+  display: inline-block;
+  padding-block: 10px;
 }
 .dive-outro__foot a:hover {
   text-decoration: underline;

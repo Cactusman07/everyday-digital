@@ -85,3 +85,24 @@ p a:hover::before {
   );
   opacity: 0.8;
 }
+
+/* "Skip to content": hidden until a keyboard user tabs to it */
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 100;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: #fff;
+  color: #000;
+  font-weight: 600;
+  transform: translateY(-200%);
+}
+.skip-link:focus {
+  transform: none;
+}
+/* The skip link focuses <main>; it doesn't need a focus ring of its own */
+#root:focus {
+  outline: none;
+}

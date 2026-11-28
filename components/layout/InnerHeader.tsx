@@ -4,8 +4,8 @@ import SiteLogo from "./SiteLogo";
 
 export default function InnerHeader() {
   return (
-    <div className="mx-8 my-5 relative z-10">
+    <header className="mx-8 my-5 relative z-10">
       <SiteLogo className="inline-block w-14 sm:w-20" />
-    </div>
+    </header>
   );
 }

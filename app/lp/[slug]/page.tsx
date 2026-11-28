@@ -133,9 +133,9 @@ export default async function LandingPageRoute({
 
       <section className="home-section home-section--tight home-wrap lp__two">
         <Reveal>
-          <p className="eyebrow">
+          <h2 className="eyebrow">
             {lp.layout === "audit" ? "What we check" : "What's included"}
-          </p>
+          </h2>
           <ul className="case__list">
             {lp.bullets.map((b) => (
               <li key={b}>{b}</li>
@@ -145,7 +145,7 @@ export default async function LandingPageRoute({
         </Reveal>
         {lp.steps && (
           <Reveal>
-            <p className="eyebrow">How it works</p>
+            <h2 className="eyebrow">How it works</h2>
             <ol className="lp__steps">
               {lp.steps.map((s, i) => (
                 <li key={s.title}>
@@ -163,7 +163,7 @@ export default async function LandingPageRoute({
 
       {lp.layout !== "audit" && (
         <section className="home-section home-section--tight home-wrap">
-          <p className="eyebrow">Recent work</p>
+          <h2 className="eyebrow">Recent work</h2>
           <CaseStudyCards studies={CASE_STUDIES.slice(0, RECENT_WORK_COUNT)} />
         </section>
       )}
@@ -177,7 +177,7 @@ export default async function LandingPageRoute({
       )}
 
       <section className="home-section home-section--tight home-wrap home-wrap--narrow">
-        <p className="eyebrow">Questions</p>
+        <h2 className="eyebrow">Questions</h2>
         <FaqList items={lp.faq} />
       </section>
 

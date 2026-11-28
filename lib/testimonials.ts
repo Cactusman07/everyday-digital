@@ -16,8 +16,6 @@ export interface Testimonial {
   lead: string;
   /** The rest of the quote. */
   rest?: string;
-  /** The full quote as one plain-text string. */
-  text: string;
   /** The client's website. */
   url?: string;
   /** The linked project's page, e.g. "/projects/nz-in-pictures". */
@@ -67,7 +65,6 @@ export function parseTestimonial(t: WPTestimonial): Testimonial {
     initials: initialsOf(name),
     lead: first.trim(),
     rest: rest || undefined,
-    text,
     url:
       cs?.url ?? (site ? `https://${site.replace(/^www\./, "")}` : undefined),
     projectPath: t.projectSlug ? itemPath("project", t.projectSlug) : undefined,

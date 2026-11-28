@@ -5,5 +5,9 @@ export default function LandingLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <div id="root">{children}</div>;
+  return (
+    <main id="root" tabIndex={-1}>
+      {children}
+    </main>
+  );
 }

@@ -68,6 +68,10 @@ export default function RootLayout({
   return (
     <html lang="en-NZ" className={`${bananaItalic.variable} ${anton.variable}`}>
       <body>
+        {/* First stop for keyboard users: jump past the header and menu */}
+        <a href="#root" className="skip-link">
+          Skip to content
+        </a>
         {/* Page metadata replaces the layout's `alternates`, so the feed link
             is rendered here instead; React moves it into <head>. */}
         <link

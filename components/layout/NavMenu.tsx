@@ -4,7 +4,7 @@
 // passed in by NavMenuLoader; `null` renders the button with no items (the
 // fallback while they stream in, or when WordPress is down).
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import SocialLinks from "./SocialLinks";
 import OutlineIcon from "@/components/shared/OutlineIcon";
@@ -16,16 +16,30 @@ export interface MenuItem {
 
 export default function NavMenu({ items }: { items: MenuItem[] | null }) {
   const [open, setOpen] = useState(false);
+  const toggle = useRef<HTMLButtonElement>(null);
   const close = () => setOpen(false);
+
+  // Escape closes the menu and puts focus back on the button that opened it
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      setOpen(false);
+      toggle.current?.focus();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
 
   return (
     <div className="flex items-center justify-between py-4 pr-4">
       <nav>
         <button
+          ref={toggle}
           type="button"
           className="menu-toggle flex cursor-pointer w-8 h-7 z-20 relative"
           onClick={() => setOpen((o) => !o)}
-          aria-label="Open menu"
+          aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
           aria-controls="navMenu"
         >
@@ -35,7 +49,12 @@ export default function NavMenu({ items }: { items: MenuItem[] | null }) {
             <span className="block h-0.5 w-8 animate-pulse bg-white" />
           </span>
         </button>
-        <div id="navMenu" className={open ? "showMenuNav" : "hideMenuNav"}>
+        {/* inert while closed: the off-screen links can't be focused or read out */}
+        <div
+          id="navMenu"
+          className={open ? "showMenuNav" : "hideMenuNav"}
+          inert={!open}
+        >
           <button
             type="button"
             className="absolute top-0 right-0 pl-4 pt-8 pr-8"

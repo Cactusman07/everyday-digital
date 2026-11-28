@@ -13,7 +13,7 @@
   line-height: 1.02;
   margin: 0 0 14px;
 }
-.quote-lead footer {
+.quote-lead figcaption {
   color: var(--edd-mute);
   font-size: 14px;
 }

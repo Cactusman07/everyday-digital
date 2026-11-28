@@ -9,6 +9,11 @@
   color: var(--edd-mute);
   margin: 0 0 14px;
 }
+/* Comfortable tap targets on touch screens */
+.edd-foot a {
+  display: inline-block;
+  padding-block: 10px;
+}
 .edd-foot a:hover {
   color: #fff;
 }
