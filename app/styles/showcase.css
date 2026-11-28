@@ -315,6 +315,22 @@
   margin: 0 0 18px;
   text-shadow: none;
 }
+/* Technical skills on a service page (ServiceSkills in ItemShowcase.tsx) */
+.show__skills {
+  margin-top: clamp(40px, 7vh, 80px);
+}
+.show__skills ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+.show__skills .chip {
+  font-size: 14px;
+  padding: 7px 14px;
+}
+
 .show__others {
   margin-top: clamp(40px, 7vh, 80px);
 }

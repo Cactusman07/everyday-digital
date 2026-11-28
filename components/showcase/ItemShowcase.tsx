@@ -26,6 +26,7 @@ import {
   SERVICES,
   getServiceMeta,
   servicePriceNote,
+  serviceSkills,
   sortByServiceOrder,
 } from "@/lib/services";
 import { FOUNDER, absoluteUrl } from "@/lib/site";
@@ -102,6 +103,26 @@ function PreviousNext({ showcase }: { showcase: ShowcaseItem }) {
         </Link>
       )}
     </nav>
+  );
+}
+
+/** "Technical skills": the platforms and languages a service works in. */
+function ServiceSkills({ slug }: { slug: string }) {
+  const skills = serviceSkills(slug);
+  if (!skills.length) return null;
+  return (
+    <section className="show__skills" aria-labelledby="skills-h">
+      <h2 id="skills-h" className="show__h2">
+        Technical skills
+      </h2>
+      <ul>
+        {skills.map((s) => (
+          <li key={s} className="chip">
+            {s}
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }
 
@@ -217,6 +238,7 @@ export default function ItemShowcase({
         )}
 
         <ArticleBody html={item.content} as="article" alwaysShowProgress />
+        {type === "service" && <ServiceSkills slug={item.slug} />}
 
         <div className="show__after">
           {post && (

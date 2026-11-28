@@ -21,8 +21,17 @@ export const SERVICES = [
     word: "Digital",
     colour: "#e34beb",
     summary:
-      "WordPress and Shopify builds, through to custom web apps and integrations.",
-    tags: ["WordPress", "Shopify", "Custom apps"],
+      "WordPress and Shopify builds: custom themes, plugins and the integrations that connect them.",
+    tags: ["WordPress", "Shopify", "Integrations"],
+  },
+  {
+    slug: "custom-application-development",
+    title: "Custom Application Development",
+    word: "Engineering",
+    colour: "#eb9a4b",
+    summary:
+      "Web apps, portals and integrations built for how your business actually works, on whatever platform fits. Any platform, every day.",
+    tags: ["Web apps", "Cloud", "AI"],
   },
   {
     slug: "ecommerce",
@@ -116,6 +125,32 @@ export const HERO_WORDS: string[] = (
     "website-reviews",
   ] satisfies ServiceSlug[]
 ).map((slug) => getServiceMeta(slug)!.word);
+
+/**
+ * The technical skills listed on a service's page, for services where the
+ * platform is the point.
+ */
+const SERVICE_SKILLS: Partial<Record<ServiceSlug, readonly string[]>> = {
+  "custom-application-development": [
+    "Microsoft Azure",
+    "AWS",
+    "React",
+    "Next.js",
+    "TypeScript",
+    "Node.js",
+    "Python",
+    "C# and .NET",
+    "PHP",
+    "AI and LLMs",
+    "APIs and integrations",
+    "Digital architecture",
+  ],
+};
+
+/** The technical skills a service's page lists, if any. */
+export function serviceSkills(slug: string): readonly string[] {
+  return SERVICE_SKILLS[slug as ServiceSlug] ?? [];
+}
 
 /**
  * Which published price a service's page shows. Drives both the price note

@@ -40,6 +40,16 @@ const ICONS: Record<string, ReactNode> = {
       <path d="M27 21l-6 5 6 5M37 21l6 5-6 5M34 20l-4 12" />
     </>
   ),
+  "custom-application-development": (
+    <>
+      <rect x="22" y="5" width="20" height="14" rx="3" className="ac" />
+      <path d="M32 19v9M14 40v-7a3 3 0 013-3h30a3 3 0 013 3v7" />
+      <rect x="4" y="40" width="22" height="18" rx="3" />
+      <path d="M12 45l-4 4 4 4M18 45l4 4-4 4" />
+      <rect x="38" y="40" width="22" height="18" rx="3" className="ac" />
+      <path d="M44 46h10M44 52h6" />
+    </>
+  ),
   ecommerce: (
     <>
       <path d="M5 9h8l6 30h30l6-22H16" />

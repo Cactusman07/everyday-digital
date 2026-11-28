@@ -4,6 +4,7 @@ import {
   SERVICES,
   servicePriceNote,
   servicePricing,
+  serviceSkills,
   sortByServiceOrder,
 } from "./services";
 
@@ -20,6 +21,15 @@ describe("sortByServiceOrder", () => {
       second.slug,
       "not-a-service",
     ]);
+  });
+});
+
+describe("service skills", () => {
+  it("lists skills only where a service has them", () => {
+    expect(serviceSkills("custom-application-development")).toContain(
+      "Microsoft Azure",
+    );
+    expect(serviceSkills("hosting")).toEqual([]);
   });
 });
 
