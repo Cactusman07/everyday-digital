@@ -80,9 +80,16 @@ export default function CaseStudy({
           <h1 className="display case__title">{meta.client}</h1>
           <p className="lede case__summary">{meta.summary}</p>
           <div className="section-actions">
-            <a href={meta.url} target="_blank" rel="noreferrer" className="btn">
-              Visit {displayUrl(meta.url)}
-            </a>
+            {meta.url && (
+              <a
+                href={meta.url}
+                target="_blank"
+                rel="noreferrer"
+                className="btn"
+              >
+                Visit {displayUrl(meta.url)}
+              </a>
+            )}
             <Link href="/contact" className="btn btn--accent">
               Start a project like this
             </Link>

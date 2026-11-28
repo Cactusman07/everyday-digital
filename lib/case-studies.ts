@@ -9,7 +9,8 @@ import type { WPProject } from "./wordpress/types";
 export interface CaseStudyMeta {
   slug: string;
   client: string;
-  url: string;
+  /** The client's public website. Omitted when there isn't one to visit. */
+  url?: string;
   sector: string;
   summary: string;
   services: string[];
@@ -95,7 +96,6 @@ export const CASE_STUDIES: CaseStudyMeta[] = [
   {
     slug: "plow-foods-operations-portal",
     client: "Plow Foods",
-    url: "https://plowfoods.co.nz",
     sector: "Food manufacturing · FMCG",
     summary:
       "An operations portal on top of MYOB for a New Zealand snack maker: orders, stock, production and deliveries in one place. We work inside the business, so we use it every day.",

@@ -6,6 +6,9 @@
 
 import { useEffect, useRef, type ReactNode } from "react";
 
+/** Children after this many animate in together. */
+const MAX_STAGGERED = 8;
+
 export default function Reveal({
   children,
   className = "",
@@ -26,14 +29,21 @@ export default function Reveal({
       (entries, obs) => {
         for (const e of entries) {
           if (!e.isIntersecting) continue;
+          // Cap the stagger, so a long block's later children don't wait
           Array.from(e.target.children).forEach((c, i) =>
-            (c as HTMLElement).style.setProperty("--i", String(i)),
+            (c as HTMLElement).style.setProperty(
+              "--i",
+              String(Math.min(i, MAX_STAGGERED)),
+            ),
           );
           e.target.classList.add("in");
           obs.unobserve(e.target);
         }
       },
-      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
+      // Any part of the block 8% above the fold. Not a ratio of the block:
+      // a block many screens tall can never show 12% of itself at once, so
+      // it would never appear.
+      { threshold: 0, rootMargin: "0px 0px -8% 0px" },
     );
     io.observe(el);
     return () => io.disconnect();
