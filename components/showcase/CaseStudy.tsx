@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import SiteFooter from "@/components/layout/SiteFooter";
 import { ProjectJsonLd } from "@/components/seo/JsonLd";
+import ArticleBody from "@/components/shared/ArticleBody";
 import CaseStudyCards from "@/components/shared/CaseStudyCards";
 import PullQuote from "@/components/shared/PullQuote";
 import Reveal from "@/components/shared/Reveal";
@@ -20,7 +21,6 @@ import { absoluteUrl, displayUrl } from "@/lib/site";
 import { testimonialFor } from "@/lib/testimonials";
 import type { WPProject, WPTestimonial } from "@/lib/wordpress";
 import { itemPath, sectionOf } from "@/lib/wordpress/content-types";
-import ReadingProgress from "@/components/shared/ReadingProgress";
 import OutlineIcon from "@/components/shared/OutlineIcon";
 
 /** How many other case studies to suggest at the foot of the page. */
@@ -43,7 +43,6 @@ export default function CaseStudy({ meta, project, testimonials }: Props) {
 
   return (
     <div id="content" className="case mt-40 mb-24 relative z-20">
-      <ReadingProgress />
       <ProjectJsonLd
         name={`${meta.client} — case study`}
         description={meta.summary}
@@ -145,14 +144,16 @@ export default function CaseStudy({ meta, project, testimonials }: Props) {
           </Reveal>
         </div>
 
+        {/* The same article as other projects: heading ids, an "On this
+            page" list when there are enough headings, and reading progress */}
         {project.content && (
-          <Reveal className="case__body">
-            <div
-              className="prose-edd"
-              data-article
-              dangerouslySetInnerHTML={{ __html: project.content }}
+          <div className="case__body">
+            <ArticleBody
+              html={project.content}
+              as="article"
+              alwaysShowProgress
             />
-          </Reveal>
+          </div>
         )}
 
         {quote && (
