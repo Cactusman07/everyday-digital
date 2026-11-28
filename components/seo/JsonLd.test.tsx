@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { describe, it, expect } from "vitest";
 import { render } from "@testing-library/react";
 import JsonLd, {
@@ -106,8 +107,14 @@ describe("ServiceJsonLd", () => {
     expect(data["@type"]).toBe("Service");
     expect(data.name).toBe("Web Development");
     expect(data.provider).toEqual({ "@id": ORG_ID });
-    // No published price for this one, so no offers
-    expect(data.offers).toBeUndefined();
+    // Development shows the website price, so it publishes that Offer
+    expect(data.offers).toEqual([
+      expect.objectContaining({ name: expect.stringMatching(/WordPress/) }),
+    ]);
+  });
+
+  it("publishes no Offer for a service without a published price", () => {
+    expect(serviceOffers("automation")).toEqual([]);
   });
 
   it("publishes hosting prices per month, excluding GST", () => {

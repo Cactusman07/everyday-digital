@@ -21,16 +21,13 @@ export interface SharePayload {
 
 /** The channels a post goes to, in the order captions are written. */
 export const CHANNELS = ["linkedin", "facebook", "instagram"] as const;
-export type Channel = (typeof CHANNELS)[number];
+type Channel = (typeof CHANNELS)[number];
 
 /** One caption per channel. */
 export type Captions = Record<Channel, string>;
 
 export type ChannelResult =
   { ok: true; id?: string } | { ok: false; error?: string; skipped?: string };
-
-/** Reads an environment variable, treating blank values as unset. */
-export const env = (key: string) => process.env[key]?.trim() || undefined;
 
 /**
  * Validates a request body as a {@link SharePayload}.

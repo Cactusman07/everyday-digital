@@ -14,7 +14,7 @@ export interface WPImage {
 }
 
 /** WPGraphQL wraps the featured image in an edge: `featuredImage.node`. */
-export interface WPFeaturedImage {
+interface WPFeaturedImage {
   node: WPImage;
 }
 
@@ -40,16 +40,17 @@ export interface WPEntry {
   modifiedGmt?: string;
 }
 
-export interface WPPost extends WPEntry {
+/** An entry with a publish date (posts and projects; services have none). */
+export interface WPDatedEntry extends WPEntry {
   date: string;
   dateGmt?: string;
+}
+
+export interface WPPost extends WPDatedEntry {
   tags?: { nodes: { name: string }[] };
 }
 
-export interface WPProject extends WPEntry {
-  date: string;
-  dateGmt?: string;
-}
+export type WPProject = WPDatedEntry;
 
 export type WPService = WPEntry;
 

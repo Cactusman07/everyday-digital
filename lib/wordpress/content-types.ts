@@ -74,3 +74,14 @@ export function toContentType(
 export function isRoutedType(type: ContentType): type is RoutedType {
   return "section" in CONTENT_TYPES[type];
 }
+
+/**
+ * Cache tags to purge when an item of `type` changes. Testimonials embed
+ * their project's slug (Testimonial.projectSlug), so a project change also
+ * refreshes them, in case it was renamed or unpublished.
+ */
+export function tagsToPurge(type: ContentType): CacheTag[] {
+  const tags: CacheTag[] = [CONTENT_TYPES[type].tag];
+  if (type === "project") tags.push(CONTENT_TYPES.testimonial.tag);
+  return tags;
+}

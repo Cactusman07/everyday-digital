@@ -1,5 +1,7 @@
 // Date helpers shared by pages, schema, the sitemap and feeds.
 
+import { SITE } from "./site";
+
 /**
  * WordPress GraphQL returns GMT dates without a zone marker. Appending "Z"
  * makes them unambiguous for schema, sitemaps and feeds.
@@ -9,14 +11,17 @@ export function gmt(date?: string | null): string | undefined {
   return /(?:[zZ]|[+-]\d\d:?\d\d)$/.test(date) ? date : `${date}Z`;
 }
 
-/** "19 November 2026" in New Zealand English. Empty for a missing date. */
+/**
+ * "19 November 2026" in New Zealand English: the calendar day written in
+ * `date` (WordPress's site-local `date`), whatever the server's time zone.
+ * Empty for a missing date.
+ */
 export function formatDate(date?: string): string {
   if (!date) return "";
-  return new Date(date).toLocaleDateString("en-NZ", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+  return new Date(`${date.slice(0, 10)}T00:00:00Z`).toLocaleDateString(
+    SITE.language,
+    { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" },
+  );
 }
 
 /** A copy of `items` sorted newest first by their `date`. */

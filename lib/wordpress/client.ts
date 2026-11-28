@@ -6,7 +6,7 @@ import type { CacheTag } from "./content-types";
  * Publishing in WordPress refreshes the site straight away via
  * /api/revalidate. This timer is only the safety net if that call fails.
  */
-export const FALLBACK_REVALIDATE_SECONDS = 60 * 5;
+const FALLBACK_REVALIDATE_SECONDS = 60 * 5;
 
 /** Stops a misbehaving cursor from looping forever (100 × 50 = 5000 items). */
 const MAX_PAGES = 50;
@@ -28,7 +28,7 @@ function graphqlUrl(): string {
  * @throws If WordPress is unreachable, returns a non-2xx status or reports a
  *   GraphQL error. Callers decide whether that's fatal (see {@link safe}).
  */
-export async function fetchGraphQL<T>(
+async function fetchGraphQL<T>(
   query: string,
   tag: CacheTag,
   variables?: Record<string, unknown>,

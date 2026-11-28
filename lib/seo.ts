@@ -3,7 +3,7 @@
 // here to keep the site name, locale, type and a share image.
 
 import type { Metadata } from "next";
-import { SITE, absoluteUrl } from "./site";
+import { FOUNDER, SITE, absoluteUrl } from "./site";
 
 const DEFAULT_OG_IMAGE = "/opengraph-image";
 
@@ -71,7 +71,7 @@ export function pageMetadata({
           type: "article",
           publishedTime: article.publishedTime,
           modifiedTime: article.modifiedTime,
-          authors: [absoluteUrl("/about")],
+          authors: [absoluteUrl(FOUNDER.profilePath)],
           section: article.section,
           tags: article.tags,
         }

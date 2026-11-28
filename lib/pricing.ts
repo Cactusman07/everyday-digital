@@ -1,6 +1,7 @@
-// Published prices — the only three price points on the site. Every sentence
-// that mentions a price (FAQ, service pages, landing pages, schema, share
-// images, llms.txt) is built from these numbers, so a price change is one edit.
+// Published prices — the only three price points on the site. Every place
+// that shows a price (FAQ, service pages, landing pages, schema, the default
+// share image, llms.txt) is built from these numbers, so a price change is one
+// edit.
 //
 // All prices are NZD excluding GST. Shopify stores are hosted by Shopify, so
 // hosting prices are for WordPress sites only.

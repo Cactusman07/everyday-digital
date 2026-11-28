@@ -24,6 +24,24 @@ export interface Testimonial {
   isCaseStudy: boolean;
 }
 
+/**
+ * Splits text after its first sentence. A sentence ends at ".", "!" or "?"
+ * followed by whitespace (or the end), so the dots in "nzinpictures.co.nz"
+ * or "$1.5k" don't count.
+ */
+export function splitFirstSentence(text: string): {
+  lead: string;
+  rest?: string;
+} {
+  const end = /[.!?]+(?=\s|$)/.exec(text);
+  if (!end) return { lead: text.trim() };
+  const cut = end.index + end[0].length;
+  return {
+    lead: text.slice(0, cut).trim(),
+    rest: text.slice(cut).trim() || undefined,
+  };
+}
+
 function initialsOf(name: string): string {
   const words = name.split(/\s+/).filter(Boolean);
   if (words.length === 1) return name.slice(0, 2).toUpperCase();
@@ -52,9 +70,7 @@ export function parseTestimonial(t: WPTestimonial): Testimonial {
     .map((p) => stripHtml(p))
     .filter((p) => p && !isSignature(p));
 
-  const text = paras.join(" ");
-  const [first = text] = text.match(/[^.!?]+[.!?]+(\s|$)/g) ?? [];
-  const rest = text.slice(first.length).trim();
+  const { lead, rest } = splitFirstSentence(paras.join(" "));
 
   const site = /(?:www\.)?[a-z0-9-]+\.(?:co\.nz|com|nz)/i.exec(t.content)?.[0];
   const cs = t.projectSlug ? getCaseStudy(t.projectSlug) : undefined;
@@ -63,8 +79,8 @@ export function parseTestimonial(t: WPTestimonial): Testimonial {
     name,
     company,
     initials: initialsOf(name),
-    lead: first.trim(),
-    rest: rest || undefined,
+    lead,
+    rest,
     url:
       cs?.url ?? (site ? `https://${site.replace(/^www\./, "")}` : undefined),
     projectPath: t.projectSlug ? itemPath("project", t.projectSlug) : undefined,

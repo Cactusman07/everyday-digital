@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { gmt, latest, newestFirst } from "./dates";
+import { formatDate, gmt, latest, newestFirst, publishedAt } from "./dates";
 
 describe("gmt", () => {
   it("marks WordPress GMT dates as UTC", () => {
@@ -31,5 +31,27 @@ describe("latest", () => {
       "2026-05-01Z",
     );
     expect(latest([undefined])).toBeUndefined();
+  });
+});
+
+describe("publishedAt", () => {
+  it("prefers the UTC date and falls back to the local one", () => {
+    expect(
+      publishedAt({
+        date: "2026-11-19T22:30:00",
+        dateGmt: "2026-11-19T09:30:00",
+      }),
+    ).toBe("2026-11-19T09:30:00Z");
+    expect(publishedAt({ date: "2026-11-19T22:30:00" })).toBe(
+      "2026-11-19T22:30:00",
+    );
+  });
+});
+
+describe("formatDate", () => {
+  it("writes out the day WordPress gave, whatever the server's zone", () => {
+    expect(formatDate("2026-11-19T23:30:00")).toBe("19 November 2026");
+    expect(formatDate("2026-11-19T00:15:00")).toBe("19 November 2026");
+    expect(formatDate(undefined)).toBe("");
   });
 });

@@ -5,7 +5,7 @@
 
 import type { FaqItem } from "@/lib/faq";
 import { HOSTING_ANNUAL, PRICES, dollars } from "@/lib/pricing";
-import { SERVICES } from "@/lib/services";
+import { SERVICES, servicePricing } from "@/lib/services";
 import { FOUNDER, SITE, absoluteUrl } from "@/lib/site";
 import { itemPath, sectionOf } from "@/lib/wordpress/content-types";
 
@@ -20,15 +20,51 @@ interface JsonLdProps {
 }
 
 /**
- * Renders one JSON-LD block. `<` is escaped so WordPress text can never close
- * the script tag early.
+ * Renders one JSON-LD block, adding the schema.org `@context`. `<` is escaped
+ * so WordPress text can never close the script tag early.
  */
 export default function JsonLd({ data }: JsonLdProps) {
+  const json = { "@context": "https://schema.org", ...data };
   return (
     <script
       type="application/ld+json"
       dangerouslySetInnerHTML={{
-        __html: JSON.stringify(data).replace(/</g, "\\u003c"),
+        __html: JSON.stringify(json).replace(/</g, "\\u003c"),
+      }}
+    />
+  );
+}
+
+/**
+ * A landing page's published starting price, as an Offer (GST exclusive).
+ *
+ * @param price - NZD, excluding GST.
+ */
+export function LandingOfferJsonLd({
+  name,
+  description,
+  price,
+  path,
+}: {
+  name: string;
+  description: string;
+  price: number;
+  path: string;
+}) {
+  return (
+    <JsonLd
+      data={{
+        "@type": "Offer",
+        name,
+        description,
+        priceSpecification: {
+          "@type": "PriceSpecification",
+          minPrice: price,
+          priceCurrency: "NZD",
+          valueAddedTaxIncluded: false,
+        },
+        url: absoluteUrl(path),
+        seller: { "@id": ORG_ID },
       }}
     />
   );
@@ -105,7 +141,7 @@ export function SiteJsonLd() {
     "@id": FOUNDER_ID,
     name: FOUNDER.name,
     jobTitle: FOUNDER.jobTitle,
-    url: absoluteUrl("/about"),
+    url: absoluteUrl(FOUNDER.profilePath),
     worksFor: { "@id": ORG_ID },
     sameAs: FOUNDER.sameAs,
   };
@@ -118,13 +154,12 @@ export function SiteJsonLd() {
     alternateName: SITE.alternateName,
     description: SITE.description,
     publisher: { "@id": ORG_ID },
-    inLanguage: "en-NZ",
+    inLanguage: SITE.language,
   };
 
   return (
     <JsonLd
       data={{
-        "@context": "https://schema.org",
         "@graph": [organization, founder, website],
       }}
     />
@@ -140,19 +175,21 @@ export function SiteJsonLd() {
 export function serviceOffers(slug: string) {
   const url = absoluteUrl(itemPath("service", slug));
   const exGst = { priceCurrency: "NZD", valueAddedTaxIncluded: false };
-  const perMonth = (price: number) => ({
+  /** A recurring price: per month ("MON") or per year ("ANN"). */
+  const recurring = (price: number, unit: "MON" | "ANN") => ({
     "@type": "UnitPriceSpecification",
     price,
     ...exGst,
-    unitText: "month",
+    unitText: unit === "MON" ? "month" : "year",
     referenceQuantity: {
       "@type": "QuantitativeValue",
       value: 1,
-      unitCode: "MON",
+      unitCode: unit,
     },
   });
+  const pricing = servicePricing(slug);
 
-  if (slug === "website-design")
+  if (pricing === "website")
     return [
       {
         "@type": "Offer",
@@ -165,32 +202,22 @@ export function serviceOffers(slug: string) {
         },
       },
     ];
-  if (slug === "hosting")
+  if (pricing === "hosting")
     return [
       {
         "@type": "Offer",
         name: "WordPress website hosting, including one hour of updates a month",
         url,
         priceSpecification: [
-          perMonth(PRICES.hostingMonthly),
-          {
-            "@type": "UnitPriceSpecification",
-            price: HOSTING_ANNUAL,
-            ...exGst,
-            unitText: "year",
-            referenceQuantity: {
-              "@type": "QuantitativeValue",
-              value: 1,
-              unitCode: "ANN",
-            },
-          },
+          recurring(PRICES.hostingMonthly, "MON"),
+          recurring(HOSTING_ANNUAL, "ANN"),
         ],
       },
       {
         "@type": "Offer",
         name: "WordPress eCommerce hosting",
         url,
-        priceSpecification: perMonth(PRICES.ecommerceHostingMonthly),
+        priceSpecification: recurring(PRICES.ecommerceHostingMonthly, "MON"),
       },
     ];
   return [];
@@ -238,7 +265,6 @@ export function BreadcrumbJsonLd({
   return (
     <JsonLd
       data={{
-        "@context": "https://schema.org",
         "@type": "BreadcrumbList",
         itemListElement: items.map((it, i) => ({
           "@type": "ListItem",
@@ -269,13 +295,12 @@ export function WebPageJsonLd({
   return (
     <JsonLd
       data={{
-        "@context": "https://schema.org",
         "@type": type,
         "@id": `${url}#webpage`,
         url,
         name,
         description,
-        inLanguage: "en-NZ",
+        inLanguage: SITE.language,
         isPartOf: { "@id": WEBSITE_ID },
         about: { "@id": ORG_ID },
         mainEntity,
@@ -295,13 +320,12 @@ export function BlogJsonLd({
   return (
     <JsonLd
       data={{
-        "@context": "https://schema.org",
         "@type": "Blog",
         "@id": BLOG_ID,
         url: absoluteUrl(sectionOf("post").path),
         name: `${SITE.name} blog`,
         description,
-        inLanguage: "en-NZ",
+        inLanguage: SITE.language,
         publisher: { "@id": ORG_ID },
         blogPost: posts.map((p) => ({
           "@type": "BlogPosting",
@@ -320,7 +344,6 @@ export function FaqJsonLd({ faq }: { faq: FaqItem[] }) {
   return (
     <JsonLd
       data={{
-        "@context": "https://schema.org",
         "@type": "FAQPage",
         mainEntity: faq.map((f) => ({
           "@type": "Question",
@@ -360,7 +383,6 @@ export function ArticleJsonLd({
   return (
     <JsonLd
       data={{
-        "@context": "https://schema.org",
         "@type": "BlogPosting",
         "@id": `${url}#article`,
         headline: title,
@@ -371,14 +393,14 @@ export function ArticleJsonLd({
         image: image ? [absoluteUrl(image)] : undefined,
         url,
         mainEntityOfPage: { "@type": "WebPage", "@id": url },
-        inLanguage: "en-NZ",
+        inLanguage: SITE.language,
         wordCount,
         isPartOf: { "@id": BLOG_ID },
         author: {
           "@type": "Person",
           "@id": FOUNDER_ID,
           name: FOUNDER.name,
-          url: absoluteUrl("/about"),
+          url: absoluteUrl(FOUNDER.profilePath),
         },
         publisher: { "@id": ORG_ID },
       }}
@@ -404,7 +426,6 @@ export function ServiceJsonLd({
   return (
     <JsonLd
       data={{
-        "@context": "https://schema.org",
         "@type": "Service",
         "@id": `${url}#service`,
         name,
@@ -443,7 +464,6 @@ export function ProjectJsonLd({
   return (
     <JsonLd
       data={{
-        "@context": "https://schema.org",
         "@type": "CreativeWork",
         "@id": `${url}#work`,
         name,
@@ -452,7 +472,7 @@ export function ProjectJsonLd({
         image: image ? absoluteUrl(image) : undefined,
         datePublished,
         dateModified: dateModified ?? datePublished,
-        inLanguage: "en-NZ",
+        inLanguage: SITE.language,
         creator: { "@id": ORG_ID },
         about: client
           ? { "@type": "Organization", name: client.name, url: client.url }

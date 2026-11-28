@@ -1,21 +1,18 @@
 // Landing pages for paid and social traffic, rendered at /lp/<slug>. They're
 // noindex by default (they exist to convert one ad or post, not to rank) and
 // have a single action. Add an entry here to add a page; no new route needed.
-//
-// Layouts:
-//   "offer"     — price up front, what's included, steps, FAQ, form
-//   "audit"     — problem-led, what we check, steps, FAQ, form
-//   "migration" — platform choice, what's included, steps, FAQ, form
+// Every page has: hero and proof points, a list, steps, recent work, a
+// testimonial, FAQ and the enquiry form. Review pages list "what we check"
+// instead of "what's included" and leave out the recent work.
 
 import type { FaqItem } from "./faq";
 import { PRICES, PRICE_COPY, dollars } from "./pricing";
 import type { ServiceSlug } from "./services";
 
-export type LandingLayout = "offer" | "audit" | "migration";
-
 export interface LandingPage {
   slug: string;
-  layout: LandingLayout;
+  /** A review offer: lists what we check, and shows no recent work. */
+  isReview?: boolean;
   /** <title> and H1. */
   title: string;
   /** Meta description and sub-headline. */
@@ -44,10 +41,15 @@ const HOSTING_FAQ: FaqItem = {
   a: PRICE_COPY.hosting,
 };
 
+/** For the online-store page, where the hosting price is for WooCommerce only. */
+const STORE_HOSTING_FAQ: FaqItem = {
+  q: "What does hosting cost for a WooCommerce store?",
+  a: `WooCommerce stores are ${dollars(PRICES.ecommerceHostingMonthly)} a month on our managed WordPress hosting, with SSL, backups, a firewall and monitoring. Prices exclude GST.`,
+};
+
 export const LANDING_PAGES: LandingPage[] = [
   {
     slug: "wordpress-website",
-    layout: "offer",
     eyebrow: `WordPress website · from ${dollars(PRICES.website)} + GST`,
     title: `A simple WordPress website, designed and built, from ${dollars(PRICES.website)}`,
     description:
@@ -112,7 +114,7 @@ export const LANDING_PAGES: LandingPage[] = [
   },
   {
     slug: "website-review",
-    layout: "audit",
+    isReview: true,
     eyebrow: "Website review · fixed price",
     title: "Find out exactly what's holding your website back",
     description:
@@ -163,7 +165,6 @@ export const LANDING_PAGES: LandingPage[] = [
   },
   {
     slug: "online-store",
-    layout: "migration",
     eyebrow: "Online store · Shopify or WooCommerce",
     title: "An online store, set up properly, at a fixed price",
     description:
@@ -172,7 +173,7 @@ export const LANDING_PAGES: LandingPage[] = [
       { value: "2", label: "platforms we specialise in" },
       {
         value: `${dollars(PRICES.ecommerceHostingMonthly)}/mo`,
-        label: "WordPress eCommerce hosting",
+        label: "WooCommerce hosting",
       },
       { value: "Fixed", label: "price, agreed after a free chat" },
     ],
@@ -211,7 +212,7 @@ export const LANDING_PAGES: LandingPage[] = [
         q: "Can you connect it to Xero or our point-of-sale?",
         a: "Yes. Syncing a store with accounting, point-of-sale or inventory systems is one of our most common jobs.",
       },
-      HOSTING_FAQ,
+      STORE_HOSTING_FAQ,
     ],
     cta: "Start my store",
     formService: "ecommerce",

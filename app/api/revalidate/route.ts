@@ -12,7 +12,7 @@ import { hasBearerSecret } from "@/lib/auth";
 import { INDEXNOW_KEY, SITE, absoluteUrl } from "@/lib/site";
 import {
   ALL_CACHE_TAGS,
-  CONTENT_TYPES,
+  tagsToPurge,
   isRoutedType,
   itemPath,
   toContentType,
@@ -96,7 +96,7 @@ export async function POST(req: NextRequest) {
 
   const type = body.all ? undefined : toContentType(body.type);
   // Unknown or missing type: purge everything rather than miss something
-  const tags: CacheTag[] = type ? [CONTENT_TYPES[type].tag] : ALL_CACHE_TAGS;
+  const tags: CacheTag[] = type ? tagsToPurge(type) : ALL_CACHE_TAGS;
   for (const tag of tags) revalidateTag(tag, "max");
 
   // Tag purges already cover these paths, but revalidating them too makes the

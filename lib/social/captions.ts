@@ -5,10 +5,10 @@
 
 import Anthropic from "@anthropic-ai/sdk";
 import { FOUNDER, SITE } from "../site";
+import { env } from "../env";
 import {
   CHANNELS,
   SHARE_WORDING,
-  env,
   type Captions,
   type SharePayload,
 } from "./types";

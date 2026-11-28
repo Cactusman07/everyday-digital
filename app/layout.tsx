@@ -66,7 +66,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en-NZ" className={`${bananaItalic.variable} ${anton.variable}`}>
+    <html
+      lang={SITE.language}
+      className={`${bananaItalic.variable} ${anton.variable}`}
+    >
       <body>
         {/* First stop for keyboard users: jump past the header and menu */}
         <a href="#root" className="skip-link">

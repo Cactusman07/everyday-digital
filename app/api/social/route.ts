@@ -12,6 +12,7 @@
 
 import { NextResponse, type NextRequest } from "next/server";
 import { hasBearerSecret } from "@/lib/auth";
+import { env } from "@/lib/env";
 import { writeCaptions } from "@/lib/social/captions";
 import {
   postFacebook,
@@ -19,7 +20,6 @@ import {
   postLinkedIn,
 } from "@/lib/social/channels";
 import {
-  env,
   parseSharePayload,
   type ChannelResult,
   type SharePayload,
@@ -39,7 +39,13 @@ async function attempt(
 }
 
 export async function POST(req: NextRequest) {
-  if (!hasBearerSecret(req, env("SOCIAL_WEBHOOK_SECRET")))
+  const secret = env("SOCIAL_WEBHOOK_SECRET");
+  if (!secret)
+    return NextResponse.json(
+      { ok: false, error: "SOCIAL_WEBHOOK_SECRET is not configured" },
+      { status: 500 },
+    );
+  if (!hasBearerSecret(req, secret))
     return NextResponse.json(
       { ok: false, error: "Unauthorized" },
       { status: 401 },

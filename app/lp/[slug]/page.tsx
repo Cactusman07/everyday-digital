@@ -7,7 +7,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import JsonLd, { ORG_ID } from "@/components/seo/JsonLd";
+import { LandingOfferJsonLd } from "@/components/seo/JsonLd";
 import CaseStudyCards from "@/components/shared/CaseStudyCards";
 import ContactForm from "@/components/shared/ContactForm";
 import FaqList from "@/components/shared/FaqList";
@@ -16,7 +16,7 @@ import Reveal from "@/components/shared/Reveal";
 import { CASE_STUDIES } from "@/lib/case-studies";
 import { LANDING_PAGES, getLandingPage, type LandingPage } from "@/lib/landing";
 import { pageMetadata } from "@/lib/seo";
-import { SITE, absoluteUrl, copyright, telHref } from "@/lib/site";
+import { SITE, copyright, telHref } from "@/lib/site";
 import { parseTestimonial } from "@/lib/testimonials";
 import { getTestimonials, safe } from "@/lib/wordpress";
 import logo from "@/public/images/EveryDayDigital_Logo_reversed.png";
@@ -78,22 +78,11 @@ export default async function LandingPageRoute({
   return (
     <div className="lp">
       {lp.price && (
-        <JsonLd
-          data={{
-            "@context": "https://schema.org",
-            "@type": "Offer",
-            name: lp.title,
-            description: lp.description,
-            // A starting price, excluding GST
-            priceSpecification: {
-              "@type": "PriceSpecification",
-              minPrice: lp.price,
-              priceCurrency: "NZD",
-              valueAddedTaxIncluded: false,
-            },
-            url: absoluteUrl(`/lp/${lp.slug}`),
-            seller: { "@id": ORG_ID },
-          }}
+        <LandingOfferJsonLd
+          name={lp.title}
+          description={lp.description}
+          price={lp.price}
+          path={`/lp/${lp.slug}`}
         />
       )}
 
@@ -134,7 +123,7 @@ export default async function LandingPageRoute({
       <section className="home-section home-section--tight home-wrap lp__two">
         <Reveal>
           <h2 className="eyebrow">
-            {lp.layout === "audit" ? "What we check" : "What's included"}
+            {lp.isReview ? "What we check" : "What's included"}
           </h2>
           <ul className="case__list">
             {lp.bullets.map((b) => (
@@ -161,7 +150,7 @@ export default async function LandingPageRoute({
         )}
       </section>
 
-      {lp.layout !== "audit" && (
+      {!lp.isReview && (
         <section className="home-section home-section--tight home-wrap">
           <h2 className="eyebrow">Recent work</h2>
           <CaseStudyCards studies={CASE_STUDIES.slice(0, RECENT_WORK_COUNT)} />

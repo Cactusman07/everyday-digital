@@ -17,12 +17,23 @@ const NAMED_ENTITIES: [RegExp, string][] = [
   [/&gt;/g, ">"],
 ];
 
-/** Decodes the HTML entities WordPress emits, plus any numeric `&#123;`. */
+/** A code point as a string, or the original entity if it isn't valid. */
+function fromCodePoint(code: number, entity: string): string {
+  return Number.isInteger(code) && code > 0 && code <= 0x10ffff
+    ? String.fromCodePoint(code)
+    : entity;
+}
+
+/**
+ * Decodes the HTML entities WordPress emits, plus any numeric entity in
+ * decimal (`&#8217;`) or hex (`&#x1F600;`) form.
+ */
 export function decodeEntities(s: string): string {
-  return NAMED_ENTITIES.reduce(
-    (out, [re, ch]) => out.replace(re, ch),
-    s,
-  ).replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)));
+  return NAMED_ENTITIES.reduce((out, [re, ch]) => out.replace(re, ch), s)
+    .replace(/&#(\d+);/g, (m, n: string) => fromCodePoint(Number(n), m))
+    .replace(/&#x([0-9a-f]+);/gi, (m, n: string) =>
+      fromCodePoint(parseInt(n, 16), m),
+    );
 }
 
 /** HTML → single-line plain text, with scripts and styles dropped. */
@@ -104,8 +115,10 @@ export function withHeadingIds(html = ""): { html: string; toc: TocItem[] } {
     (match, level: string, attrs: string, inner: string) => {
       const text = stripHtml(inner);
       if (!text) return match;
-      let id = slugify(text);
-      while (used.has(id)) id += "-2";
+      // Repeated headings get -2, -3… so every id stays unique
+      const base = slugify(text);
+      let id = base;
+      for (let n = 2; used.has(id); n++) id = `${base}-${n}`;
       used.add(id);
       toc.push({ id, text, level: Number(level) as 2 | 3 });
       return `<h${level} id="${id}"${attrs}>${inner}</h${level}>`;

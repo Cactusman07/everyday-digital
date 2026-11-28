@@ -3,12 +3,43 @@
 
 import { excerptText } from "../html";
 import { isCmsMediaUrl } from "../wordpress/images";
-import { env, type ChannelResult, type SharePayload } from "./types";
+import { env } from "../env";
+import { type ChannelResult, type SharePayload } from "./types";
 
 const graphUrl = () =>
   `https://graph.facebook.com/${env("META_GRAPH_VERSION") ?? "v23.0"}`;
 
 const NOT_SET_UP: ChannelResult = { ok: false, skipped: "not set up" };
+
+/** Each API call gets this long before it's abandoned (the route has 60s in all). */
+const REQUEST_TIMEOUT_MS = 15_000;
+
+/** Instagram image processing: poll every 2s, for up to 20s. */
+const IG_POLL_MS = 2000;
+const IG_POLL_TRIES = 10;
+
+/**
+ * POSTs form data to a Meta Graph API endpoint and turns the reply into a
+ * ChannelResult: the created object's id, or Meta's error message.
+ */
+async function graphPost(
+  path: string,
+  params: Record<string, string>,
+  fallbackError: string,
+): Promise<ChannelResult> {
+  const res = await fetch(`${graphUrl()}/${path}`, {
+    method: "POST",
+    body: new URLSearchParams(params),
+    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+  });
+  const j = (await res.json()) as { id?: string; error?: { message: string } };
+  return res.ok && j.id
+    ? { ok: true, id: j.id }
+    : {
+        ok: false,
+        error: j.error?.message ?? `${fallbackError} (HTTP ${res.status})`,
+      };
+}
 
 /** Posts a link post to the Facebook Page. */
 export async function postFacebook(
@@ -18,14 +49,11 @@ export async function postFacebook(
   const page = env("FB_PAGE_ID");
   const token = env("FB_PAGE_TOKEN");
   if (!page || !token) return NOT_SET_UP;
-  const res = await fetch(`${graphUrl()}/${page}/feed`, {
-    method: "POST",
-    body: new URLSearchParams({ message, link: p.url, access_token: token }),
-  });
-  const j = (await res.json()) as { id?: string; error?: { message: string } };
-  return res.ok && j.id
-    ? { ok: true, id: j.id }
-    : { ok: false, error: j.error?.message ?? `HTTP ${res.status}` };
+  return graphPost(
+    `${page}/feed`,
+    { message, link: p.url, access_token: token },
+    "post failed",
+  );
 }
 
 /**
@@ -43,41 +71,37 @@ export async function postInstagram(
   if (!p.image || !/\.jpe?g(\?|$)/i.test(p.image))
     return { ok: false, skipped: "needs a JPEG featured image" };
 
-  const create = await fetch(`${graphUrl()}/${ig}/media`, {
-    method: "POST",
-    body: new URLSearchParams({
-      image_url: p.image,
-      caption,
-      access_token: token,
-    }),
-  });
-  const c = (await create.json()) as {
-    id?: string;
-    error?: { message: string };
-  };
-  if (!c.id)
-    return { ok: false, error: c.error?.message ?? "could not create media" };
+  const media = await graphPost(
+    `${ig}/media`,
+    { image_url: p.image, caption, access_token: token },
+    "could not create media",
+  );
+  if (!media.ok || !media.id) return media;
 
-  // Usually ready within a few seconds; give up after ~20s
-  for (let i = 0; i < 10; i++) {
-    const s = await fetch(
-      `${graphUrl()}/${c.id}?fields=status_code&access_token=${encodeURIComponent(token)}`,
+  // Wait for Instagram to fetch and process the image before publishing
+  let ready = false;
+  for (let i = 0; i < IG_POLL_TRIES && !ready; i++) {
+    const res = await fetch(
+      `${graphUrl()}/${media.id}?fields=status_code&access_token=${encodeURIComponent(token)}`,
+      { signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) },
     );
-    const status = ((await s.json()) as { status_code?: string }).status_code;
-    if (status === "FINISHED") break;
+    const status = ((await res.json()) as { status_code?: string }).status_code;
     if (status === "ERROR")
       return { ok: false, error: "Instagram could not process the image" };
-    await new Promise((r) => setTimeout(r, 2000));
+    ready = status === "FINISHED";
+    if (!ready) await new Promise((r) => setTimeout(r, IG_POLL_MS));
   }
+  if (!ready)
+    return {
+      ok: false,
+      error: "Instagram was still processing the image after 20s",
+    };
 
-  const pub = await fetch(`${graphUrl()}/${ig}/media_publish`, {
-    method: "POST",
-    body: new URLSearchParams({ creation_id: c.id, access_token: token }),
-  });
-  const j = (await pub.json()) as { id?: string; error?: { message: string } };
-  return j.id
-    ? { ok: true, id: j.id }
-    : { ok: false, error: j.error?.message ?? "publish failed" };
+  return graphPost(
+    `${ig}/media_publish`,
+    { creation_id: media.id, access_token: token },
+    "publish failed",
+  );
 }
 
 /** Characters LinkedIn's "little text format" treats as markup. */
@@ -116,6 +140,7 @@ async function linkedInThumbnail(
       {
         method: "POST",
         headers,
+        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
         body: JSON.stringify({
           initializeUploadRequest: { owner: `urn:li:organization:${org}` },
         }),
@@ -128,6 +153,7 @@ async function linkedInThumbnail(
     const img = await fetch(image, { signal: AbortSignal.timeout(10000) });
     const put = await fetch(upload.uploadUrl, {
       method: "PUT",
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
       headers: { Authorization: headers.Authorization },
       body: await img.arrayBuffer(),
     });
@@ -157,6 +183,7 @@ export async function postLinkedIn(
   const res = await fetch("https://api.linkedin.com/rest/posts", {
     method: "POST",
     headers,
+    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
     body: JSON.stringify({
       author: `urn:li:organization:${org}`,
       commentary: toLinkedInCommentary(commentary),

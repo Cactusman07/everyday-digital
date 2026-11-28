@@ -80,7 +80,7 @@ export async function GET() {
 <title>${esc(SITE.name)}</title>
 <link>${SITE.url}</link>
 <description>${esc(FEED_DESCRIPTION)}</description>
-<language>en-NZ</language>
+<language>${SITE.language}</language>
 <atom:link href="${absoluteUrl("/feed.xml")}" rel="self" type="application/rss+xml"/>
 ${items.map(itemXml).join("\n")}
 </channel>

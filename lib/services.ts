@@ -117,16 +117,33 @@ export const HERO_WORDS: string[] = (
   ] satisfies ServiceSlug[]
 ).map((slug) => getServiceMeta(slug)!.word);
 
-/** Price notes for services with a published price or fee structure. */
-const PRICE_NOTES: Partial<Record<ServiceSlug, string>> = {
-  "website-design": `${PRICE_COPY.website} ${PRICE_COPY.quoted}`,
-  development: `${PRICE_COPY.website} ${PRICE_COPY.quoted}`,
+/**
+ * Which published price a service's page shows. Drives both the price note
+ * on the page and the Offer in its structured data.
+ */
+export type ServicePricing = "website" | "hosting" | "monthly-fee";
+
+const SERVICE_PRICING: Partial<Record<ServiceSlug, ServicePricing>> = {
+  "website-design": "website",
+  development: "website",
+  hosting: "hosting",
+  "digital-management": "monthly-fee",
+};
+
+/** The published price a service shows, if it has one. */
+export function servicePricing(slug: string): ServicePricing | undefined {
+  return SERVICE_PRICING[slug as ServiceSlug];
+}
+
+const PRICE_NOTES: Record<ServicePricing, string> = {
+  website: `${PRICE_COPY.website} ${PRICE_COPY.quoted}`,
   hosting: PRICE_COPY.hosting,
-  "digital-management":
+  "monthly-fee":
     "A fixed monthly fee, with the scope agreed in a free chat first.",
 };
 
 /** One line on price for a service page. */
 export function servicePriceNote(slug: string): string {
-  return PRICE_NOTES[slug as ServiceSlug] ?? PRICE_COPY.quotedService;
+  const pricing = servicePricing(slug);
+  return pricing ? PRICE_NOTES[pricing] : PRICE_COPY.quotedService;
 }

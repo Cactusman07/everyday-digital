@@ -45,7 +45,7 @@ export default async function HomePage() {
     <>
       {/* The FAQ (answer engines quote it) and the priced service catalogue */}
       <FaqJsonLd faq={FAQ} />
-      <JsonLd data={{ "@context": "https://schema.org", ...offerCatalog() }} />
+      <JsonLd data={offerCatalog()} />
 
       <HomeScrollEffects />
       <DiveChrome />

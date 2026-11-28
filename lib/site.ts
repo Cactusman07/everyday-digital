@@ -16,6 +16,8 @@ export const SITE = {
   /** The origin without its scheme, e.g. "everydaydigital.co.nz". */
   domain: displayUrl(url),
   tagline: "We keep you running.",
+  /** BCP 47 language tag for <html lang>, schema and feeds. */
+  language: "en-NZ",
   description:
     "Web design, development and hosting for New Zealand businesses — WordPress, Shopify and custom-built apps, plus automation and AI help. Auckland-based, working NZ-wide.",
   email: "hello@everydaydigital.co.nz",
@@ -37,6 +39,8 @@ export const FOUNDER = {
   name: "Sam Muir",
   initials: "SM",
   jobTitle: "Founder",
+  /** The page about the founder, used as his profile URL in schema. */
+  profilePath: "/about",
   bio: "Sam runs Every Day Digital in Auckland. He designs and builds websites, online stores and business automation, and helps run two businesses of his own, so the advice comes from doing it every day.",
   /** Other profiles of the founder, so search engines can join them up. */
   sameAs: [

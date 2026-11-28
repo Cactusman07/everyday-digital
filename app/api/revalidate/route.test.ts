@@ -5,6 +5,7 @@ const revalidatePath = vi.fn();
 vi.mock("next/cache", () => ({ revalidateTag, revalidatePath }));
 
 const { POST } = await import("./route");
+const { ALL_CACHE_TAGS } = await import("@/lib/wordpress/content-types");
 
 const SECRET = "test-secret";
 
@@ -45,7 +46,8 @@ describe("POST /api/revalidate", () => {
       req({ type: "project", slug: "nz-in-pictures" }, SECRET),
     );
     expect(res.status).toBe(200);
-    expect(purgedTags()).toEqual(["wp:projects"]);
+    // Projects also refresh testimonials, which embed the project slug
+    expect(purgedTags()).toEqual(["wp:projects", "wp:testimonials"]);
     expect(purgedPaths()).toEqual(
       expect.arrayContaining(["/", "/projects/nz-in-pictures"]),
     );
@@ -67,7 +69,7 @@ describe("POST /api/revalidate", () => {
     "purges everything for %j",
     async (body) => {
       await POST(req(body, SECRET));
-      expect(revalidateTag).toHaveBeenCalledTimes(6);
+      expect(revalidateTag).toHaveBeenCalledTimes(ALL_CACHE_TAGS.length);
     },
   );
 });

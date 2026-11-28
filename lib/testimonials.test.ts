@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { parseTestimonial, testimonialFor } from "./testimonials";
+import {
+  parseTestimonial,
+  splitFirstSentence,
+  testimonialFor,
+} from "./testimonials";
 
 const kerr = {
   title: "David Kerr - NZ In Pictures",
@@ -46,5 +50,24 @@ describe("testimonialFor", () => {
     expect(
       testimonialFor("nz-in-pictures", [{ ...kerr, projectSlug: null }]),
     ).toBeUndefined();
+  });
+});
+
+describe("splitFirstSentence", () => {
+  it("ignores dots inside web addresses and numbers", () => {
+    expect(
+      splitFirstSentence(
+        "We hired Sam to rebuild nzinpictures.co.nz and sales doubled. Great work.",
+      ),
+    ).toEqual({
+      lead: "We hired Sam to rebuild nzinpictures.co.nz and sales doubled.",
+      rest: "Great work.",
+    });
+  });
+
+  it("keeps a single sentence whole", () => {
+    expect(splitFirstSentence("Brilliant work")).toEqual({
+      lead: "Brilliant work",
+    });
   });
 });

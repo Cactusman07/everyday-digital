@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
+  decodeEntities,
+  excerptOf,
   excerptText,
   htmlToMarkdown,
   readingMinutes,
@@ -79,5 +81,35 @@ describe("withHeadingIds", () => {
       { id: "why", text: "Why", level: 2 },
       { id: "why-2", text: "Why", level: 3 },
     ]);
+  });
+});
+
+describe("decodeEntities", () => {
+  it("decodes decimal and hex entities, including astral characters", () => {
+    expect(decodeEntities("&#8220;Hi&#8221; &#x1F600; &amp;")).toBe(
+      "“Hi” 😀 &",
+    );
+  });
+
+  it("leaves invalid numeric entities alone", () => {
+    expect(decodeEntities("&#0; &#x110000;")).toBe("&#0; &#x110000;");
+  });
+});
+
+describe("unique heading ids", () => {
+  it("numbers repeated headings -2, -3", () => {
+    const { toc } = withHeadingIds("<h2>Why</h2><h2>Why</h2><h2>Why</h2>");
+    expect(toc.map((t) => t.id)).toEqual(["why", "why-2", "why-3"]);
+  });
+});
+
+describe("excerptOf", () => {
+  it("prefers the hand-written excerpt, else the content", () => {
+    expect(
+      excerptOf({ excerpt: "<p>Short.</p>", content: "<p>Long</p>" }),
+    ).toBe("Short.");
+    expect(excerptOf({ excerpt: "", content: "<p>Body text</p>" })).toBe(
+      "Body text",
+    );
   });
 });
