@@ -54,7 +54,7 @@ export const CASE_STUDIES: CaseStudyMeta[] = [
     ],
     howWeDidIt: [
       "Elementor for the layout so the client can update pages without a developer",
-      "Performance tuned with Breeze and Object Cache Pro; heartbeat throttled and cron moved to the server",
+      "Performance tuning, with custom server-side jobs that run the store's scheduled tasks in the background so pages stay fast for shoppers",
       "Ongoing updates and new products added on request",
     ],
   },
@@ -71,13 +71,7 @@ export const CASE_STUDIES: CaseStudyMeta[] = [
       "Integration",
       "Hosting",
     ],
-    stack: [
-      "WordPress",
-      "WooCommerce",
-      "Lightspeed",
-      "Google Merchant Center",
-      "Cloudways",
-    ],
+    stack: ["WordPress", "WooCommerce", "Lightspeed", "Cloudways"],
     timeline: null,
     results: [
       { label: "Conversion", value: null },

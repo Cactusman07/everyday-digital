@@ -17,3 +17,17 @@
   color: var(--edd-mute);
   font-size: 14px;
 }
+
+/* The whole quote (case studies): readable sentences, not a headline */
+.quote-lead--full {
+  max-width: 62ch;
+  padding-left: clamp(18px, 2.5vw, 28px);
+  border-left: 3px solid var(--edd-accent);
+}
+.quote-lead--full p {
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: normal;
+  font-size: clamp(19px, 1.7vw, 24px);
+  line-height: 1.5;
+}

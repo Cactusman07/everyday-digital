@@ -163,7 +163,7 @@ export default function CaseStudy({
 
         {quote && (
           <Reveal>
-            <PullQuote testimonial={quote} className="case__quote" />
+            <PullQuote testimonial={quote} full className="case__quote" />
           </Reveal>
         )}
 
