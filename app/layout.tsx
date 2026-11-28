@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
@@ -8,6 +9,14 @@ import { SiteJsonLd } from "@/components/seo/JsonLd";
 import { HERO_GRADIENT_LAYERS } from "@/lib/brand";
 import { FOUNDER, SITE } from "@/lib/site";
 import { OG_LOCALE } from "@/lib/seo";
+
+/**
+ * Google Analytics 4 web stream for everydaydigital.co.nz. Loaded on
+ * production only, after the page is interactive, so previews and local
+ * runs aren't counted and it doesn't slow the first paint.
+ */
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "G-LWQ4K9WKGT";
+const isProduction = process.env.VERCEL_ENV === "production";
 
 const bananaItalic = localFont({
   src: "../public/fonts/BananasItalicPersonaluse-Regula.woff2",
@@ -98,6 +107,7 @@ export default function RootLayout({
         <Analytics />
         <SpeedInsights />
       </body>
+      {isProduction && <GoogleAnalytics gaId={GA_ID} />}
     </html>
   );
 }

@@ -10,7 +10,7 @@ import { getCaseStudy } from "./case-studies";
 import { gmt, publishedAt } from "./dates";
 import { metaDescription } from "./html";
 import { ogImage } from "./og";
-import { pageMetadata, type PageMetaInput } from "./seo";
+import { editorSeo, pageMetadata, type PageMetaInput } from "./seo";
 import { getServiceMeta } from "./services";
 import { SITE, absoluteUrl } from "./site";
 import {
@@ -57,10 +57,16 @@ function defineDetailRoute<T extends WPEntry>({
 }: DetailRouteOptions<T>) {
   const section = sectionOf(type);
   const find = (items: T[], slug: string) => items.find((i) => i.slug === slug);
-  /** Page metadata input for one item, with its path and default share card. */
-  const metaFor = (item: T) => {
+  /**
+   * Page metadata input for one item, with its path and default share card.
+   * A title or description written in Yoast wins over the generated one.
+   */
+  const metaFor = (item: T): PageMetaInput => {
     const path = itemPath(type, item.slug);
-    return metadata(item, { path, image: `${path}/opengraph-image` });
+    return {
+      ...metadata(item, { path, image: `${path}/opengraph-image` }),
+      ...editorSeo(item),
+    };
   };
 
   return {

@@ -10,7 +10,7 @@ import WordPressPage, {
 import PageJsonLd from "@/components/seo/PageJsonLd";
 import { metaDescription } from "@/lib/html";
 import { getPageConfig, type PageListing } from "@/lib/pages";
-import { pageMetadata } from "@/lib/seo";
+import { editorSeo, pageMetadata } from "@/lib/seo";
 import type { SlugParams } from "@/lib/detail-routes";
 import {
   getPage,
@@ -76,9 +76,11 @@ export async function generateMetadata({
   const page = await getPage(slug).catch(() => undefined);
   if (!page) return {};
   const { seo } = getPageConfig(slug);
+  const editor = editorSeo(page);
   return pageMetadata({
-    title: seo?.title ?? page.title,
-    description: seo?.description ?? metaDescription(page),
+    title: editor.title ?? seo?.title ?? page.title,
+    description:
+      editor.description ?? seo?.description ?? metaDescription(page),
     path: `/${slug}`,
   });
 }

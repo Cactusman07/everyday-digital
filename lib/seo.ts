@@ -3,7 +3,9 @@
 // here to keep the site name, locale, type and a share image.
 
 import type { Metadata } from "next";
+import { decodeEntities } from "./html";
 import { FOUNDER, SITE, absoluteUrl } from "./site";
+import type { WPSeo } from "./wordpress/types";
 
 const DEFAULT_OG_IMAGE = "/opengraph-image";
 
@@ -77,5 +79,30 @@ export function pageMetadata({
         }
       : { ...base, type: "website" },
     ...(noindex ? { robots: { index: false, follow: false } } : {}),
+  };
+}
+
+/**
+ * The search title and description an editor wrote in Yoast's box, if any.
+ * Yoast always returns a title, built from its template ("Post | Every Day
+ * Digital") when nobody wrote one, so a title only counts when it differs
+ * from the item's own. The brand suffix is dropped because the layout adds
+ * it to every title.
+ */
+export function editorSeo(item: { title: string; seo?: WPSeo }): {
+  title?: string;
+  description?: string;
+} {
+  const brand = new RegExp(`\\s*[|\\-–—]\\s*${SITE.name}$`);
+  const title = decodeEntities(item.seo?.title ?? "")
+    .trim()
+    .replace(brand, "");
+  const description = decodeEntities(item.seo?.metaDesc ?? "").trim();
+  // WordPress curls quotes in titles; Yoast's copy keeps them straight
+  const plain = (s: string) =>
+    s.replace(/[‘’]/g, "'").replace(/[“”]/g, '"').toLowerCase();
+  return {
+    ...(title && plain(title) !== plain(item.title) && { title }),
+    ...(description && { description }),
   };
 }

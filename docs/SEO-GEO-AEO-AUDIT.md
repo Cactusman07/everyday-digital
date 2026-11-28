@@ -90,3 +90,14 @@ For a business that wants to be recommended, option 1 or 2. `app/robots.ts` has 
 4. `curl -s https://everydaydigital.co.nz/robots.txt` → AI policy present, sitemap line present.
 5. Share the home URL in LinkedIn → 1200×630 card renders.
 6. PageSpeed Insights mobile → aim LCP < 2.5 s, CLS < 0.1.
+
+## 7. Who owns what: Next.js or Yoast (Nov 2026)
+
+The public site is the Next.js front end, so it owns everything search engines and AI tools read about `everydaydigital.co.nz`: `robots.txt`, `sitemap.xml`, `llms.txt`, `llms-full.txt`, the RSS feed, canonicals, structured data and share images. Yoast only ever sees `cms.everydaydigital.co.nz`, which redirects visitors away and sends `noindex`, so its sitemap, `llms.txt` and schema endpoint are switched off.
+
+Yoast is kept for the editor:
+
+- **Search title and meta description.** Whatever is written in Yoast's box on a page, post, project or service is used on the live site (`editorSeo()` in `lib/seo.ts`). Leave it blank and the site generates them as before. Needs the Yoast SEO and "Add WPGraphQL SEO" plugins active: the GraphQL queries ask for `seo { title metaDesc }`.
+- **SEO and readability analysis** while writing.
+
+Google Analytics 4 (stream `G-LWQ4K9WKGT`) loads on production only, from `app/layout.tsx` via `@next/third-parties`. Site Kit in WordPress reads the same property, so its dashboard shows the live site's traffic.

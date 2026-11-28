@@ -8,6 +8,13 @@ import type { ContentType } from "./content-types";
 
 const FEATURED_IMAGE = `featuredImage { node { sourceUrl altText } }`;
 
+/**
+ * The search title and meta description set in Yoast's editor box. Needs the
+ * Yoast SEO and "Add WPGraphQL SEO" plugins active in WordPress: without
+ * them this field doesn't exist and every query fails.
+ */
+const SEO = `seo { title metaDesc }`;
+
 /** Fields every routed entry (post, project, service) has in common. */
 const ENTRY_FIELDS = `
   databaseId
@@ -17,6 +24,7 @@ const ENTRY_FIELDS = `
   excerpt(format: RENDERED)
   modifiedGmt
   ${FEATURED_IMAGE}
+  ${SEO}
 `;
 
 /**
@@ -50,7 +58,7 @@ export const QUERIES: Record<
 > = {
   page: paginated(
     "pages",
-    `databaseId title uri content(format: RENDERED) modifiedGmt isFrontPage ${FEATURED_IMAGE}`,
+    `databaseId title uri content(format: RENDERED) modifiedGmt isFrontPage ${FEATURED_IMAGE} ${SEO}`,
     // Oldest first: the order the menu has always used
     "{ status: PUBLISH, orderby: { field: DATE, order: ASC } }",
   ),

@@ -31,7 +31,6 @@ export const SITE = {
   social: {
     linkedin: "https://www.linkedin.com/company/every-day-digital/",
     facebook: "https://www.facebook.com/every.day.digital.2023",
-    instagram: "https://www.instagram.com/everydaydigitalnz/",
   },
 } as const;
 

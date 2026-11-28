@@ -18,6 +18,13 @@ interface WPFeaturedImage {
   node: WPImage;
 }
 
+/** What Yoast returns: its rendered search title and the custom description. */
+export interface WPSeo {
+  title?: string;
+  /** Empty unless the editor wrote one. */
+  metaDesc?: string;
+}
+
 export interface WPPage {
   databaseId: number;
   title: string;
@@ -27,6 +34,7 @@ export interface WPPage {
   featuredImage?: WPFeaturedImage;
   modifiedGmt?: string;
   isFrontPage: boolean;
+  seo?: WPSeo;
 }
 
 /** Fields shared by every post type that has its own page and slug. */
@@ -38,6 +46,7 @@ export interface WPEntry {
   excerpt: string;
   featuredImage?: WPFeaturedImage;
   modifiedGmt?: string;
+  seo?: WPSeo;
 }
 
 /** An entry with a publish date (posts and projects; services have none). */

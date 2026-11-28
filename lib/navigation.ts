@@ -24,6 +24,5 @@ export const MENU_EXCLUDED_PATHS = ["/terms"];
 /** Our social profiles, in the order their icons appear. */
 export const SOCIAL_LINKS = [
   { id: "facebook", label: "Facebook", href: SITE.social.facebook },
-  { id: "instagram", label: "Instagram", href: SITE.social.instagram },
   { id: "linkedin", label: "LinkedIn", href: SITE.social.linkedin },
 ] as const;
