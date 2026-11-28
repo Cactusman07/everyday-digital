@@ -114,8 +114,12 @@ export const CASE_STUDIES: CaseStudyMeta[] = [
     sector: "Ecommerce · Furniture",
     summary:
       "Our own Shopify store. Real products, real freight, real stock — so when we build a store for you, we know what breaks.",
-    services: ["Shopify development", "Automation", "Social media automation"],
-    stack: ["Shopify", "Azure Logic Apps", "Meta Graph API"],
+    services: [
+      "Shopify development",
+      "Price automation",
+      "Social media automation",
+    ],
+    stack: ["Shopify", "Azure Logic Apps", "Outlook", "AI"],
     timeline: null,
     results: [
       { label: "Orders", value: null },
@@ -123,10 +127,12 @@ export const CASE_STUDIES: CaseStudyMeta[] = [
     ],
     whatWeDid: [
       "Shopify store setup, theme customisation and product catalogue",
+      "Supplier price changes applied to the store automatically, with no manual entry",
       "Daily Instagram and Facebook posting automated end to end",
       "Supplier orders, invoices and packing slips handled automatically",
     ],
     howWeDidIt: [
+      "Supplier price lists arrive by email to Outlook; AI reads the prices from the attached PDFs and spreadsheets, and Azure workflows update the store",
       "Azure Logic Apps pick a product, Claude writes the caption, and the post goes to Instagram and Facebook on its own",
       "We run this store ourselves, which is the point: it's the test bed for everything we recommend to store clients",
     ],
