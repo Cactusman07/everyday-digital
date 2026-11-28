@@ -39,6 +39,7 @@ import {
 import { itemPath, sectionOf } from "@/lib/wordpress/content-types";
 import ShareLinks from "./ShareLinks";
 import { isCmsMediaUrl } from "@/lib/wordpress/images";
+import BookingLink from "@/components/shared/BookingLink";
 
 /** The item being shown, tagged by type so each branch gets the right fields. */
 type ShowcaseItem =
@@ -193,9 +194,9 @@ export default function ItemShowcase({
           <aside className="show__price">
             <span className="eyebrow">Pricing</span>
             <p>{servicePriceNote(item.slug)}</p>
-            <Link href="/contact" className="btn btn--accent">
+            <BookingLink className="btn btn--accent">
               Book a free consultation
-            </Link>
+            </BookingLink>
           </aside>
         ) : (
           isCmsMediaUrl(image?.sourceUrl) && (

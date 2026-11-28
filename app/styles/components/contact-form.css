@@ -154,3 +154,15 @@ select:focus-visible {
 .contact-success a {
   color: var(--color-accent);
 }
+
+/* Contact page: "book a call" button and other ways to get in touch, above
+   the form (WordPressPage.tsx ContactDetails) */
+.contact-options {
+  margin: 0 0 clamp(28px, 5vh, 52px);
+}
+.contact-options p {
+  margin: 16px 0 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--edd-mute);
+}

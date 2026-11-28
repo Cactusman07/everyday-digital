@@ -18,6 +18,7 @@ import type { WPPost, WPProject } from "@/lib/wordpress";
 import { Climber, Waver } from "./Silhouettes";
 import { itemPath, sectionOf } from "@/lib/wordpress/content-types";
 import { isCmsMediaUrl } from "@/lib/wordpress/images";
+import BookingLink from "@/components/shared/BookingLink";
 
 const MANIFESTO =
   "We design, build and host websites and online stores, then automate the busywork behind them. WordPress and Shopify specialists. Fixed prices, agreed before we start.";
@@ -190,9 +191,9 @@ export function PriceCount() {
         {PRICE_COPY.website} {PRICE_COPY.quoted}
       </p>
       <div className="section-actions dive-center">
-        <Link href="/contact" className="btn btn--accent btn--lg">
+        <BookingLink className="btn btn--accent btn--lg">
           Book a free consultation
-        </Link>
+        </BookingLink>
       </div>
     </section>
   );
@@ -324,6 +325,7 @@ export function Outro() {
             <Link href="/contact" className="btn btn--accent btn--lg">
               Start with a free chat
             </Link>
+            <BookingLink className="btn btn--lg" />
             <a href={`mailto:${SITE.email}`} className="btn btn--lg">
               {SITE.email}
             </a>

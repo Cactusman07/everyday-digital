@@ -21,6 +21,8 @@ export const SITE = {
   email: "hello@everydaydigital.co.nz",
   phone: "021 175 9457",
   phoneIntl: "+64-21-175-9457",
+  /** Calendly page where visitors book a call straight into Sam's calendar. */
+  bookingUrl: "https://calendly.com/hello-everydaydigital",
   city: "Auckland",
   region: "Auckland",
   country: "NZ",

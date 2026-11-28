@@ -92,7 +92,7 @@ const PAGES: Record<string, PageConfig> = {
     },
     eyebrow: "Get in touch",
     intro:
-      "Whether you've got a clear brief or just an idea, we're here to help. Fill in the form and we'll get back to you within one business day.",
+      "Whether you've got a clear brief or just an idea, we're here to help. Book a free call straight into our calendar, or fill in the form and we'll get back to you within one business day.",
     contactForm: true,
     schemaType: "ContactPage",
   },

@@ -26,6 +26,7 @@ import PostGrid from "./PostGrid";
 import ProjectGrid from "./ProjectGrid";
 import ServiceGrid from "./ServiceGrid";
 import TeamProfiles from "./TeamProfiles";
+import BookingLink from "@/components/shared/BookingLink";
 
 /** The WordPress list shown on a page, tagged by kind (see PageConfig.listing). */
 export type PageListingData =
@@ -60,17 +61,22 @@ function Listing({ listing }: { listing: PageListingData }) {
 function ContactDetails() {
   return (
     <>
-      <p className="page-intro page-intro--small">
-        Prefer another way? Call{" "}
-        <a href={telHref()} className="projects-cta-link">
-          {SITE.phone}
-        </a>{" "}
-        or email{" "}
-        <a href={`mailto:${SITE.email}`} className="projects-cta-link">
-          {SITE.email}
-        </a>
-        .
-      </p>
+      <div className="contact-options">
+        <BookingLink className="btn btn--accent btn--lg">
+          Book a free call in our calendar
+        </BookingLink>
+        <p>
+          Or fill in the form below, call{" "}
+          <a href={telHref()} className="projects-cta-link">
+            {SITE.phone}
+          </a>{" "}
+          or email{" "}
+          <a href={`mailto:${SITE.email}`} className="projects-cta-link">
+            {SITE.email}
+          </a>
+          .
+        </p>
+      </div>
       <ContactForm />
     </>
   );
