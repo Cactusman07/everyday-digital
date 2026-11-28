@@ -6,13 +6,12 @@ The site deploys from `main` on Vercel. Every pull request gets its own preview 
 
 Project → Settings → Environment Variables. Set each for **Production and Preview**, then redeploy so the change takes effect.
 
-| Name                                   | Value                                       | Notes                                                                                  |
-| -------------------------------------- | ------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `WORDPRESS_GRAPHQL_URL`                | `https://cms.everydaydigital.co.nz/graphql` |                                                                                        |
-| `NEXT_PUBLIC_SITE_URL`                 | `https://everydaydigital.co.nz`             | Previews can keep the production value. It only sets canonical, sitemap and share URLs |
-| `REVALIDATE_SECRET`                    | output of `openssl rand -hex 32`            | Same value goes in WordPress as `EDD_REVALIDATE_SECRET`                                |
-| `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | Search Console token                        | Optional. Adds the verification meta tag                                               |
-| `NEXT_PUBLIC_BING_SITE_VERIFICATION`   | Bing Webmaster token                        | Optional. Adds the verification meta tag                                               |
+| Name                                 | Value                                       | Notes                                                                                  |
+| ------------------------------------ | ------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `WORDPRESS_GRAPHQL_URL`              | `https://cms.everydaydigital.co.nz/graphql` |                                                                                        |
+| `NEXT_PUBLIC_SITE_URL`               | `https://everydaydigital.co.nz`             | Previews can keep the production value. It only sets canonical, sitemap and share URLs |
+| `REVALIDATE_SECRET`                  | output of `openssl rand -hex 32`            | Same value goes in WordPress as `EDD_REVALIDATE_SECRET`                                |
+| `NEXT_PUBLIC_BING_SITE_VERIFICATION` | Bing Webmaster token                        | Optional. Adds the verification meta tag                                               |
 
 The social posting variables are in [SOCIAL-AUTOMATION.md](SOCIAL-AUTOMATION.md).
 

@@ -41,9 +41,10 @@ export const metadata: Metadata = {
   openGraph: { type: "website", locale: OG_LOCALE, siteName: SITE.name },
   twitter: { card: "summary_large_image" },
   verification: {
-    // Paste the codes from Google Search Console and Bing Webmaster Tools
-    // into Vercel env vars to verify ownership without touching DNS.
-    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+    // Search Console ownership. Public by design: it's in every page's HTML.
+    google: "7CWjSwhgFoza8EjLxak3ETOlRQCk3pLxAprLvKTtYrI",
+    // Bing Webmaster Tools: set its code as a Vercel env var to verify
+    // without touching DNS.
     other: process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
       ? { "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION }
       : undefined,
