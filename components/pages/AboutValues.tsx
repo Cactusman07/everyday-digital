@@ -77,7 +77,7 @@ const STEPS = [
 ];
 
 /** Section heading: an h2 in body type, not the script heading style. */
-function SectionTitle({ children }: { children: ReactNode }) {
+export function SectionTitle({ children }: { children: ReactNode }) {
   return <h2 className="about-values__title text-accent">{children}</h2>;
 }
 

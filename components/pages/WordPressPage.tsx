@@ -21,9 +21,11 @@ import type {
   WPTestimonial,
 } from "@/lib/wordpress";
 import AboutValues from "./AboutValues";
+import FounderProfile from "./FounderProfile";
 import PageHeader from "./PageHeader";
 import PostGrid from "./PostGrid";
 import ProjectGrid from "./ProjectGrid";
+import RecentWork from "./RecentWork";
 import ServiceGrid from "./ServiceGrid";
 import TeamProfiles from "./TeamProfiles";
 import BookingLink from "@/components/shared/BookingLink";
@@ -46,6 +48,8 @@ function Listing({ listing }: { listing: PageListingData }) {
     case "team":
       return (
         <>
+          <FounderProfile />
+          <RecentWork />
           <AboutValues />
           <TeamProfiles
             team={listing.items.map((m) => ({

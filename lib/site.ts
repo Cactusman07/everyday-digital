@@ -35,18 +35,20 @@ export const SITE = {
   },
 } as const;
 
+const FOUNDER_LINKEDIN = "https://www.linkedin.com/in/sam-muir-a6b54164/";
+
 export const FOUNDER = {
   name: "Sam Muir",
   initials: "SM",
-  jobTitle: "Founder",
+  jobTitle: "Founder & Director",
   /** The page about the founder, used as his profile URL in schema. */
   profilePath: "/about",
+  /** Square headshot in public/; without one, avatars show the initials. */
+  photo: undefined as string | undefined,
   bio: "Sam runs Every Day Digital in Auckland. He designs and builds websites, online stores and business automation, and helps run two businesses of his own, so the advice comes from doing it every day.",
+  linkedIn: FOUNDER_LINKEDIN,
   /** Other profiles of the founder, so search engines can join them up. */
-  sameAs: [
-    "https://sammuir.co.nz",
-    "https://www.linkedin.com/in/sam-muir-a6b54164/",
-  ],
+  sameAs: ["https://sammuir.co.nz", FOUNDER_LINKEDIN],
 } as const;
 
 /**

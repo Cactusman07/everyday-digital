@@ -15,7 +15,7 @@ Browser → Next.js on Vercel → WPGraphQL on WordPress (cms.everydaydigital.co
 
 Each testimonial is linked to its project with the **Project** box in its WordPress editor; the site uses that link (never the names) to connect a quote to its case study.
 
-Facts that need to be exact live in code under `lib/`: prices (`pricing.ts`), which price each service shows (`services.ts`), case studies, the FAQ, and contact details and the Calendly booking link (`site.ts`).
+Facts that need to be exact live in code under `lib/`: prices (`pricing.ts`), which price each service shows (`services.ts`), case studies, the FAQ, and contact details, the Calendly booking link and the founder's profile (`site.ts`). The founder's profile on the About page and under blog posts shows `FOUNDER.photo` (a square image in `public/`) when it's set, and his initials when it isn't.
 
 ## Prerequisites
 

@@ -229,16 +229,7 @@
   margin-bottom: 6px;
 }
 .show__author-av {
-  flex: none;
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  font-family: var(--font-display);
   font-size: 20px;
-  color: #000;
-  background: var(--edd-rainbow);
 }
 .show__share {
   display: flex;

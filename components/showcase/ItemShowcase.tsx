@@ -14,6 +14,7 @@ import SiteFooter from "@/components/layout/SiteFooter";
 import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import ArticleBody from "@/components/shared/ArticleBody";
 import CallToActionBand from "@/components/shared/CallToActionBand";
+import FounderAvatar from "@/components/shared/FounderAvatar";
 import ScriptTitle from "@/components/shared/ScriptTitle";
 import ServiceIcon from "@/components/shared/ServiceIcon";
 import Testimonials from "@/components/shared/Testimonials";
@@ -220,9 +221,7 @@ export default function ItemShowcase({
         <div className="show__after">
           {post && (
             <div className="show__author">
-              <span className="show__author-av" aria-hidden="true">
-                {FOUNDER.initials}
-              </span>
+              <FounderAvatar size={54} className="show__author-av" />
               <div>
                 <p className="show__author-name">Written by {FOUNDER.name}</p>
                 <p>{FOUNDER.bio}</p>

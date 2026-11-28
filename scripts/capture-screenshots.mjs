@@ -33,14 +33,20 @@ for (const [slug, url] of SITES) {
     deviceScaleFactor: 2,
   });
   try {
-    await page.goto(url, { waitUntil: "networkidle", timeout: 45000 });
-    await page.waitForTimeout(1500);
+    // "load", then a pause for late images and fonts. ("networkidle" never
+    // arrives on stores whose trackers keep polling, such as Shopify's.)
+    await page.goto(url, { waitUntil: "load", timeout: 45000 });
+    await page.waitForTimeout(4000);
     for (const selector of DISMISS) {
       const button = page.locator(selector).first();
       if (await button.isVisible().catch(() => false))
         await button.click().catch(() => {});
     }
-    await page.screenshot({ path: `public/images/work/${slug}.png` });
+    // Finish CSS animations so a fading hero isn't caught half-drawn
+    await page.screenshot({
+      path: `public/images/work/${slug}.png`,
+      animations: "disabled",
+    });
     console.log("captured", slug);
   } catch (e) {
     console.error("failed", slug, e.message);

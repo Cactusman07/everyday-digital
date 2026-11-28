@@ -142,6 +142,7 @@ export function SiteJsonLd() {
     name: FOUNDER.name,
     jobTitle: FOUNDER.jobTitle,
     url: absoluteUrl(FOUNDER.profilePath),
+    ...(FOUNDER.photo ? { image: absoluteUrl(FOUNDER.photo) } : {}),
     worksFor: { "@id": ORG_ID },
     sameAs: FOUNDER.sameAs,
   };
