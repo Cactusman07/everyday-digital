@@ -117,6 +117,10 @@
   margin: 0;
   font-size: clamp(16px, 1.3vw, 19px);
 }
+/* No eyebrow margin here, or the label sits above the centre line */
+.show__price .eyebrow {
+  margin: 0;
+}
 
 /* Article + contents list */
 .show__body {
