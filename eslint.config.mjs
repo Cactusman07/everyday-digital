@@ -1,4 +1,6 @@
 import js from "@eslint/js";
+import jsxA11y from "eslint-plugin-jsx-a11y";
+import reactHooks from "eslint-plugin-react-hooks";
 import prettierConfig from "eslint-config-prettier";
 import globals from "globals";
 import tseslint from "typescript-eslint";
@@ -20,6 +22,10 @@ export default tseslint.config(
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
+  // Rules of Hooks and effect dependencies
+  reactHooks.configs.flat.recommended,
+  // Accessibility checks on JSX (alt text, labels, roles, keyboard handlers…)
+  jsxA11y.flatConfigs.recommended,
   {
     languageOptions: {
       globals: { ...globals.browser, ...globals.node },

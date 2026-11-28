@@ -1,5 +1,5 @@
-minimumReleaseAgeExclude:
-  - minimatch@11.0.1
 overrides:
+  # jsx-a11y imports minimatch 3's default export; keep it on the patched 3.x line
+  eslint-plugin-jsx-a11y>minimatch: ^3.1.5
   minimatch@<11.0.1: ^11.0.1
   postcss: ^8.5.10

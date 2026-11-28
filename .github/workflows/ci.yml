@@ -6,7 +6,17 @@ on:
   pull_request:
     branches: [main]
 
-# The live CMS unless the repository sets its own variables.
+# Read-only token; nothing here writes to the repository
+permissions:
+  contents: read
+
+# A newer push to the same branch or PR cancels the run in progress
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+# The live CMS unless the repository sets its own variables. (The e2e tests
+# use a mock WordPress instead; see playwright.config.ts.)
 env:
   WORDPRESS_GRAPHQL_URL: ${{ vars.WORDPRESS_GRAPHQL_URL || 'https://cms.everydaydigital.co.nz/graphql' }}
   NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL || 'https://everydaydigital.co.nz' }}
@@ -15,6 +25,7 @@ jobs:
   check:
     name: Audit, format, lint, typecheck, test, build
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
       - uses: ./.github/actions/setup
@@ -25,11 +36,17 @@ jobs:
   e2e:
     name: End-to-end smoke tests
     runs-on: ubuntu-latest
-    env:
-      CI: true
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
       - uses: ./.github/actions/setup
+      # Reuse the downloaded browser between runs; key on the Playwright version
+      - id: playwright
+        run: echo "version=$(pnpm exec playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@v6
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm run test:e2e
       - uses: actions/upload-artifact@v7

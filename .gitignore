@@ -21,3 +21,9 @@ next-env.d.ts
 # Tooling
 .vercel
 *.log
+
+# Local screenshot and accessibility checks (not part of the build)
+.visual-check
+
+# Written by `next dev` on every start
+/AGENTS.md
