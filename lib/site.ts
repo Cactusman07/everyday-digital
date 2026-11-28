@@ -37,7 +37,10 @@ export const FOUNDER = {
   jobTitle: "Founder",
   bio: "Sam runs Every Day Digital in Auckland. He designs and builds websites, online stores and business automation, and helps run two businesses of his own, so the advice comes from doing it every day.",
   /** Other profiles of the founder, so search engines can join them up. */
-  sameAs: ["https://sammuir.co.nz"],
+  sameAs: [
+    "https://sammuir.co.nz",
+    "https://www.linkedin.com/in/sam-muir-a6b54164/",
+  ],
 } as const;
 
 /**
