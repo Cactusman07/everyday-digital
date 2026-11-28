@@ -2,6 +2,7 @@ import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const MOCK_GRAPHQL_URL = "http://localhost:8181/graphql";
 const fetchMock = vi.fn();
+const JSON_HEADERS = new Headers({ "content-type": "application/json" });
 vi.stubGlobal("fetch", fetchMock);
 
 let wp: typeof import("./index");
@@ -21,6 +22,7 @@ function respond(
 ) {
   fetchMock.mockResolvedValueOnce({
     ok: true,
+    headers: JSON_HEADERS,
     json: () =>
       Promise.resolve({
         data: {
@@ -63,10 +65,19 @@ describe("fetching", () => {
   it("throws on GraphQL errors", async () => {
     fetchMock.mockResolvedValueOnce({
       ok: true,
+      headers: JSON_HEADERS,
       json: () =>
         Promise.resolve({ data: null, errors: [{ message: "Boom" }] }),
     });
     await expect(wp.getPages()).rejects.toThrow("Boom");
+  });
+
+  it("explains an HTML reply (a firewall or bot check) instead of failing to parse it", async () => {
+    fetchMock.mockResolvedValueOnce({
+      ok: true,
+      headers: new Headers({ "content-type": "text/html" }),
+    });
+    await expect(wp.getPages()).rejects.toThrow(/not JSON/);
   });
 
   it("safe() turns a failure into an empty list", async () => {

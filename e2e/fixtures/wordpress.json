@@ -1,0 +1,102 @@
+{
+  "pages": [
+    {
+      "databaseId": 1,
+      "title": "Home",
+      "uri": "/",
+      "content": "",
+      "isFrontPage": true,
+      "modifiedGmt": "2026-11-01T00:00:00"
+    },
+    {
+      "databaseId": 2,
+      "title": "About",
+      "uri": "/about/",
+      "content": "<p>We build and run websites.</p>",
+      "isFrontPage": false,
+      "modifiedGmt": "2026-11-01T00:00:00"
+    },
+    {
+      "databaseId": 3,
+      "title": "Projects",
+      "uri": "/projects/",
+      "content": "",
+      "isFrontPage": false,
+      "modifiedGmt": "2026-11-01T00:00:00"
+    },
+    {
+      "databaseId": 4,
+      "title": "Services",
+      "uri": "/services/",
+      "content": "",
+      "isFrontPage": false,
+      "modifiedGmt": "2026-11-01T00:00:00"
+    },
+    {
+      "databaseId": 5,
+      "title": "Contact",
+      "uri": "/contact/",
+      "content": "",
+      "isFrontPage": false,
+      "modifiedGmt": "2026-11-01T00:00:00"
+    },
+    {
+      "databaseId": 6,
+      "title": "Blog",
+      "uri": "/blog/",
+      "content": "",
+      "isFrontPage": false,
+      "modifiedGmt": "2026-11-01T00:00:00"
+    },
+    {
+      "databaseId": 7,
+      "title": "Terms & Conditions",
+      "uri": "/terms/",
+      "content": "<h2>Terms</h2><p>The terms.</p>",
+      "isFrontPage": false,
+      "modifiedGmt": "2026-11-01T00:00:00"
+    }
+  ],
+  "posts": [
+    {
+      "databaseId": 10,
+      "title": "Getting your website ready for AI search",
+      "slug": "getting-your-website-ready-for-ai-search",
+      "content": "<h2>Why it matters</h2><p>Answer engines read your site.</p>",
+      "excerpt": "<p>How AI search finds you.</p>",
+      "date": "2026-11-01T09:00:00",
+      "dateGmt": "2026-10-31T20:00:00",
+      "modifiedGmt": "2026-11-02T20:00:00",
+      "tags": { "nodes": [{ "name": "SEO" }] }
+    }
+  ],
+  "projects": [
+    {
+      "databaseId": 20,
+      "title": "NZ In Pictures",
+      "slug": "nz-in-pictures",
+      "content": "<p>A WooCommerce store for landscape prints.</p>",
+      "excerpt": "",
+      "date": "2026-06-01T09:00:00",
+      "dateGmt": "2026-05-31T21:00:00",
+      "modifiedGmt": "2026-06-02T21:00:00"
+    }
+  ],
+  "services": [
+    {
+      "databaseId": 30,
+      "title": "Web Hosting",
+      "slug": "hosting",
+      "content": "<p>Managed WordPress hosting.</p>",
+      "excerpt": "<p>Managed WordPress hosting.</p>",
+      "modifiedGmt": "2026-11-01T00:00:00"
+    }
+  ],
+  "teams": [],
+  "testimonials": [
+    {
+      "title": "David Kerr - NZ In Pictures",
+      "content": "<p>Sam built our store. It works brilliantly!</p>"
+    }
+  ]
+}

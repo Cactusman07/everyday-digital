@@ -40,6 +40,12 @@ export async function fetchGraphQL<T>(
     next: { revalidate: FALLBACK_REVALIDATE_SECONDS, tags: [tag] },
   });
   if (!res.ok) throw new Error(`GraphQL fetch failed: ${res.status}`);
+  // A firewall or bot check (e.g. Cloudways bot protection) answers with an
+  // HTML page and a 200, so check what came back before parsing it
+  if (!res.headers.get("content-type")?.includes("json"))
+    throw new Error(
+      `GraphQL endpoint returned ${res.headers.get("content-type") ?? "no content type"}, not JSON; is the request being blocked?`,
+    );
 
   const json = (await res.json()) as {
     data: T;

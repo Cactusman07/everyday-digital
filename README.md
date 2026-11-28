@@ -39,26 +39,26 @@ Facts that need to be exact live in code under `lib/`: prices, services, case st
 
 ## Scripts
 
-| Script                | What it does                                                          |
-| --------------------- | --------------------------------------------------------------------- |
-| `pnpm run dev`        | Dev server with hot reload                                            |
-| `pnpm run build`      | Production build                                                      |
-| `pnpm start`          | Serve the production build on port 3000                               |
-| `pnpm run lint`       | ESLint                                                                |
-| `pnpm run lint:php`   | `php -l` on the WordPress theme and plugins (skipped without PHP)     |
-| `pnpm run typecheck`  | `next typegen` (route and image types), then `tsc --noEmit`           |
-| `pnpm run format`     | Prettier, writing changes (`format:check` only reports)               |
-| `pnpm test`           | Vitest unit tests (`test:watch` to re-run on save)                    |
-| `pnpm run test:e2e`   | Playwright smoke tests (starts the dev server; needs a reachable CMS) |
-| `pnpm run check`      | lint, lint:php, typecheck, test                                       |
-| `pnpm run audit`      | `pnpm audit`; fails on any known vulnerability                        |
-| `pnpm run audit:fix`  | Adds pnpm overrides for vulnerable dependencies, then installs        |
-| `pnpm run tidy`       | audit:fix, audit, format, check (what the pre-commit hook runs)       |
-| `pnpm run tidy:check` | audit, format:check, check (what CI runs, without writing files)      |
-| `pnpm run update`     | Update every dependency to its latest version                         |
-| `pnpm run wp:start`   | Start the WordPress containers                                        |
-| `pnpm run wp:stop`    | Stop them (data is kept)                                              |
-| `pnpm run wp:remove`  | Remove them (`wordpress/` and the database volume are kept)           |
+| Script                | What it does                                                      |
+| --------------------- | ----------------------------------------------------------------- |
+| `pnpm run dev`        | Dev server with hot reload                                        |
+| `pnpm run build`      | Production build                                                  |
+| `pnpm start`          | Serve the production build on port 3000                           |
+| `pnpm run lint`       | ESLint                                                            |
+| `pnpm run lint:php`   | `php -l` on the WordPress theme and plugins (skipped without PHP) |
+| `pnpm run typecheck`  | `next typegen` (route and image types), then `tsc --noEmit`       |
+| `pnpm run format`     | Prettier, writing changes (`format:check` only reports)           |
+| `pnpm test`           | Vitest unit tests (`test:watch` to re-run on save)                |
+| `pnpm run test:e2e`   | Playwright smoke tests against a mock WordPress (no CMS needed)   |
+| `pnpm run check`      | lint, lint:php, typecheck, test                                   |
+| `pnpm run audit`      | `pnpm audit`; fails on any known vulnerability                    |
+| `pnpm run audit:fix`  | Adds pnpm overrides for vulnerable dependencies, then installs    |
+| `pnpm run tidy`       | audit:fix, audit, format, check (what the pre-commit hook runs)   |
+| `pnpm run tidy:check` | audit, format:check, check (what CI runs, without writing files)  |
+| `pnpm run update`     | Update every dependency to its latest version                     |
+| `pnpm run wp:start`   | Start the WordPress containers                                    |
+| `pnpm run wp:stop`    | Stop them (data is kept)                                          |
+| `pnpm run wp:remove`  | Remove them (`wordpress/` and the database volume are kept)       |
 
 ## Quality checks
 
@@ -69,7 +69,7 @@ Facts that need to be exact live in code under `lib/`: prices, services, case st
 
   Formatting fixes are re-staged automatically. If you staged part of a file with `git add -p`, the rest of that file is staged too.
 
-- **CI** (`.github/workflows/ci.yml`): `tidy:check` and a production build on every push and pull request to `main`, plus the Playwright smoke tests against a production build. It uses the live CMS unless the repository sets `WORDPRESS_GRAPHQL_URL`.
+- **CI** (`.github/workflows/ci.yml`): `tidy:check` and a production build on every push and pull request to `main`, plus the Playwright smoke tests against a production build. The build reads the CMS at the `WORDPRESS_GRAPHQL_URL` repository variable; the smoke tests use a mock WordPress (`scripts/mock-wordpress.mjs` with `e2e/fixtures/wordpress.json`), so the CMS's bot protection can't fail them.
 - **Unit tests** sit next to the code they test (`*.test.ts`).
 
 ## Project structure
@@ -105,8 +105,8 @@ lib/
   html.ts, dates.ts, testimonials.ts, brand.ts, scroll.ts, auth.ts
   social/                  Captions and channel posting for /api/social
 wpTheme/                   WordPress theme (post types) and mu-plugins (revalidate, social)
-e2e/                       Playwright smoke tests
-scripts/                   Screenshot capture and the PHP lint
+e2e/                       Playwright smoke tests and the mock WordPress fixture
+scripts/                   Screenshot capture, PHP lint, mock WordPress for e2e
 docs/                      Deployment, social automation, SEO audit, marketing plan
 ```
 
