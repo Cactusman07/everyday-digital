@@ -9,6 +9,8 @@
 .show__crumbs {
   display: flex;
   flex-wrap: wrap;
+  /* Links are padded for tap size; centre them with the separators */
+  align-items: center;
   gap: 8px;
   font-size: 13px;
   color: var(--edd-mute);
