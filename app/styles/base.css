@@ -64,42 +64,51 @@ p {
   margin-bottom: 12px;
 }
 
-/* Inline links in copy: underline bar that fills with the rainbow on hover */
-p a {
-  text-decoration: none;
+/* Inline links in copy: an underline bar that fills with the rainbow on
+   hover. Both are backgrounds on the link text itself, cloned onto every
+   line, so a link that wraps is underlined and filled line by line. Buttons
+   keep their own styles. :where() keeps this at the weight of a plain `a`
+   selector, so .text-link and article links keep their own colours. */
+:where(p, .prose-edd li) a:where(:not(.btn)) {
   color: #fff;
-  position: relative;
   font-weight: 500;
 }
-
-p a::before {
-  content: "";
-  background-color: color-mix(in srgb, var(--color-accent) 75%, transparent);
-  position: absolute;
-  left: 0;
-  bottom: 0px;
-  width: 100%;
-  height: 2px;
-  z-index: -1;
-  transition: all 0.3s ease-in-out;
+:where(p, .prose-edd li) a:where(:not(.btn)),
+.text-link {
+  text-decoration: none;
+  background-image:
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--edd-pink) 80%, transparent),
+      color-mix(in srgb, var(--edd-violet) 80%, transparent),
+      color-mix(in srgb, var(--edd-indigo) 80%, transparent),
+      color-mix(in srgb, var(--color-accent) 80%, transparent),
+      color-mix(in srgb, var(--edd-green) 80%, transparent)
+    ),
+    linear-gradient(
+      color-mix(in srgb, var(--color-accent) 75%, transparent),
+      color-mix(in srgb, var(--color-accent) 75%, transparent)
+    );
+  background-repeat: no-repeat;
+  background-position:
+    0 100%,
+    0 100%;
+  /* rainbow: no height yet; underline bar: 2px */
+  background-size:
+    100% 0,
+    100% 2px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  transition:
+    background-size 0.3s ease-in-out,
+    color 0.3s ease-in-out;
 }
-
-p a:hover {
+:where(p, .prose-edd li) a:where(:not(.btn)):hover,
+.text-link:hover {
   color: #fff;
-}
-
-p a:hover::before {
-  bottom: 0;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    var(--edd-pink),
-    var(--edd-violet),
-    var(--edd-indigo),
-    var(--color-accent),
-    var(--edd-green)
-  );
-  opacity: 0.8;
+  background-size:
+    100% 100%,
+    100% 2px;
 }
 
 /* "Skip to content": hidden until a keyboard user tabs to it */

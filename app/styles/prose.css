@@ -44,11 +44,10 @@
 #content .prose-edd > :first-child {
   margin-top: 0;
 }
+/* Article links keep the accent colour; the underline and hover fill come
+   from the inline-link style in base.css */
 #content .prose-edd a {
   color: var(--color-accent);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  transition: color 0.2s;
 }
 #content .prose-edd a:hover {
   color: #fff;

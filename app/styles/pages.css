@@ -124,10 +124,6 @@
   font-weight: 500;
 }
 
-.text-link:hover {
-  text-decoration: underline;
-}
-
 /* Tints a white icon image to the accent blue (ServiceGrid.tsx) */
 .content-icon-tint {
   filter: invert(62%) sepia(57%) saturate(553%) hue-rotate(168deg)
