@@ -44,8 +44,15 @@ export const FOUNDER = {
   /** The page about the founder, used as his profile URL in schema. */
   profilePath: "/about",
   /** Square headshot in public/; without one, avatars show the initials. */
-  photo: undefined as string | undefined,
+  photo: "/images/Sam_Muir_Every_Day_Digital.webp" as string | undefined,
+  /** One line, under every blog post. */
   bio: "Sam runs Every Day Digital in Auckland. He designs and builds websites, online stores and business automation, and helps run two businesses of his own, so the advice comes from doing it every day.",
+  /** The longer, personal profile on the About page, one entry per paragraph. */
+  profile: [
+    "Sam designs and builds digital experiences for real users. He has spent more than 15 years in digital, and worked everywhere from startups to large corporates.",
+    "Sam loves helping people automate things in their businesses so they can focus on where they spend their time.",
+    "Sam has three boys, wife Emma, and lives in Auckland. He loves catching up with people and discussing new ideas over a coffee. Reach out and chat today.",
+  ],
   linkedIn: FOUNDER_LINKEDIN,
   /** Other profiles of the founder, so search engines can join them up. */
   sameAs: ["https://sammuir.co.nz", FOUNDER_LINKEDIN],
