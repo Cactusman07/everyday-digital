@@ -92,6 +92,11 @@
     grid-template-columns: 1fr;
   }
 }
+/* The column labels are h2s styled as .eyebrow: undo the heading defaults */
+.case__cols .eyebrow {
+  line-height: inherit;
+  text-shadow: none;
+}
 .case__list {
   list-style: none;
   padding: 0;

@@ -60,11 +60,6 @@
   transform: scale(1.06);
   background: rgba(0, 0, 0, 0.8);
 }
-#menu .menu-toggle:focus-visible,
-#navMenu button:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 3px;
-}
 #menu .menu-toggle .menu-toggle__icon {
   transform: scale(0.8);
 }

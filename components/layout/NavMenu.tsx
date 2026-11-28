@@ -14,18 +14,52 @@ export interface MenuItem {
   label: string;
 }
 
+/** What Tab can land on inside the panel. */
+const FOCUSABLE = "a[href], button:not([disabled])";
+
 export default function NavMenu({ items }: { items: MenuItem[] | null }) {
   const [open, setOpen] = useState(false);
   const toggle = useRef<HTMLButtonElement>(null);
+  const panel = useRef<HTMLDivElement>(null);
+  const closeButton = useRef<HTMLButtonElement>(null);
+  /** Closes the menu by navigating: focus goes wherever the new page puts it. */
   const close = () => setOpen(false);
+  /** Closes the menu and puts focus back on the button that opened it. */
+  const closeToToggle = () => {
+    setOpen(false);
+    toggle.current?.focus();
+  };
 
-  // Escape closes the menu and puts focus back on the button that opened it
+  // On open, focus moves into the panel. Tab then stays in the menu: the
+  // panel plus the toggle (it sits outside the panel but stays on top of it,
+  // as a second close button), wrapping at either end. Escape closes.
   useEffect(() => {
     if (!open) return;
+    closeButton.current?.focus({ preventScroll: true });
     const onKey = (e: KeyboardEvent) => {
-      if (e.key !== "Escape") return;
-      setOpen(false);
-      toggle.current?.focus();
+      if (e.key === "Escape") {
+        setOpen(false);
+        toggle.current?.focus();
+        return;
+      }
+      if (e.key !== "Tab" || !toggle.current || !panel.current) return;
+      const stops = [
+        toggle.current,
+        ...panel.current.querySelectorAll<HTMLElement>(FOCUSABLE),
+      ].filter((el) => el.offsetParent !== null || el === toggle.current);
+      const first = stops[0];
+      const last = stops[stops.length - 1];
+      const at = document.activeElement;
+      if (!stops.includes(at as HTMLElement)) {
+        e.preventDefault();
+        first.focus();
+      } else if (e.shiftKey && at === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && at === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -52,13 +86,15 @@ export default function NavMenu({ items }: { items: MenuItem[] | null }) {
         {/* inert while closed: the off-screen links can't be focused or read out */}
         <div
           id="navMenu"
+          ref={panel}
           className={open ? "showMenuNav" : "hideMenuNav"}
           inert={!open}
         >
           <button
+            ref={closeButton}
             type="button"
             className="absolute top-0 right-0 pl-4 pt-8 pr-8"
-            onClick={close}
+            onClick={closeToToggle}
             aria-label="Close menu"
           >
             <OutlineIcon className="h-8 w-8 text-white cursor-pointer animate-pulse">

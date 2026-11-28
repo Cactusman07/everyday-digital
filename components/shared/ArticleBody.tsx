@@ -2,8 +2,8 @@
 // page" contents list sits beside the text once it has enough headings. A
 // reading-progress bar runs along the top of the window for long reads.
 
-import ReadingProgress from "@/components/showcase/ReadingProgress";
-import TableOfContents from "@/components/showcase/TableOfContents";
+import ReadingProgress from "./ReadingProgress";
+import TableOfContents from "./TableOfContents";
 import { withHeadingIds } from "@/lib/html";
 
 /** Articles with at least this many h2/h3 headings get a contents list. */

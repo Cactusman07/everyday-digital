@@ -1,5 +1,5 @@
 // Builds the menu from the WordPress pages. Rendered inside its own Suspense
-// boundary (app/layout.tsx) so the page never waits on WordPress for it.
+// boundary (SiteMenu.tsx) so the page never waits on WordPress for it.
 
 import { MENU_EXCLUDED_PATHS } from "@/lib/navigation";
 import { getPages, pageSlug, safe } from "@/lib/wordpress";

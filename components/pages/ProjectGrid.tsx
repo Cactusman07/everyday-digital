@@ -19,7 +19,7 @@ export default function ProjectGrid({ projects }: { projects: WPProject[] }) {
     return (
       <p className="mt-4 text-white/60">
         Your project could be here…{" "}
-        <Link href="/contact" className="projects-cta-link">
+        <Link href="/contact" className="text-link">
           Get in touch →
         </Link>
       </p>
@@ -61,6 +61,8 @@ export default function ProjectGrid({ projects }: { projects: WPProject[] }) {
                     src={src}
                     alt={alt}
                     fill
+                    // The first card is the largest image above the fold (LCP)
+                    priority={i === 0}
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                 )}
@@ -69,9 +71,9 @@ export default function ProjectGrid({ projects }: { projects: WPProject[] }) {
                 <span className="proj-card__kind">
                   {cs ? `Case study · ${cs.sector}` : "Project"}
                 </span>
-                <span className="proj-card__title">
+                <h2 className="proj-card__title">
                   {cs?.client ?? project.title}
-                </span>
+                </h2>
                 <span className="proj-card__text">
                   {cs?.summary ?? excerptOf(project, 130)}
                 </span>

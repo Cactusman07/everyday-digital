@@ -32,6 +32,6 @@
   }
 }
 
-.inner-page #social {
+.inner-page .social-links {
   display: flex;
 }

@@ -76,30 +76,16 @@ const STEPS = [
   },
 ];
 
-/** Section heading, styled as body text but announced as a heading. */
-function SectionTitle({
-  children,
-  className = "",
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
-  return (
-    <p
-      role="heading"
-      aria-level={2}
-      className={`text-accent text-[32px] font-bold ${className}`}
-    >
-      {children}
-    </p>
-  );
+/** Section heading: an h2 in body type, not the script heading style. */
+function SectionTitle({ children }: { children: ReactNode }) {
+  return <h2 className="about-values__title text-accent">{children}</h2>;
 }
 
 export default function AboutValues() {
   return (
     <div className="mt-10 space-y-10">
       <div className="border-l-4 border-[#4b6ceb] rounded-r-xl bg-white/5 px-6 py-5">
-        <SectionTitle className="mt-0 mb-3">Our Mission</SectionTitle>
+        <SectionTitle>Our Mission</SectionTitle>
         <p className="text-white/70 text-base leading-relaxed m-0">
           We believe the digital world should work for{" "}
           <strong className="text-white font-medium">everyone</strong> — not
@@ -111,7 +97,7 @@ export default function AboutValues() {
       </div>
 
       <div>
-        <SectionTitle className="mb-4">What Sets Us Apart</SectionTitle>
+        <SectionTitle>What Sets Us Apart</SectionTitle>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {VALUES.map((v) => (
             <div
@@ -129,7 +115,7 @@ export default function AboutValues() {
       </div>
 
       <div>
-        <SectionTitle className="mb-4">How We Work</SectionTitle>
+        <SectionTitle>How We Work</SectionTitle>
         <ol className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {STEPS.map((s, i) => (
             <li key={s.title} className="bg-white/5 rounded-xl p-4">

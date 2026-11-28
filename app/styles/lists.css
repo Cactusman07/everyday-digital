@@ -1,6 +1,6 @@
 /* List pages: the Services, Blog and Projects grids (components/pages/
    ServiceGrid.tsx, PostGrid.tsx, ProjectGrid.tsx). Cards build on .edd-card
-   (components/cards.css). */
+   (app/styles/components/cards.css). */
 
 /* Services list */
 .svc-grid {
@@ -30,7 +30,8 @@
   transform-origin: 0 50%;
   transition: transform 0.5s var(--edd-ease);
 }
-.svc-grid__card:hover::after {
+.svc-grid__card:hover::after,
+.svc-grid__card:focus-visible::after {
   transform: scaleX(1);
 }
 .svc-grid__n {
@@ -95,7 +96,8 @@
 .post-card__img--contain img {
   object-fit: contain;
 }
-.post-card:hover .post-card__img img {
+.post-card:hover .post-card__img img,
+.post-card:focus-visible .post-card__img img {
   transform: scale(1.04);
 }
 .post-card__body {
@@ -115,11 +117,15 @@
   color: var(--color-accent);
   font-weight: 600;
 }
+/* An h2: undo the site heading defaults (base.css) */
 .post-card__title {
   font-family: var(--font-display);
   text-transform: uppercase;
   font-size: 22px;
   line-height: 1.05;
+  letter-spacing: inherit;
+  text-shadow: none;
+  margin: 0;
 }
 .post-card__text {
   color: rgba(255, 255, 255, 0.68);
@@ -204,7 +210,8 @@
     rgba(0, 0, 0, 0.92) 85%
   );
 }
-.proj-card:hover .proj-card__img img {
+.proj-card:hover .proj-card__img img,
+.proj-card:focus-visible .proj-card__img img {
   transform: scale(1.06);
 }
 .proj-card__body {
@@ -221,11 +228,15 @@
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.75);
 }
+/* An h2: undo the site heading defaults (base.css) */
 .proj-card__title {
   font-family: var(--font-display);
   text-transform: uppercase;
   font-size: clamp(24px, 2.4vw, 36px);
   line-height: 1;
+  letter-spacing: inherit;
+  text-shadow: none;
+  margin: 0;
 }
 .proj-card__text,
 .proj-card__go {

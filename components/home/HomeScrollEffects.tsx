@@ -60,8 +60,6 @@ export default function HomeScrollEffects() {
     const legR = q<SVGPolylineElement>('[data-leg="r"]');
     const target = Number(num?.dataset.diveNum ?? 0);
 
-    document.body.classList.add("dive-home");
-
     // Widths only change on resize, so measure them here rather than every frame
     let trackOverflow = 0; // how far the work track extends past the window
     let rowWidths: number[] = []; // half the width of each marquee row (it repeats)
@@ -223,7 +221,6 @@ export default function HomeScrollEffects() {
       window.removeEventListener("load", remeasure);
       window.clearTimeout(idleTimer);
       io.disconnect();
-      document.body.classList.remove("dive-home");
       header?.classList.remove("is-diving", "is-done");
       if (h1) h1.style.transform = "";
       if (title) title.style.opacity = "";

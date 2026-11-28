@@ -1,13 +1,6 @@
 /* Contact form and its success state (components/shared/ContactForm.tsx),
-   used on /contact and on the landing pages. Fields show focus with a border
-   colour instead of an outline. */
-
-label:focus-visible,
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible {
-  outline: 0px;
-}
+   used on /contact and on the landing pages. Focused fields get the site
+   focus ring (base.css) and a brighter border. */
 
 .contact-form {
   margin-top: 2rem;
@@ -43,7 +36,7 @@ select:focus-visible {
 
 .form-optional {
   font-weight: 400;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.55);
   text-transform: none;
   letter-spacing: normal;
   font-size: 11px;
@@ -57,7 +50,8 @@ select:focus-visible {
   margin-top: 0;
   padding: 0.625rem 0.875rem;
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--edd-line);
+  /* 3:1 against the page, so the field edges are visible */
+  border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 8px;
   color: #fff;
   font-size: 14px;
@@ -67,13 +61,12 @@ select:focus-visible {
 .contact-form input:focus,
 .contact-form textarea:focus,
 .contact-form select:focus {
-  outline: none;
   border-color: var(--edd-indigo);
 }
 
 .contact-form input::placeholder,
 .contact-form textarea::placeholder {
-  color: rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .contact-form textarea {
@@ -97,11 +90,15 @@ select:focus-visible {
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s;
 }
 
+/* Dark text on the lighter blue (white would be 2.4:1) */
 .form-submit:hover:not(:disabled) {
   background: var(--color-accent);
+  color: var(--edd-accent-ink);
 }
 
 .form-submit:disabled {
@@ -121,7 +118,7 @@ select:focus-visible {
 }
 
 .form-note {
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.55);
   font-size: 12px;
   text-align: center;
   margin-top: 0.75rem;
@@ -144,6 +141,10 @@ select:focus-visible {
 .contact-success h2 {
   color: var(--color-accent);
   margin-bottom: 0.75rem;
+}
+/* Focused by script when it appears (to announce it), not a control */
+.contact-success h2:focus {
+  outline: none;
 }
 
 .contact-success p {

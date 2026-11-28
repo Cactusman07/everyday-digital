@@ -67,11 +67,11 @@ function ContactDetails() {
         </BookingLink>
         <p>
           Or fill in the form below, call{" "}
-          <a href={telHref()} className="projects-cta-link">
+          <a href={telHref()} className="text-link">
             {SITE.phone}
           </a>{" "}
           or email{" "}
-          <a href={`mailto:${SITE.email}`} className="projects-cta-link">
+          <a href={`mailto:${SITE.email}`} className="text-link">
             {SITE.email}
           </a>
           .

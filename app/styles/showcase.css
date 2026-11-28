@@ -1,8 +1,9 @@
 /* Showcase pages for blog posts, projects and services
    (components/showcase/ItemShowcase.tsx): breadcrumb, header, media, price,
-   article with a contents list (TableOfContents.tsx), author, share links
-   (ShareLinks.tsx), previous/next, other services and the call to action
-   (components/shared/CallToActionBand.tsx, also on WordPress pages). */
+   article with a contents list, author, share links, previous/next, other
+   services and the call to action (components/shared/TableOfContents.tsx,
+   ShareLinks.tsx and CallToActionBand.tsx; the last is also on WordPress
+   pages). */
 
 /* Breadcrumb */
 .show__crumbs {
@@ -289,7 +290,8 @@
     border-color 0.3s,
     transform 0.4s var(--edd-ease);
 }
-.show__pn-card:hover {
+.show__pn-card:hover,
+.show__pn-card:focus-visible {
   border-color: var(--k, var(--color-accent));
   transform: translateY(-3px);
 }
@@ -364,6 +366,8 @@
   text-transform: uppercase;
   font-size: clamp(22px, 2.4vw, 34px);
   line-height: 1.05;
+  letter-spacing: inherit;
+  text-shadow: none;
   margin: 0 0 6px;
 }
 .show__cta p {

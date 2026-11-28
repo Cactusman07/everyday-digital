@@ -10,6 +10,7 @@ import { excerptOf } from "@/lib/html";
 import { getServiceMeta, sortByServiceOrder } from "@/lib/services";
 import type { WPService } from "@/lib/wordpress";
 import { itemPath } from "@/lib/wordpress/content-types";
+import { isCmsMediaUrl } from "@/lib/wordpress/images";
 
 export default function ServiceGrid({ services }: { services: WPService[] }) {
   return (
@@ -24,14 +25,14 @@ export default function ServiceGrid({ services }: { services: WPService[] }) {
               className="edd-card svc-grid__card has-sicon"
               style={{ "--k": meta?.colour ?? DEFAULT_ACCENT } as CSSProperties}
             >
-              <span className="svc-grid__n">
+              <span className="svc-grid__n" aria-hidden="true">
                 {String(i + 1).padStart(2, "0")}
               </span>
               {/* Our own icon when there is one, else the WordPress image */}
               {hasServiceIcon(item.slug) ? (
                 <ServiceIcon slug={item.slug} size={48} />
               ) : (
-                image && (
+                isCmsMediaUrl(image) && (
                   <Image
                     src={image}
                     alt=""
@@ -41,7 +42,7 @@ export default function ServiceGrid({ services }: { services: WPService[] }) {
                   />
                 )
               )}
-              <span className="edd-card__title">{item.title}</span>
+              <h2 className="edd-card__title">{item.title}</h2>
               {meta && (
                 <span className="svc-grid__word">Every Day {meta.word}</span>
               )}

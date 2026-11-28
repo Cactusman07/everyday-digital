@@ -25,6 +25,8 @@ function PostCard({ post, big = false }: { post: WPPost; big?: boolean }) {
             src={img.sourceUrl}
             alt={img.altText || post.title}
             fill
+            // The big latest-post card is the page's largest image (LCP)
+            priority={big}
             sizes={
               big
                 ? "(max-width: 900px) 100vw, 60vw"
@@ -38,7 +40,7 @@ function PostCard({ post, big = false }: { post: WPPost; big?: boolean }) {
           {big && <b>Latest · </b>}
           {formatDate(post.date)} · {readingMinutes(post.content)} min read
         </span>
-        <span className="post-card__title">{post.title}</span>
+        <h2 className="post-card__title">{post.title}</h2>
         <span className="post-card__text">
           {excerptOf(post, big ? 220 : 140)}
         </span>

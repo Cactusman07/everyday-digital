@@ -44,6 +44,22 @@ a:hover {
   color: var(--color-accent);
 }
 
+/* Reduced motion, site-wide: animations and transitions finish at once (so
+   their end events still fire) and smooth scrolling is off. Hover lifts
+   become an instant shift rather than movement. Rules elsewhere only set
+   the resting state of scroll-driven effects (reveal.css, home.css). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after,
+  ::backdrop {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 p {
   margin-bottom: 12px;
 }
@@ -102,6 +118,12 @@ p a:hover::before {
 .skip-link:focus {
   transform: none;
 }
+/* One keyboard focus ring for everything (buttons, links, cards, fields) */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
 /* The skip link focuses <main>; it doesn't need a focus ring of its own */
 #root:focus {
   outline: none;

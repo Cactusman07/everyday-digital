@@ -1,6 +1,6 @@
 /* Line-art service icons (components/shared/ServiceIcon.tsx). --k is the
    service colour; .ac marks the accent shapes. A .has-sicon ancestor lights
-   the icon up on hover. */
+   the icon up on hover or keyboard focus. */
 
 .sicon {
   color: #fff;
@@ -12,9 +12,11 @@
   fill-opacity: 0.35;
   transition: fill-opacity 0.3s;
 }
-.has-sicon:hover .sicon {
+.has-sicon:hover .sicon,
+.has-sicon:focus-visible .sicon {
   color: var(--k);
 }
-.has-sicon:hover .sicon .ac {
+.has-sicon:hover .sicon .ac,
+.has-sicon:focus-visible .sicon .ac {
   fill-opacity: 0.75;
 }

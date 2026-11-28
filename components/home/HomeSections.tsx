@@ -54,7 +54,7 @@ export function DiveIntro() {
 
 export function Manifesto() {
   return (
-    <section className="manifesto" data-dive-mani id="about-us">
+    <section className="manifesto" data-dive-mani>
       <div className="manifesto__stick">
         <p>
           {MANIFESTO.split(" ").map((w, i) => (
@@ -179,14 +179,19 @@ export function PriceCount() {
   return (
     <section className="dive-price" data-dive-price id="pricing">
       <p className="eyebrow">A simple WordPress website starts at</p>
+      {/* The number counts up on scroll, so screen readers get the real price
+          from the hidden text instead */}
+      <p className="sr-only">{dollars(PRICES.website)} plus GST</p>
       <div
         className="dive-price__big"
         data-dive-num={PRICES.website}
-        aria-label={dollars(PRICES.website)}
+        aria-hidden="true"
       >
         {dollars(PRICES.website)}
       </div>
-      <div className="dive-price__gst">+ GST</div>
+      <div className="dive-price__gst" aria-hidden="true">
+        + GST
+      </div>
       <p className="dive-price__p">
         {PRICE_COPY.website} {PRICE_COPY.quoted}
       </p>

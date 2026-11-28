@@ -20,7 +20,7 @@ import { absoluteUrl, displayUrl } from "@/lib/site";
 import { testimonialFor } from "@/lib/testimonials";
 import type { WPProject, WPTestimonial } from "@/lib/wordpress";
 import { itemPath, sectionOf } from "@/lib/wordpress/content-types";
-import ReadingProgress from "./ReadingProgress";
+import ReadingProgress from "@/components/shared/ReadingProgress";
 import OutlineIcon from "@/components/shared/OutlineIcon";
 
 /** How many other case studies to suggest at the foot of the page. */
@@ -127,7 +127,7 @@ export default function CaseStudy({
 
         <div className="case__cols">
           <Reveal>
-            <p className="eyebrow">What we did</p>
+            <h2 className="eyebrow">What we did</h2>
             <ul className="case__list">
               {meta.whatWeDid.map((w) => (
                 <li key={w}>{w}</li>
@@ -135,7 +135,7 @@ export default function CaseStudy({
             </ul>
           </Reveal>
           <Reveal>
-            <p className="eyebrow">How we did it</p>
+            <h2 className="eyebrow">How we did it</h2>
             <ul className="case__list">
               {meta.howWeDidIt.map((w) => (
                 <li key={w}>{w}</li>

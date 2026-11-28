@@ -32,6 +32,7 @@ export default function TableOfContents({ items }: { items: TocItem[] }) {
             <a
               href={`#${i.id}`}
               className={active === i.id ? "is-on" : undefined}
+              aria-current={active === i.id ? "location" : undefined}
             >
               {i.text}
             </a>

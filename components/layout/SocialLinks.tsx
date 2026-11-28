@@ -21,11 +21,10 @@ export default function SocialLinks({
   className?: string;
 }) {
   return (
-    <div id="social" className={`${className} bottom-0 left-0 md:left-5 z-20`}>
+    <div className={`social-links ${className} bottom-0 left-0 md:left-5 z-20`}>
       {SOCIAL_LINKS.map((i) => (
         <a
           key={i.id}
-          id={i.id}
           className="social-icon md:mb-3 mr-3"
           target="_blank"
           rel="noreferrer"

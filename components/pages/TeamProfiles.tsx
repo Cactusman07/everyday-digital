@@ -3,17 +3,23 @@
 // "Meet the Team" on the About page: a photo card per team member; choosing
 // one opens their full bio in a ProfileDialog.
 
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import Image from "next/image";
 import type { WPTeamMember } from "@/lib/wordpress";
+import { isCmsMediaUrl } from "@/lib/wordpress/images";
+import ProfileDialog from "./ProfileDialog";
 
 /** A team member plus their short bio as plain text (worked out on the server). */
 export type TeamProfile = WPTeamMember & { bio: string };
-import ProfileDialog from "./ProfileDialog";
 
 export default function TeamProfiles({ team }: { team: TeamProfile[] }) {
   const [active, setActive] = useState<TeamProfile | null>(null);
-  const close = useCallback(() => setActive(null), []);
+  /** The card that opened the dialog: focus goes back to it on close. */
+  const opener = useRef<HTMLButtonElement | null>(null);
+  const close = useCallback(() => {
+    setActive(null);
+    opener.current?.focus();
+  }, []);
 
   if (!team.length) return null;
   return (
@@ -27,11 +33,14 @@ export default function TeamProfiles({ team }: { team: TeamProfile[] }) {
               type="button"
               key={member.databaseId}
               className="promo m-5"
-              onClick={() => setActive(member)}
+              onClick={(e) => {
+                opener.current = e.currentTarget;
+                setActive(member);
+              }}
               aria-haspopup="dialog"
             >
               <span className="image-wrapper relative block">
-                {photo?.sourceUrl && (
+                {isCmsMediaUrl(photo?.sourceUrl) && (
                   <Image
                     src={photo.sourceUrl}
                     alt={photo.altText || member.title}

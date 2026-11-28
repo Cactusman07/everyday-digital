@@ -1,6 +1,7 @@
 /* LinkedIn, Facebook and Instagram icon links
    (components/layout/SocialLinks.tsx) in the home hero, the menu panel and the
-   footer. */
+   footer. .social-links is the wrapper; it renders more than once a page, so
+   it has no id. */
 
 .social-icon {
   display: grid;

@@ -7,10 +7,6 @@ export default function NzDotMap() {
       aria-hidden="true"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 100 125"
-      version="1.1"
-      xmlSpace="preserve"
-      x="0px"
-      y="0px"
       fillRule="evenodd"
       clipRule="evenodd"
     >

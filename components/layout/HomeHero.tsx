@@ -1,38 +1,24 @@
-"use client";
-
 // The home page hero: full-screen animated "Every Day <word>" title,
-// buttons and social links. The logo hides once the visitor scrolls in.
+// buttons and social links. A server component: only the cycling title and
+// the logo's hide-on-scroll wrapper are client JS.
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import { onScrollFrame } from "@/lib/scroll";
 import HeroButtons from "./HeroButtons";
 import HeroWordCycle from "./HeroWordCycle";
+import HideOnScroll from "./HideOnScroll";
 import SiteLogo from "./SiteLogo";
 import SocialLinks from "./SocialLinks";
 import OutlineIcon from "@/components/shared/OutlineIcon";
 
-/** Scroll distance after which the home page logo hides. */
-const LOGO_HIDE_AFTER_PX = 80;
-
-/** Hides the logo once the visitor scrolls into the page. */
-function useNearTop() {
-  const [nearTop, setNearTop] = useState(true);
-  useEffect(
-    () => onScrollFrame(() => setNearTop(window.scrollY <= LOGO_HIDE_AFTER_PX)),
-    [],
-  );
-  return nearTop;
-}
-
 export default function HomeHero() {
-  const showLogo = useNearTop();
   return (
     <header
       id="header"
       className="h-[calc(100vh-40px)] mx-8 my-5 relative max-w-full z-10"
     >
-      {showLogo && <SiteLogo className="absolute w-14 sm:w-20 top-0 left-0" />}
+      <HideOnScroll>
+        <SiteLogo className="absolute w-14 sm:w-20 top-0 left-0" />
+      </HideOnScroll>
 
       <SocialLinks className="hidden md:block absolute" />
       <div className="fixed md:absolute bottom-0 md:bottom-5 md:left-auto z-[5] right-0 left-0 justify-center flex">
@@ -42,17 +28,10 @@ export default function HomeHero() {
         id="title"
         className="transition-all duration-500 justify-center block text-7xl sm:text-8xl lg:text-[160px] xl:text-[210px] my-auto"
       >
-        <h1 className="absolute transition-all duration-700">
-          Every Day&nbsp;
-          <br className="sm:hidden" />
-          <span id="textWrap">
-            <HeroWordCycle />
-          </span>
-        </h1>
+        <HeroWordCycle />
         <Link
           href="/about"
-          className="absolute flex items-center gap-3 group"
-          style={{ top: "64%", left: 0 }}
+          className="hero-about absolute flex items-center gap-3 group"
         >
           <span className="text-white/70 text-xs uppercase tracking-[0.18em] font-medium transition-colors duration-300 group-hover:text-accent">
             About our approach

@@ -8,7 +8,6 @@ export type PageListing = "services" | "projects" | "posts" | "team";
 export interface CallToAction {
   heading: string;
   text: string;
-  label?: string;
 }
 
 export interface PageConfig {
@@ -42,7 +41,6 @@ const PAGES: Record<string, PageConfig> = {
     cta: {
       heading: "Not sure which one you need?",
       text: "Most projects mix two or three of these. Tell us what you're trying to do and we'll come back with a fixed-price quote.",
-      label: "Book a free consultation",
     },
   },
   projects: {

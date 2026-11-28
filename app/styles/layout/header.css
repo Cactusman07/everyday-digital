@@ -58,8 +58,15 @@ body:has(.dive-intro) #root .dive-outro {
 #header #title > a {
   transition: opacity 0.4s;
 }
+#header #title > .hero-pause {
+  transition:
+    opacity 0.4s,
+    color 0.3s,
+    border-color 0.3s;
+}
 #header.is-diving > *:not(#title):not(.fixed),
-#header.is-diving #title > a {
+#header.is-diving #title > a,
+#header.is-diving #title > .hero-pause {
   opacity: 0;
   pointer-events: none;
 }
@@ -67,10 +74,38 @@ body:has(.dive-intro) #root .dive-outro {
   visibility: hidden;
 }
 
-/* Mobile hero: keep "About our approach" clear of the two-line title.
-   !important: the link's position is set inline in HomeHero.tsx. */
+/* "About our approach" under the title, and the title's pause/play button
+   (HeroWordCycle.tsx) on the same line at the right, styled like the link's
+   arrow circle */
+.hero-about,
+.hero-pause {
+  top: 64%;
+}
+.hero-about {
+  left: 0;
+}
+.hero-pause {
+  position: absolute;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+}
+.hero-pause:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+/* Mobile hero: keep both clear of the two-line title */
 @media (width < 768px) {
-  #header #title > a {
-    top: 72% !important;
+  .hero-about,
+  .hero-pause {
+    top: 72%;
   }
 }

@@ -37,7 +37,7 @@ import {
   type WPTestimonial,
 } from "@/lib/wordpress";
 import { itemPath, sectionOf } from "@/lib/wordpress/content-types";
-import ShareLinks from "./ShareLinks";
+import ShareLinks from "@/components/shared/ShareLinks";
 import { isCmsMediaUrl } from "@/lib/wordpress/images";
 import BookingLink from "@/components/shared/BookingLink";
 

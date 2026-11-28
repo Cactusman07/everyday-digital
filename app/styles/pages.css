@@ -49,14 +49,27 @@
   margin-top: 18px;
   background: var(--edd-rainbow);
 }
+/* Section headings on the About page (AboutValues.tsx): h2s in body type.
+   Set here, not with utilities, because the unlayered heading defaults in
+   base.css beat Tailwind utilities. */
+.about-values__title {
+  font-family: inherit;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: inherit;
+  letter-spacing: normal;
+  text-shadow: none;
+  margin: 0 0 12px;
+}
+
 /* Inline text link in page intros (contact details, projects page) */
-.projects-cta-link {
+.text-link {
   color: #a89cf7;
   text-decoration: none;
   font-weight: 500;
 }
 
-.projects-cta-link:hover {
+.text-link:hover {
   text-decoration: underline;
 }
 
