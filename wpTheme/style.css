@@ -2,6 +2,7 @@
 Theme Name:  Every Day Digital
 Author:      Sam Muir
 Description: Headless theme for Every Day Digital. Registers the custom post types (Projects, Team, Services, Testimonials) that the Next.js front end reads through WPGraphQL. Requires the WPGraphQL plugin.
-Version:     2.0.3
+Version:     2.0.4
+Requires PHP: 7.4
 Text Domain: everyday-digital
 */

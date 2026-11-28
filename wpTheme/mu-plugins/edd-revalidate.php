@@ -45,7 +45,7 @@ final class EDD_Revalidate {
 		add_filter( 'debug_information', array( __CLASS__, 'site_health' ) );
 		// Admin bar button: "Refresh live site" — purges everything.
 		add_action( 'admin_bar_menu', array( __CLASS__, 'admin_bar' ), 100 );
-		EDD_Common::on_admin_action( 'edd_revalidate_all', 'edit_posts', array( __CLASS__, 'ping_all' ) );
+		EDD_Common::on_admin_action( 'edd_revalidate_all', 'edit_others_posts', array( __CLASS__, 'ping_all' ) );
 	}
 
 	/**
@@ -195,7 +195,8 @@ final class EDD_Revalidate {
 	}
 
 	public static function admin_bar( WP_Admin_Bar $bar ): void {
-		if ( ! current_user_can( 'edit_posts' ) ) {
+		// Refreshing the whole site is for editors, not every author
+		if ( ! current_user_can( 'edit_others_posts' ) ) {
 			return;
 		}
 		$bar->add_node(

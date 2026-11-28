@@ -111,10 +111,27 @@ final class EDD_Social_Share {
 		);
 
 		$response = EDD_Common::post_json( EDD_SOCIAL_URL, EDD_SOCIAL_SECRET, $payload, self::TIMEOUT );
-		$result   = is_wp_error( $response )
-			? wp_json_encode( array( 'ok' => false, 'error' => $response->get_error_message() ) )
-			: wp_remote_retrieve_body( $response );
-		update_post_meta( $post_id, self::META_RESULT, $result );
+		update_post_meta( $post_id, self::META_RESULT, self::result_json( $response ) );
+	}
+
+	/**
+	 * The share result to keep on the post, as JSON: the route's own reply, or
+	 * an error when the request failed or the reply isn't the route's JSON
+	 * (a proxy error page, say).
+	 *
+	 * @param array|WP_Error $response wp_remote_post() response.
+	 */
+	private static function result_json( $response ): string {
+		if ( is_wp_error( $response ) ) {
+			return (string) wp_json_encode( array( 'ok' => false, 'error' => $response->get_error_message() ) );
+		}
+		$body = wp_remote_retrieve_body( $response );
+		$json = json_decode( $body, true );
+		if ( is_array( $json ) && isset( $json['ok'] ) ) {
+			return $body;
+		}
+		$code = wp_remote_retrieve_response_code( $response );
+		return (string) wp_json_encode( array( 'ok' => false, 'error' => 'The site returned HTTP ' . $code ) );
 	}
 
 	public static function add_box(): void {
@@ -140,7 +157,7 @@ final class EDD_Social_Share {
 			foreach ( array( 'facebook', 'instagram', 'linkedin' ) as $ch ) {
 				if ( isset( $result['results'][ $ch ] ) ) {
 					$r = $result['results'][ $ch ];
-					echo '<p>' . esc_html( ucfirst( $ch ) ) . ': ' . esc_html( $r['ok'] ? 'posted' : ( $r['skipped'] ?? ( $r['error'] ?? 'failed' ) ) ) . '</p>';
+					echo '<p>' . esc_html( ucfirst( $ch ) ) . ': ' . esc_html( ! empty( $r['ok'] ) ? 'posted' : ( $r['skipped'] ?? ( $r['error'] ?? 'failed' ) ) ) . '</p>';
 				}
 			}
 			if ( ! empty( $result['captions']['linkedin'] ) ) {

@@ -3,8 +3,10 @@
  * Every Day Digital theme.
  *
  * The theme is headless: Next.js renders the public site from WPGraphQL, so
- * this file only defines the content model (custom post types) and an admin
- * notice. Nothing is enqueued on the front end, and index.php is empty.
+ * this file only defines the content model: the custom post types, the
+ * testimonial's link to its project (a meta box, exposed to GraphQL as
+ * projectSlug) and a notice when WPGraphQL is missing. Nothing is enqueued on
+ * the front end, and index.php is empty.
  *
  * @package everyday-digital
  */
@@ -116,7 +118,7 @@ function edd_register_post_types(): void {
 			array(
 				'label'                 => $type['plural'],
 				'labels'                => edd_post_type_labels( $type['singular'], $type['plural'] ),
-				'supports'              => array( 'title', 'editor', 'thumbnail', 'excerpt', 'comments' ),
+				'supports'              => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
 				'hierarchical'          => true,
 				'public'                => true,
 				'publicly_queryable'    => true,
@@ -183,7 +185,7 @@ function edd_register_testimonial_project_meta(): void {
 			'single'            => true,
 			'show_in_rest'      => true,
 			'sanitize_callback' => 'absint',
-			'auth_callback'     => static fn() => current_user_can( 'edit_posts' ),
+			'auth_callback'     => static fn( $allowed, $key, $post_id ) => current_user_can( 'edit_post', $post_id ),
 		)
 	);
 }
