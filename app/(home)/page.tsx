@@ -25,7 +25,8 @@ import { SITE } from "@/lib/site";
 import { getPosts, getProjects, getTestimonials, safe } from "@/lib/wordpress";
 
 export const metadata = pageMetadata({
-  title: `Web Design, Development & Hosting in Auckland | ${SITE.name}`,
+  // The root layout's title template adds " | Every Day Digital"
+  title: "Web Design, Development & Hosting in Auckland",
   description: `WordPress and Shopify websites, online stores, hosting, AI and automation for NZ businesses. Simple WordPress sites from ${dollars(PRICES.website)} + GST. Auckland, NZ-wide.`,
   path: "/",
   shareTitle: `${SITE.name} — ${SITE.tagline}`,
