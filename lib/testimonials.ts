@@ -1,8 +1,9 @@
-// Testimonials come from WordPress as a title ("David Kerr - NZ In Pictures")
-// and an HTML body. This turns them into the parts the cards show and links
-// each one to its client's case study where there is one.
+// Testimonials come from WordPress as a title ("David Kerr - NZ In Pictures"),
+// an HTML body and, optionally, the project they're about (chosen in the
+// editor; see wpTheme/functions.php). This turns them into the parts the cards
+// show and links each one to its project.
 
-import { CASE_STUDIES, type CaseStudyMeta } from "./case-studies";
+import { getCaseStudy } from "./case-studies";
 import { stripHtml } from "./html";
 import { itemPath } from "./wordpress/content-types";
 import type { WPTestimonial } from "./wordpress/types";
@@ -17,30 +18,12 @@ export interface Testimonial {
   rest?: string;
   /** The full quote as one plain-text string. */
   text: string;
+  /** The client's website. */
   url?: string;
-  /** Path of the matching case study, e.g. "/projects/nz-in-pictures". */
-  caseStudy?: string;
-}
-
-/** Lower-case letters and digits only, minus "ltd"/"limited", for loose name matching. */
-const normalise = (s: string) =>
-  s
-    .toLowerCase()
-    .replace(/\b(ltd|limited)\b/g, "")
-    .replace(/[^a-z0-9]/g, "");
-
-/**
- * True when two business names refer to the same client, allowing for
- * suffixes and punctuation ("Plow Foods Ltd" matches "Plow Foods").
- */
-export function isSameClient(a: string, b: string): boolean {
-  const [short, long] = [normalise(a), normalise(b)].sort(
-    (p, q) => p.length - q.length,
-  );
-  // A prefix match needs a few letters, so "NZ" alone can't match "NZ In Pictures"
-  return (
-    !!short && (short === long || (short.length >= 5 && long.startsWith(short)))
-  );
+  /** The linked project's page, e.g. "/projects/nz-in-pictures". */
+  projectPath?: string;
+  /** True when the linked project has a full case study. */
+  isCaseStudy: boolean;
 }
 
 function initialsOf(name: string): string {
@@ -76,7 +59,7 @@ export function parseTestimonial(t: WPTestimonial): Testimonial {
   const rest = text.slice(first.length).trim();
 
   const site = /(?:www\.)?[a-z0-9-]+\.(?:co\.nz|com|nz)/i.exec(t.content)?.[0];
-  const cs = company ? findCaseStudy(company) : undefined;
+  const cs = t.projectSlug ? getCaseStudy(t.projectSlug) : undefined;
 
   return {
     name,
@@ -87,20 +70,16 @@ export function parseTestimonial(t: WPTestimonial): Testimonial {
     text,
     url:
       cs?.url ?? (site ? `https://${site.replace(/^www\./, "")}` : undefined),
-    caseStudy: cs ? itemPath("project", cs.slug) : undefined,
+    projectPath: t.projectSlug ? itemPath("project", t.projectSlug) : undefined,
+    isCaseStudy: !!cs,
   };
 }
 
-function findCaseStudy(company: string): CaseStudyMeta | undefined {
-  return CASE_STUDIES.find((c) => isSameClient(c.client, company));
-}
-
-/** The testimonial from a given client, if WordPress has one. */
+/** The testimonial linked to a project, if WordPress has one. */
 export function testimonialFor(
-  client: string,
+  projectSlug: string,
   testimonials: WPTestimonial[],
 ): Testimonial | undefined {
-  return testimonials
-    .map(parseTestimonial)
-    .find((t) => isSameClient(t.company, client));
+  const linked = testimonials.find((t) => t.projectSlug === projectSlug);
+  return linked && parseTestimonial(linked);
 }

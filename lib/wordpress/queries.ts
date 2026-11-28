@@ -64,5 +64,8 @@ export const QUERIES: Record<
     "teams",
     `databaseId title content(format: RENDERED) excerpt(format: RENDERED) ${FEATURED_IMAGE}`,
   ),
-  testimonial: paginated("testimonials", `title content(format: RENDERED)`),
+  testimonial: paginated(
+    "testimonials",
+    `title content(format: RENDERED) projectSlug`,
+  ),
 };

@@ -158,3 +158,117 @@ function edd_wpgraphql_missing_notice(): void {
 		esc_html__( 'Download it here.', 'everyday-digital' )
 	);
 }
+
+/*
+ * Each testimonial can name the project it's about, chosen from a dropdown in
+ * the editor. The website reads it through WPGraphQL as Testimonial.projectSlug
+ * to link a quote to its project, rather than guessing from names.
+ */
+
+/** Post meta key holding the linked project's post ID. */
+const EDD_TESTIMONIAL_PROJECT_META = 'edd_project_id';
+
+add_action( 'init', 'edd_register_testimonial_project_meta' );
+add_action( 'add_meta_boxes_testimonials', 'edd_add_testimonial_project_box' );
+add_action( 'save_post_testimonials', 'edd_save_testimonial_project' );
+add_action( 'graphql_register_types', 'edd_register_testimonial_project_field' );
+
+/** Registers the project link as a single integer meta value. */
+function edd_register_testimonial_project_meta(): void {
+	register_post_meta(
+		'testimonials',
+		EDD_TESTIMONIAL_PROJECT_META,
+		array(
+			'type'              => 'integer',
+			'single'            => true,
+			'show_in_rest'      => true,
+			'sanitize_callback' => 'absint',
+			'auth_callback'     => static fn() => current_user_can( 'edit_posts' ),
+		)
+	);
+}
+
+/** Adds the "Project" box to the testimonial editor's sidebar. */
+function edd_add_testimonial_project_box(): void {
+	add_meta_box(
+		'edd-testimonial-project',
+		__( 'Project', 'everyday-digital' ),
+		'edd_render_testimonial_project_box',
+		'testimonials',
+		'side'
+	);
+}
+
+/**
+ * Renders a dropdown of published projects, with the linked one selected.
+ *
+ * @param WP_Post $post The testimonial being edited.
+ */
+function edd_render_testimonial_project_box( WP_Post $post ): void {
+	$current  = (int) get_post_meta( $post->ID, EDD_TESTIMONIAL_PROJECT_META, true );
+	$projects = get_posts(
+		array(
+			'post_type'   => 'projects',
+			'post_status' => 'publish',
+			'numberposts' => -1,
+			'orderby'     => 'title',
+			'order'       => 'ASC',
+		)
+	);
+
+	wp_nonce_field( 'edd_testimonial_project', 'edd_testimonial_project_nonce' );
+	echo '<label class="screen-reader-text" for="edd-project-id">' . esc_html__( 'Project', 'everyday-digital' ) . '</label>';
+	echo '<select id="edd-project-id" name="edd_project_id" style="width:100%">';
+	echo '<option value="0">' . esc_html__( '— No project —', 'everyday-digital' ) . '</option>';
+	foreach ( $projects as $project ) {
+		printf(
+			'<option value="%d"%s>%s</option>',
+			(int) $project->ID,
+			selected( $current, $project->ID, false ),
+			esc_html( get_the_title( $project ) )
+		);
+	}
+	echo '</select>';
+	echo '<p class="description">' . esc_html__( 'The project this quote is about. The website links the quote to that project.', 'everyday-digital' ) . '</p>';
+}
+
+/**
+ * Saves the chosen project when a testimonial is saved.
+ *
+ * @param int $post_id The testimonial's post ID.
+ */
+function edd_save_testimonial_project( int $post_id ): void {
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+		return;
+	}
+	$nonce = isset( $_POST['edd_testimonial_project_nonce'] ) ? sanitize_key( wp_unslash( $_POST['edd_testimonial_project_nonce'] ) ) : '';
+	if ( ! wp_verify_nonce( $nonce, 'edd_testimonial_project' ) || ! current_user_can( 'edit_post', $post_id ) ) {
+		return;
+	}
+
+	$project_id = isset( $_POST['edd_project_id'] ) ? absint( $_POST['edd_project_id'] ) : 0;
+	if ( $project_id && 'projects' === get_post_type( $project_id ) ) {
+		update_post_meta( $post_id, EDD_TESTIMONIAL_PROJECT_META, $project_id );
+	} else {
+		delete_post_meta( $post_id, EDD_TESTIMONIAL_PROJECT_META );
+	}
+}
+
+/** Adds Testimonial.projectSlug to the GraphQL schema: the linked project's slug, or null. */
+function edd_register_testimonial_project_field(): void {
+	register_graphql_field(
+		'Testimonial',
+		'projectSlug',
+		array(
+			'type'        => 'String',
+			'description' => __( 'Slug of the published project this testimonial is about, if one is linked.', 'everyday-digital' ),
+			'resolve'     => static function ( $post ) {
+				$project_id = (int) get_post_meta( $post->databaseId, EDD_TESTIMONIAL_PROJECT_META, true );
+				if ( ! $project_id || 'publish' !== get_post_status( $project_id ) ) {
+					return null;
+				}
+				return get_post_field( 'post_name', $project_id );
+			},
+		)
+	);
+}

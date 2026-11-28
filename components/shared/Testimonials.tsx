@@ -51,9 +51,11 @@ function TestimonialCard({
         <p className="tst__lead">{t.lead}</p>
         {t.rest && <p>{t.rest}</p>}
       </blockquote>
-      {t.caseStudy && (
-        <Link href={t.caseStudy} className="tst__more">
-          Read the {t.company} case study →
+      {t.projectPath && (
+        <Link href={t.projectPath} className="tst__more">
+          {t.isCaseStudy
+            ? `Read the ${t.company} case study →`
+            : `See the ${t.company} project →`}
         </Link>
       )}
     </figure>

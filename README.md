@@ -13,6 +13,8 @@ Browser → Next.js on Vercel → WPGraphQL on WordPress (cms.everydaydigital.co
 - When content changes, a WordPress must-use plugin calls `/api/revalidate` and the change is live on the next request. A 5-minute timer is the fallback. See [docs/DEPLOY-AND-REVALIDATE.md](docs/DEPLOY-AND-REVALIDATE.md).
 - New blog posts and projects are shared to Facebook, Instagram and LinkedIn by `/api/social`. See [docs/SOCIAL-AUTOMATION.md](docs/SOCIAL-AUTOMATION.md).
 
+Each testimonial is linked to its project with the **Project** box in its WordPress editor; the site uses that link (never the names) to connect a quote to its case study.
+
 Facts that need to be exact live in code under `lib/`: prices, services, case studies, the FAQ and contact details.
 
 ## Prerequisites

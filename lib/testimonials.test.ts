@@ -1,41 +1,50 @@
 import { describe, expect, it } from "vitest";
-import { isSameClient, parseTestimonial, testimonialFor } from "./testimonials";
+import { parseTestimonial, testimonialFor } from "./testimonials";
 
 const kerr = {
   title: "David Kerr - NZ In Pictures",
   content:
     "<p>Sam built our store. It works brilliantly!</p><p>Highly recommended.</p><p>David Kerr www.nzinpictures.co.nz</p>",
+  projectSlug: "nz-in-pictures",
 };
 
 describe("parseTestimonial", () => {
   it("splits name, company and quote, dropping the signature", () => {
-    const t = parseTestimonial(kerr);
-    expect(t).toMatchObject({
+    expect(parseTestimonial(kerr)).toMatchObject({
       name: "David Kerr",
       company: "NZ In Pictures",
       initials: "DK",
       lead: "Sam built our store.",
       rest: "It works brilliantly! Highly recommended.",
-      caseStudy: "/projects/nz-in-pictures",
     });
   });
-});
 
-describe("isSameClient", () => {
-  it("ignores case, punctuation and company suffixes", () => {
-    expect(isSameClient("Plow Foods Ltd", "plow foods")).toBe(true);
-    expect(isSameClient("Plow Foods", "Plow Foods Limited")).toBe(true);
+  it("links to the project chosen in WordPress", () => {
+    expect(parseTestimonial(kerr)).toMatchObject({
+      projectPath: "/projects/nz-in-pictures",
+      isCaseStudy: true,
+      url: "https://nzinpictures.co.nz",
+    });
+    expect(
+      parseTestimonial({ ...kerr, projectSlug: "some-other-project" }),
+    ).toMatchObject({
+      projectPath: "/projects/some-other-project",
+      isCaseStudy: false,
+    });
   });
 
-  it("needs more than a couple of letters to match a prefix", () => {
-    expect(isSameClient("NZ", "NZ In Pictures")).toBe(false);
-    expect(isSameClient("Home Office Space", "Ride Rotorua Store")).toBe(false);
+  it("has no project link when none is chosen", () => {
+    const t = parseTestimonial({ ...kerr, projectSlug: null });
+    expect(t.projectPath).toBeUndefined();
+    expect(t.isCaseStudy).toBe(false);
   });
 });
 
 describe("testimonialFor", () => {
-  it("finds a client's testimonial", () => {
-    expect(testimonialFor("NZ In Pictures", [kerr])?.name).toBe("David Kerr");
-    expect(testimonialFor("Plow Foods", [kerr])).toBeUndefined();
+  it("finds the testimonial linked to a project, never by name", () => {
+    expect(testimonialFor("nz-in-pictures", [kerr])?.name).toBe("David Kerr");
+    expect(
+      testimonialFor("nz-in-pictures", [{ ...kerr, projectSlug: null }]),
+    ).toBeUndefined();
   });
 });

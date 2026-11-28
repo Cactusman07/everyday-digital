@@ -45,7 +45,7 @@ export default function CaseStudy({
     0,
     RELATED_COUNT,
   );
-  const quote = testimonialFor(meta.client, testimonials);
+  const quote = testimonialFor(meta.slug, testimonials);
 
   return (
     <div id="content" className="case mt-40 mb-24 relative z-20">

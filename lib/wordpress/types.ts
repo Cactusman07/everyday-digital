@@ -65,4 +65,6 @@ export interface WPTestimonial {
   /** "Name - Company", e.g. "David Kerr - NZ In Pictures". */
   title: string;
   content: string;
+  /** Slug of the project this quote is about, chosen in the editor. */
+  projectSlug?: string | null;
 }

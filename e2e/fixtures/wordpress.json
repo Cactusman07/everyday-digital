@@ -96,7 +96,8 @@
   "testimonials": [
     {
       "title": "David Kerr - NZ In Pictures",
-      "content": "<p>Sam built our store. It works brilliantly!</p>"
+      "content": "<p>Sam built our store. It works brilliantly!</p>",
+      "projectSlug": "nz-in-pictures"
     }
   ]
 }
