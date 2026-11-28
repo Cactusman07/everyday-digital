@@ -3,9 +3,6 @@
 // structured facts shown around it. Results with a null value are hidden
 // until there's a real number to show, so nothing unverified ships.
 
-import { preferCmsImage } from "./wordpress/images";
-import type { WPProject } from "./wordpress/types";
-
 export interface CaseStudyMeta {
   slug: string;
   client: string;
@@ -31,14 +28,7 @@ export const CASE_STUDIES: CaseStudyMeta[] = [
     summary:
       "A WooCommerce store selling New Zealand landscape prints and digital images, with variable products for sizes and formats.",
     services: ["Web design", "WooCommerce development", "Hosting"],
-    stack: [
-      "WordPress",
-      "WooCommerce",
-      "Elementor",
-      "Cloudways",
-      "Breeze",
-      "Object Cache Pro",
-    ],
+    stack: ["WordPress", "WooCommerce", "Elementor"],
     timeline: null,
     results: [
       { label: "Print orders", value: null },
@@ -49,7 +39,7 @@ export const CASE_STUDIES: CaseStudyMeta[] = [
       "Designed and built the store around the photography — large imagery, minimal chrome",
       "Variable products for print size, finish and digital download",
       "Checkout, shipping and NZ tax set up",
-      "Hosted on our managed Cloudways server with full-page caching and object cache",
+      "Hosted on our managed WordPress hosting, set up for speed",
       "2026 tune-up: FAQs with schema, page-by-page SEO and AI search fixes, Google Merchant Center",
     ],
     howWeDidIt: [
@@ -71,7 +61,7 @@ export const CASE_STUDIES: CaseStudyMeta[] = [
       "Integration",
       "Hosting",
     ],
-    stack: ["WordPress", "WooCommerce", "Lightspeed", "Cloudways"],
+    stack: ["WordPress", "WooCommerce", "Lightspeed"],
     timeline: null,
     results: [
       { label: "Conversion", value: null },
@@ -84,7 +74,7 @@ export const CASE_STUDIES: CaseStudyMeta[] = [
     ],
     howWeDidIt: [
       "Built on a staging copy the team could test, then moved to the live domain in one step",
-      "Hosted on our managed Cloudways server, with server cron and background-task limits for a large catalogue",
+      "Hosted on our managed WordPress hosting, set up to handle a large catalogue",
     ],
   },
   {
@@ -148,19 +138,10 @@ export function getCaseStudy(slug: string): CaseStudyMeta | undefined {
   return CASE_STUDIES.find((c) => c.slug === slug);
 }
 
-/** Local screenshot for a case study (see scripts/capture-screenshots.mjs). */
-export const caseStudyScreenshot = (slug: string) => `/images/work/${slug}.png`;
-
 /**
- * The image to show for a case study: the WordPress featured image when
- * next/image can load it, otherwise the local screenshot.
- *
- * @param projects - WordPress projects to look the featured image up in.
+ * A case study's image everywhere it appears (hero, work tiles, cards): a
+ * screenshot of the client's site, from scripts/capture-screenshots.mjs, so
+ * each one shows the website itself rather than whatever the WordPress
+ * featured image happens to be (a logo, say).
  */
-export function caseStudyImage(slug: string, projects: WPProject[] = []) {
-  const project = projects.find((p) => p.slug === slug);
-  return preferCmsImage(
-    project?.featuredImage?.node.sourceUrl,
-    caseStudyScreenshot(slug),
-  );
-}
+export const caseStudyImage = (slug: string) => `/images/work/${slug}.png`;

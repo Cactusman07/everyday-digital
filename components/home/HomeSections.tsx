@@ -14,7 +14,7 @@ import { FOOTER_LINKS, SOCIAL_LINKS } from "@/lib/navigation";
 import { PRICES, PRICE_COPY, dollars } from "@/lib/pricing";
 import { SERVICES } from "@/lib/services";
 import { SITE, copyright } from "@/lib/site";
-import type { WPPost, WPProject } from "@/lib/wordpress";
+import type { WPPost } from "@/lib/wordpress";
 import { Climber, Waver } from "./Silhouettes";
 import { itemPath, sectionOf } from "@/lib/wordpress/content-types";
 import { isCmsMediaUrl } from "@/lib/wordpress/images";
@@ -204,7 +204,7 @@ export function PriceCount() {
   );
 }
 
-export function WorkTrack({ projects }: { projects: WPProject[] }) {
+export function WorkTrack() {
   return (
     <section
       className="dive-hz"
@@ -229,7 +229,7 @@ export function WorkTrack({ projects }: { projects: WPProject[] }) {
               <Link href={itemPath("project", cs.slug)}>
                 <div className="dive-pan__shot">
                   <Image
-                    src={caseStudyImage(cs.slug, projects)}
+                    src={caseStudyImage(cs.slug)}
                     alt={`${cs.client} website`}
                     fill
                     sizes="(max-width: 760px) 82vw, 62vw"

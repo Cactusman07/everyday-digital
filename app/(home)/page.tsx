@@ -22,7 +22,7 @@ import { FAQ } from "@/lib/faq";
 import { PRICES, dollars } from "@/lib/pricing";
 import { pageMetadata } from "@/lib/seo";
 import { SITE } from "@/lib/site";
-import { getPosts, getProjects, getTestimonials, safe } from "@/lib/wordpress";
+import { getPosts, getTestimonials, safe } from "@/lib/wordpress";
 
 export const metadata = pageMetadata({
   // The root layout's title template adds " | Every Day Digital"
@@ -35,8 +35,7 @@ export const metadata = pageMetadata({
 });
 
 export default async function HomePage() {
-  const [projects, testimonials, posts] = await Promise.all([
-    safe(getProjects),
+  const [testimonials, posts] = await Promise.all([
     safe(getTestimonials),
     safe(getPosts),
   ]);
@@ -55,7 +54,7 @@ export default async function HomePage() {
         <ServiceStack />
         <PlatformMarquee />
         <PriceCount />
-        <WorkTrack projects={projects} />
+        <WorkTrack />
         <Testimonials testimonials={testimonials} variant="home" />
         <LatestPosts posts={posts} />
         <FaqSection />

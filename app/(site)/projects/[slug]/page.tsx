@@ -34,7 +34,6 @@ export default async function ProjectPage(props: SlugParams) {
         <CaseStudy
           meta={caseStudy}
           project={project}
-          projects={items}
           testimonials={testimonials}
         />
       </>

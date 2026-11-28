@@ -48,10 +48,9 @@ describe("pricing", () => {
 
 describe("case studies", () => {
   it("each has a screenshot for its work tile", async () => {
-    const { CASE_STUDIES, caseStudyScreenshot } =
-      await import("./case-studies");
+    const { CASE_STUDIES, caseStudyImage } = await import("./case-studies");
     for (const c of CASE_STUDIES) {
-      const file = join(process.cwd(), "public", caseStudyScreenshot(c.slug));
+      const file = join(process.cwd(), "public", caseStudyImage(c.slug));
       expect(() => readFileSync(file)).not.toThrow();
     }
   });

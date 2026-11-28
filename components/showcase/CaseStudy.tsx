@@ -29,17 +29,11 @@ const RELATED_COUNT = 3;
 interface Props {
   meta: CaseStudyMeta;
   project: WPProject;
-  projects: WPProject[];
   testimonials: WPTestimonial[];
 }
 
-export default function CaseStudy({
-  meta,
-  project,
-  projects,
-  testimonials,
-}: Props) {
-  const hero = caseStudyImage(meta.slug, projects);
+export default function CaseStudy({ meta, project, testimonials }: Props) {
+  const hero = caseStudyImage(meta.slug);
   const results = meta.results.filter((r) => r.value);
   const related = CASE_STUDIES.filter((c) => c.slug !== meta.slug).slice(
     0,
@@ -172,7 +166,7 @@ export default function CaseStudy({
           <h2 id="related-h" className="display case__related-title">
             Other projects.
           </h2>
-          <CaseStudyCards studies={related} projects={projects} columns={3} />
+          <CaseStudyCards studies={related} columns={3} />
         </section>
       </div>
       <SiteFooter />

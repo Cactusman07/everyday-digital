@@ -34,7 +34,7 @@ export default function ProjectGrid({ projects }: { projects: WPProject[] }) {
       cs,
       // Case studies fall back to their screenshot; others show the CMS image
       src: cs
-        ? caseStudyImage(project.slug, projects)
+        ? caseStudyImage(project.slug)
         : isCmsMediaUrl(img?.sourceUrl)
           ? img.sourceUrl
           : undefined,

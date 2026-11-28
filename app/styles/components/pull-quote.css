@@ -20,7 +20,7 @@
 
 /* The whole quote (case studies): readable sentences, not a headline */
 .quote-lead--full {
-  max-width: 62ch;
+  max-width: 60%;
   padding-left: clamp(18px, 2.5vw, 28px);
   border-left: 3px solid var(--edd-accent);
 }
@@ -30,4 +30,9 @@
   letter-spacing: normal;
   font-size: clamp(19px, 1.7vw, 24px);
   line-height: 1.5;
+}
+@media (width < 768px) {
+  .quote-lead--full {
+    max-width: none;
+  }
 }

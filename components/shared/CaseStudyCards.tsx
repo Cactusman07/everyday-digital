@@ -4,18 +4,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { caseStudyImage, type CaseStudyMeta } from "@/lib/case-studies";
-import type { WPProject } from "@/lib/wordpress";
 import Reveal from "./Reveal";
 import { itemPath } from "@/lib/wordpress/content-types";
 
 export default function CaseStudyCards({
   studies,
-  projects,
   columns = 2,
 }: {
   studies: CaseStudyMeta[];
-  /** WordPress projects, so a card can use the project's featured image. */
-  projects?: WPProject[];
   columns?: 2 | 3;
 }) {
   return (
@@ -31,7 +27,7 @@ export default function CaseStudyCards({
           <Link href={itemPath("project", c.slug)} className="work-card__link">
             <div className="work-card__media">
               <Image
-                src={caseStudyImage(c.slug, projects)}
+                src={caseStudyImage(c.slug)}
                 alt={`${c.client} website`}
                 fill
                 sizes={`(max-width: 760px) 100vw, ${columns === 3 ? "33vw" : "50vw"}`}
