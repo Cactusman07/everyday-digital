@@ -11,7 +11,7 @@ export const PRICES = {
   website: 1500,
   /** WordPress website hosting, per month. Annual billing gets two months free. */
   hostingMonthly: 40,
-  /** WordPress eCommerce (WooCommerce) hosting, per month. */
+  /** Hosting for a WooCommerce store, per month. */
   ecommerceHostingMonthly: 50,
 } as const;
 
@@ -28,7 +28,7 @@ export const PRICE_COPY = {
   /** For a service with no published price. */
   quotedService:
     "Quoted at a fixed price after a free consultation and chat, so you know the cost before we start.",
-  hosting: `Website hosting is ${dollars(PRICES.hostingMonthly)} a month, including one hour of free updates each month. Pay annually and get two months free (${dollars(HOSTING_ANNUAL)} a year). WordPress eCommerce hosting is ${dollars(PRICES.ecommerceHostingMonthly)} a month. Prices exclude GST.`,
+  hosting: `Website hosting is ${dollars(PRICES.hostingMonthly)} a month, including one hour of free updates each month. Pay annually and get two months free (${dollars(HOSTING_ANNUAL)} a year). Hosting for a WooCommerce store is ${dollars(PRICES.ecommerceHostingMonthly)} a month. Prices exclude GST.`,
   /** Short form for cards and share images. */
-  hostingShort: `Websites ${dollars(PRICES.hostingMonthly)} a month with an hour of free updates. WordPress eCommerce ${dollars(PRICES.ecommerceHostingMonthly)} a month.`,
+  hostingShort: `Websites ${dollars(PRICES.hostingMonthly)} a month with an hour of free updates. WooCommerce stores ${dollars(PRICES.ecommerceHostingMonthly)} a month.`,
 } as const;

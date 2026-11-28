@@ -31,7 +31,8 @@ describe("pricing", () => {
       ecommerceHostingMonthly: 50,
     });
     expect(PRICE_COPY.hosting).toContain("$40 a month");
-    expect(PRICE_COPY.hosting).toContain("$50 a month");
+    expect(PRICE_COPY.hosting).toContain("WooCommerce store is $50 a month");
+    expect(PRICE_COPY.hostingShort).toContain("WooCommerce stores $50 a month");
     expect(FAQ.map((f) => f.a).join(" ")).toContain("$1500 + GST");
   });
 

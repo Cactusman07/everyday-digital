@@ -216,7 +216,7 @@ export function serviceOffers(slug: string) {
       },
       {
         "@type": "Offer",
-        name: "WordPress eCommerce hosting",
+        name: "WooCommerce store hosting",
         url,
         priceSpecification: recurring(PRICES.ecommerceHostingMonthly, "MON"),
       },
