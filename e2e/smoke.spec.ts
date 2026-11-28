@@ -1,48 +1,39 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test.describe("Smoke tests", () => {
-  test("home page loads with title", async ({ page }) => {
+  test("home page renders the hero", async ({ page }) => {
     await page.goto("/");
     await expect(page).toHaveTitle(/Every Day/);
+    await expect(page.locator("h1").first()).toContainText("Every Day");
   });
 
-  test("home page renders hero heading", async ({ page }) => {
+  test("menu opens and lists the pages", async ({ page }) => {
     await page.goto("/");
-    const heading = page.locator("h1");
-    await expect(heading).toBeVisible();
-    await expect(heading).toContainText("Every Day");
+    await page.getByRole("button", { name: "Open menu" }).click();
+    const menu = page.locator("#navMenu");
+    await expect(menu).toBeVisible();
+    await expect(menu.getByRole("link", { name: /services/i })).toBeVisible();
   });
 
-  test("navigation menu opens and contains links", async ({ page }) => {
-    await page.goto("/");
-    const hamburger = page
-      .locator("#menu button, #menu [role='button']")
-      .first();
-    if (await hamburger.isVisible()) {
-      await hamburger.click();
-      const nav = page.locator("#navMenu");
-      await expect(nav).toBeVisible();
-    }
-  });
-
-  test("404 page renders for unknown routes", async ({ page }) => {
+  test("unknown routes get the 404 page", async ({ page }) => {
     const response = await page.goto("/this-page-does-not-exist-12345");
     expect(response?.status()).toBe(404);
-    await expect(page.locator("text=Page Not Found")).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Page not found" }),
+    ).toBeVisible();
   });
 
-  test("sitemap.xml is accessible", async ({ page }) => {
-    const response = await page.goto("/sitemap.xml");
-    expect(response?.status()).toBe(200);
-    const content = await page.content();
-    expect(content).toContain("urlset");
+  test("sitemap.xml lists the site", async ({ request }) => {
+    const response = await request.get("/sitemap.xml");
+    expect(response.status()).toBe(200);
+    expect(await response.text()).toContain("<urlset");
   });
 
-  test("robots.txt is accessible", async ({ page }) => {
-    const response = await page.goto("/robots.txt");
-    expect(response?.status()).toBe(200);
-    const text = await response?.text();
+  test("robots.txt points at the sitemap", async ({ request }) => {
+    const response = await request.get("/robots.txt");
+    expect(response.status()).toBe(200);
+    const text = await response.text();
     expect(text).toContain("User-Agent");
-    expect(text).toContain("sitemap");
+    expect(text).toContain("Sitemap:");
   });
 });

@@ -1,15 +1,13 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import localFont from "next/font/local";
-import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import HomeHero from "@/components/HomeHero";
-import NavMenu from "@/components/NavMenu";
-import NavMenuServer from "@/components/NavMenuServer";
-import SvgBackground from "@/components/SvgBackground";
-import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/JsonLd";
-import { SITE } from "@/lib/site";
+import "./globals.css";
+import NzDotMap from "@/components/layout/NzDotMap";
+import { SiteJsonLd } from "@/components/seo/JsonLd";
+import { HERO_GRADIENT_LAYERS } from "@/lib/brand";
+import { FOUNDER, SITE } from "@/lib/site";
+import { OG_LOCALE } from "@/lib/seo";
 
 const bananaItalic = localFont({
   src: "../public/fonts/BananasItalicPersonaluse-Regula.woff2",
@@ -24,17 +22,15 @@ const anton = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || "https://everydaydigital.co.nz",
-  ),
+  metadataBase: new URL(SITE.url),
   title: {
-    default: "Every Day Digital | Web Design, Development & Hosting, Auckland",
-    template: "%s | Every Day Digital",
+    default: `${SITE.name} | Web Design, Development & Hosting, Auckland`,
+    template: `%s | ${SITE.name}`,
   },
   description: SITE.description,
   applicationName: SITE.name,
-  authors: [{ name: SITE.founder }],
-  creator: SITE.founder,
+  authors: [{ name: FOUNDER.name }],
+  creator: FOUNDER.name,
   keywords: [
     "web design auckland",
     "wordpress developer auckland",
@@ -42,14 +38,8 @@ export const metadata: Metadata = {
     "web hosting nz",
     "business automation nz",
   ],
-  openGraph: {
-    type: "website",
-    locale: "en_NZ",
-    siteName: "Every Day Digital",
-  },
-  twitter: {
-    card: "summary_large_image",
-  },
+  openGraph: { type: "website", locale: OG_LOCALE, siteName: SITE.name },
+  twitter: { card: "summary_large_image" },
   verification: {
     // Paste the codes from Google Search Console and Bing Webmaster Tools
     // into Vercel env vars to verify ownership without touching DNS.
@@ -83,32 +73,19 @@ export default function RootLayout({
         <link
           rel="alternate"
           type="application/rss+xml"
-          title="Every Day Digital"
+          title={SITE.name}
           href="/feed.xml"
         />
-        {/* Gradient layers, animated by BackgroundGradients */}
-        <div id="background1" className="fullpage" />
-        <div id="background2" className="fullpage" />
-        <div id="background3" className="fullpage" />
-        <div id="background4" className="fullpage" />
-        <div id="background5" className="fullpage" />
-        <div id="background6" className="fullpage" />
+        {/* Gradient layers, cross-faded by HeroWordCycle */}
+        {Array.from({ length: HERO_GRADIENT_LAYERS }, (_, i) => (
+          <div key={i} id={`background${i + 1}`} className="fullpage" />
+        ))}
 
-        <OrganizationJsonLd />
-        <WebSiteJsonLd />
+        <SiteJsonLd />
 
-        <SvgBackground />
-        {/* The menu streams in separately so its WordPress fetch never blocks
-            the page; the fallback is the same button with no items. */}
-        <HomeHero
-          menuSlot={
-            <Suspense fallback={<NavMenu menu={null} />}>
-              <NavMenuServer />
-            </Suspense>
-          }
-        />
-
-        <div id="root">{children}</div>
+        <NzDotMap />
+        {/* Header, menu and #root come from the route group layouts */}
+        {children}
 
         <Analytics />
         <SpeedInsights />

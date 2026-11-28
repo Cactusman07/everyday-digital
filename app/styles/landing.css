@@ -1,0 +1,191 @@
+/* Landing pages (/lp/<slug>): app/lp/[slug]/page.tsx. The lp layout renders
+   no site header or menu. Stats row, package fine print, steps, the closing
+   form card (.final-cta) and a footer. */
+
+.pkg__fine {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0 0 14px;
+  line-height: 1.5;
+}
+
+.stats {
+  list-style: none;
+  margin: 0 0 28px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+@media (width < 768px) {
+  .stats {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.stats b {
+  display: block;
+  font-family: var(--font-system);
+  font-weight: 900;
+  font-size: clamp(44px, 6.4vw, 92px);
+  line-height: 0.88;
+  letter-spacing: -0.04em;
+  color: var(--edd-accent);
+}
+.stats b.stats__text {
+  font-size: clamp(26px, 3.4vw, 46px);
+  text-transform: uppercase;
+}
+.stats small {
+  display: block;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--edd-line);
+  color: var(--edd-mute);
+  font-size: 13px;
+}
+
+.final-cta {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 36px;
+  align-items: end;
+  border: 1px solid var(--edd-line);
+  border-radius: 18px;
+  padding: clamp(26px, 4.5vw, 56px);
+  background: rgba(0, 0, 0, 0.4);
+}
+@media (width < 1024px) {
+  .final-cta {
+    grid-template-columns: 1fr;
+  }
+}
+
+.final-cta__mail {
+  color: var(--edd-mute);
+  font-size: 14px;
+  text-decoration: none;
+}
+.final-cta__mail:hover {
+  color: #fff;
+}
+
+.lp {
+  position: relative;
+  z-index: 20;
+}
+.lp__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 22px;
+  padding-bottom: 10px;
+}
+.lp__hero {
+  padding-top: clamp(28px, 5vw, 64px);
+  padding-bottom: clamp(24px, 4vw, 48px);
+}
+.lp__title {
+  font-size: clamp(36px, 6.4vw, 84px);
+  max-width: 18ch;
+}
+.lp__lede {
+  font-size: clamp(17px, 1.6vw, 21px);
+  max-width: 58ch;
+}
+.lp__proof {
+  margin-top: 36px;
+  grid-template-columns: repeat(3, 1fr);
+}
+@media (width < 640px) {
+  .lp__proof {
+    grid-template-columns: 1fr;
+  }
+}
+.lp__proof b.stats__text {
+  font-size: clamp(30px, 4vw, 54px);
+  text-transform: none;
+}
+.lp__two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+@media (width < 1024px) {
+  .lp__two {
+    grid-template-columns: 1fr;
+  }
+}
+.lp__fine {
+  margin-top: 14px;
+}
+.lp__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 16px;
+}
+.lp__steps li {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 14px;
+  align-items: start;
+}
+.lp__step-n {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--edd-accent);
+  color: var(--edd-accent);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+}
+.lp__steps b {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+.lp__steps p {
+  color: var(--edd-mute);
+  font-size: 14.5px;
+  line-height: 1.55;
+  margin: 0;
+}
+.lp__form .final-cta {
+  align-items: start;
+}
+.lp__form-title {
+  font-size: clamp(28px, 4vw, 52px);
+}
+.lp__form .contact-form {
+  margin-top: 0;
+}
+.lp__foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-top: 24px;
+  padding-bottom: 40px;
+  color: var(--edd-mute);
+  font-size: 13px;
+  border-top: 1px solid var(--edd-line);
+  position: relative;
+  z-index: 20;
+}
+.lp__foot a:hover {
+  color: #fff;
+}
+
+.lp .form-submit,
+.final-cta .form-submit {
+  background: var(--edd-accent);
+  color: var(--edd-accent-ink);
+  border-radius: 999px;
+  font-weight: 700;
+}
+.lp .form-submit:hover:not(:disabled),
+.final-cta .form-submit:hover:not(:disabled) {
+  background: var(--edd-accent-hover);
+}

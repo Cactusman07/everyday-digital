@@ -1,0 +1,133 @@
+/* Case study pages (/projects/<slug> for the built-in case studies):
+   components/showcase/CaseStudy.tsx. .case__list is also used on the landing
+   pages. */
+
+.case__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--edd-mute);
+  font-size: 14px;
+  text-decoration: none;
+  margin-bottom: 28px;
+}
+.case__back svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s;
+}
+.case__back:hover {
+  color: #fff;
+}
+.case__back:hover svg {
+  transform: translateX(-3px);
+}
+.case__own {
+  margin-left: 10px;
+  vertical-align: middle;
+}
+.case__title {
+  font-size: clamp(42px, 8.5vw, 120px);
+}
+.case__summary {
+  max-width: 60ch;
+  font-size: clamp(17px, 1.6vw, 21px);
+}
+.case__hero {
+  position: relative;
+  margin: 40px auto 0;
+  max-width: var(--edd-maxw);
+  padding: 0 var(--edd-gutter);
+  aspect-ratio: 16 / 8;
+}
+.case__hero-img {
+  object-fit: cover;
+  object-position: top;
+  border-radius: 16px;
+  border: 1px solid var(--edd-line);
+}
+.case__facts {
+  list-style: none;
+  margin: 36px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+}
+.case__facts li {
+  border: 1px solid var(--edd-line);
+  border-radius: 12px;
+  padding: 16px 18px;
+  background: rgba(0, 0, 0, 0.35);
+}
+.case__facts small {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--edd-mute);
+  margin-bottom: 8px;
+}
+.case__facts b {
+  font-weight: 600;
+  font-size: 14.5px;
+  line-height: 1.45;
+}
+.case__fact--result b {
+  font-family: var(--font-system);
+  font-weight: 900;
+  font-size: 30px;
+  letter-spacing: -0.03em;
+  color: var(--edd-accent);
+  line-height: 1;
+}
+.case__cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 36px;
+  margin-top: 44px;
+}
+@media (width < 768px) {
+  .case__cols {
+    grid-template-columns: 1fr;
+  }
+}
+.case__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 12px;
+  border-top: 1px solid var(--edd-line);
+}
+.case__list li {
+  padding: 12px 0 0;
+  border-bottom: 1px solid var(--edd-line);
+  padding-bottom: 12px;
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.88);
+}
+.case__list li::before {
+  content: "— ";
+  color: var(--edd-accent);
+}
+.case__body {
+  margin-top: 44px;
+  max-width: 760px;
+}
+.case__body .prose-edd ul,
+.case__body .prose-edd ol {
+  color: rgba(255, 255, 255, 0.85);
+}
+.case__quote {
+  margin-top: 44px;
+}
+.case__related {
+  margin-top: 64px;
+  padding-top: 44px;
+  border-top: 1px solid var(--edd-line);
+}
+.case__related-title {
+  font-size: clamp(30px, 4.6vw, 60px);
+}

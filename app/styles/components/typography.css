@@ -1,0 +1,31 @@
+/* Shared type styles: the small-caps .eyebrow label, the poster-style
+   .display heading (Anton capitals) and the .lede intro paragraph. Used across
+   the home, case study, landing and showcase pages. */
+
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--edd-mute);
+  margin: 0 0 12px;
+  font-weight: 500;
+}
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: -0.005em;
+  line-height: 0.92;
+  font-size: clamp(38px, 7vw, 96px);
+  text-shadow: none;
+  margin: 0 0 18px;
+}
+
+.lede {
+  color: var(--edd-mute);
+  max-width: 56ch;
+  font-size: clamp(16px, 1.4vw, 18px);
+  line-height: 1.6;
+  margin: 0 0 8px;
+}

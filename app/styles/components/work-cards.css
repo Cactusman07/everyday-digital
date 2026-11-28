@@ -1,0 +1,96 @@
+/* Case study cards: screenshot, sector and summary, in a 2- or 3-column grid.
+   components/shared/CaseStudyCards.tsx (case study "related work"). */
+
+.work-grid {
+  list-style: none;
+  margin: 30px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+@media (width < 768px) {
+  .work-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.work-card__link {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  border: 1px solid var(--edd-line);
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  text-decoration: none;
+  height: 100%;
+  transition:
+    transform 0.35s var(--edd-ease),
+    border-color 0.3s;
+}
+.work-card__link:hover {
+  transform: translateY(-6px);
+  border-color: var(--edd-accent);
+  color: #fff;
+}
+.work-card--own .work-card__link {
+  border-color: rgba(223, 255, 62, 0.45);
+}
+.work-card__media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background: repeating-linear-gradient(
+    135deg,
+    #17171b 0 11px,
+    #101014 11px 22px
+  );
+  overflow: hidden;
+}
+.work-card__img {
+  object-fit: cover;
+  object-position: top;
+  transition: transform 0.6s var(--edd-ease);
+}
+.work-card__link:hover .work-card__img {
+  transform: scale(1.03);
+}
+.work-card__body {
+  padding: 18px 20px 20px;
+}
+.work-card__sector {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--edd-mute);
+}
+.work-card h3 {
+  font-family: var(--font-system);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  font-size: clamp(22px, 2.4vw, 30px);
+  line-height: 1;
+  text-shadow: none;
+  margin: 8px 0 8px;
+}
+.work-card p {
+  color: var(--edd-mute);
+  font-size: 14.5px;
+  line-height: 1.55;
+  margin: 0 0 14px;
+}
+
+.work-grid--3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+@media (width < 1024px) {
+  .work-grid--3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .work-card__link {
+    transition: none;
+  }
+}

@@ -1,0 +1,88 @@
+/* Route-change loading screen: logo with a sliding shine and three pulsing
+   dots. components/layout/LoadingScreen.tsx (app/loading.tsx). */
+
+#logo-container {
+  overflow: hidden;
+  position: relative;
+}
+
+#splash-logo {
+  width: 100%;
+}
+#logo-container:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100px;
+  width: 20px;
+  height: 100%;
+  transform: skewX(-30deg);
+  animation-name: slide;
+  animation-duration: 4s;
+  animation-timing-function: ease-in-out;
+  animation-delay: 2s;
+  animation-iteration-count: infinite;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.2) 0%,
+    rgba(0, 0, 0, 0.35) 77%,
+    rgba(0, 0, 0, 0.7) 92%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+@keyframes slide {
+  0% {
+    left: -100px;
+    top: 0;
+  }
+  20% {
+    left: 290px;
+    top: 0;
+  }
+  100% {
+    left: 290px;
+    top: 0;
+  }
+}
+
+.loading {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+.loading__dot {
+  animation: dot ease-in-out 1s infinite;
+  background-color: grey;
+  display: inline-block;
+  border-radius: 50%;
+  height: 10px;
+  margin: 5px;
+  width: 10px;
+}
+
+.loading__dot:nth-of-type(2) {
+  animation-delay: 0.3s;
+}
+
+.loading__dot:nth-of-type(3) {
+  animation-delay: 0.5s;
+}
+
+@keyframes dot {
+  0% {
+    background-color: grey;
+    transform: scale(1);
+  }
+  50% {
+    background-color: #fff;
+    transform: scale(1.3);
+  }
+  100% {
+    background-color: grey;
+    transform: scale(1);
+  }
+}

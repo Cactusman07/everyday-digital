@@ -1,50 +1,75 @@
-// On-demand revalidation endpoint. WordPress calls this when content is
-// published, updated or deleted (see wpTheme/mu-plugins/edd-revalidate.php),
-// and Next.js purges the matching cache tags so the change is live on the
-// next request — no waiting on the ISR timer, no redeploy.
+// On-demand revalidation. WordPress calls this when content is published,
+// updated or deleted (wpTheme/mu-plugins/edd-revalidate.php) and Next.js
+// purges the matching cache tags, so the change is live on the next request.
 //
-// Security: a shared secret in the Authorization header, compared in constant
-// time. Set REVALIDATE_SECRET in Vercel (Production + Preview) and the same
-// value in WordPress as EDD_REVALIDATE_SECRET.
+// Security: `Authorization: Bearer <REVALIDATE_SECRET>`, compared in constant
+// time. Set the same value in WordPress as EDD_REVALIDATE_SECRET.
+// See docs/DEPLOY-AND-REVALIDATE.md.
 
-import { revalidateTag, revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { NextResponse, type NextRequest } from "next/server";
-import { INDEXNOW_KEY, SITE } from "@/lib/site";
-import { timingSafeEqual } from "node:crypto";
-import { WP_TAGS, type WPTag } from "@/lib/wordpress";
+import { hasBearerSecret } from "@/lib/auth";
+import { INDEXNOW_KEY, SITE, absoluteUrl } from "@/lib/site";
+import {
+  ALL_CACHE_TAGS,
+  CONTENT_TYPES,
+  isRoutedType,
+  itemPath,
+  toContentType,
+  type CacheTag,
+  type ContentType,
+} from "@/lib/wordpress/content-types";
 
 export const runtime = "nodejs";
 
-// WordPress post_type → cache tag(s) to purge. "page" also purges nav (pages
-// drive the menu) — covered by the same tag.
-const TYPE_TO_TAGS: Record<string, WPTag[]> = {
-  post: [WP_TAGS.posts],
-  page: [WP_TAGS.pages],
-  project: [WP_TAGS.projects],
-  projects: [WP_TAGS.projects],
-  service: [WP_TAGS.services],
-  services: [WP_TAGS.services],
-  team: [WP_TAGS.teams],
-  teams: [WP_TAGS.teams],
-  testimonial: [WP_TAGS.testimonials],
-  testimonials: [WP_TAGS.testimonials],
-};
-
-const ALL_TAGS = Object.values(WP_TAGS);
-
-function secretsMatch(provided: string | null, expected: string): boolean {
-  if (!provided) return false;
-  const a = Buffer.from(provided);
-  const b = Buffer.from(expected);
-  if (a.length !== b.length) return false;
-  return timingSafeEqual(a, b);
+/** What WordPress sends. An empty body purges everything. */
+interface RevalidateBody {
+  /** Canonical content type, e.g. "post" (see CONTENT_TYPES). */
+  type?: string;
+  /** The item's slug, for a path-level purge of its own page. */
+  slug?: string;
+  /** A page's uri, e.g. "/about/". */
+  uri?: string;
+  /** Purge every tag (the "Refresh live site" admin-bar button). */
+  all?: boolean;
 }
 
-interface RevalidateBody {
-  type?: string; // WordPress post_type
-  slug?: string; // optional, used for path revalidation
-  uri?: string; // optional, WordPress page uri like "/about/"
-  all?: boolean; // purge everything
+/** The paths whose rendered HTML changes along with this item. */
+function pathsFor(type: ContentType | undefined, body: RevalidateBody) {
+  const paths = new Set<string>(["/", "/sitemap.xml"]);
+  if (body.uri) paths.add(body.uri.replace(/\/$/, "") || "/");
+  if (body.slug && type && isRoutedType(type))
+    paths.add(itemPath(type, body.slug));
+  return paths;
+}
+
+/**
+ * Tells IndexNow search engines (Bing and friends) about changed pages.
+ * Production only, so preview deployments never submit URLs.
+ *
+ * @returns The IndexNow HTTP status, "skipped", or an error message.
+ */
+async function submitToIndexNow(paths: Set<string>): Promise<number | string> {
+  if (process.env.VERCEL_ENV !== "production") return "skipped";
+  const urlList = [...paths]
+    .filter((p) => p !== "/sitemap.xml")
+    .map((p) => absoluteUrl(p));
+  try {
+    const res = await fetch("https://api.indexnow.org/indexnow", {
+      method: "POST",
+      headers: { "Content-Type": "application/json; charset=utf-8" },
+      body: JSON.stringify({
+        host: SITE.domain,
+        key: INDEXNOW_KEY,
+        keyLocation: absoluteUrl(`/${INDEXNOW_KEY}.txt`),
+        urlList,
+      }),
+      signal: AbortSignal.timeout(5000),
+    });
+    return res.status;
+  } catch (e) {
+    return e instanceof Error ? e.message : "failed";
+  }
 }
 
 export async function POST(req: NextRequest) {
@@ -55,11 +80,7 @@ export async function POST(req: NextRequest) {
       { status: 500 },
     );
   }
-
-  const auth = req.headers.get("authorization");
-  const bearer = auth?.startsWith("Bearer ") ? auth.slice(7) : null;
-  const headerSecret = req.headers.get("x-revalidate-secret");
-  if (!secretsMatch(bearer ?? headerSecret, expected)) {
+  if (!hasBearerSecret(req, expected)) {
     return NextResponse.json(
       { ok: false, error: "Unauthorized" },
       { status: 401 },
@@ -70,78 +91,26 @@ export async function POST(req: NextRequest) {
   try {
     body = (await req.json()) as RevalidateBody;
   } catch {
-    // empty body is fine — treated as "revalidate everything"
+    // An empty body is fine: it means "revalidate everything"
   }
 
-  const revalidated: string[] = [];
+  const type = body.all ? undefined : toContentType(body.type);
+  // Unknown or missing type: purge everything rather than miss something
+  const tags: CacheTag[] = type ? [CONTENT_TYPES[type].tag] : ALL_CACHE_TAGS;
+  for (const tag of tags) revalidateTag(tag, "max");
 
-  if (body.all || !body.type) {
-    for (const tag of ALL_TAGS) {
-      revalidateTag(tag, "max");
-      revalidated.push(tag);
-    }
-  } else {
-    const tags = TYPE_TO_TAGS[body.type.toLowerCase()] ?? ALL_TAGS;
-    for (const tag of tags) {
-      revalidateTag(tag, "max");
-      revalidated.push(tag);
-    }
-  }
-
-  // Path-level purges for the obvious pages. Tag purges already cover these,
-  // but revalidating the path too makes the change visible on the very next
-  // request rather than the one after.
-  const paths = new Set<string>(["/", "/sitemap.xml"]);
-  if (body.uri) paths.add(body.uri.replace(/\/$/, "") || "/");
-  if (body.slug && body.type) {
-    const t = body.type.toLowerCase();
-    if (t === "post") paths.add(`/blog/${body.slug}`);
-    if (t === "project" || t === "projects")
-      paths.add(`/projects/${body.slug}`);
-    if (t === "service" || t === "services")
-      paths.add(`/services/${body.slug}`);
-  }
+  // Tag purges already cover these paths, but revalidating them too makes the
+  // change visible on the very next request rather than the one after.
+  const paths = pathsFor(type, body);
   for (const p of paths) revalidatePath(p);
 
-  // Tell IndexNow search engines (Bing and friends) about the changed pages.
-  // Production only, so preview deployments never submit URLs.
-  let indexnow: number | string = "skipped";
-  if (process.env.VERCEL_ENV === "production" && !body.all && body.type) {
-    const urlList = [...paths]
-      .filter((p) => p !== "/sitemap.xml")
-      .map((p) => `${SITE.url}${p === "/" ? "" : p}`);
-    try {
-      const res = await fetch("https://api.indexnow.org/indexnow", {
-        method: "POST",
-        headers: { "Content-Type": "application/json; charset=utf-8" },
-        body: JSON.stringify({
-          host: new URL(SITE.url).host,
-          key: INDEXNOW_KEY,
-          keyLocation: `${SITE.url}/${INDEXNOW_KEY}.txt`,
-          urlList,
-        }),
-        signal: AbortSignal.timeout(5000),
-      });
-      indexnow = res.status;
-    } catch (e) {
-      indexnow = e instanceof Error ? e.message : "failed";
-    }
-  }
+  const indexnow = type ? await submitToIndexNow(paths) : "skipped";
 
   return NextResponse.json({
     ok: true,
-    revalidated,
+    revalidated: tags,
     paths: [...paths],
     indexnow,
     at: new Date().toISOString(),
-  });
-}
-
-// Convenience for a quick browser check that the route is deployed. Does not
-// reveal whether the secret is set.
-export async function GET() {
-  return NextResponse.json({
-    ok: true,
-    usage: "POST with Authorization: Bearer <secret>",
   });
 }

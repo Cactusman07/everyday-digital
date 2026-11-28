@@ -1,0 +1,87 @@
+/* Element defaults: page background, headings, paragraphs and inline links.
+   Applies site-wide (app/layout.tsx). */
+
+body {
+  color: #fff;
+  background: #000;
+  background-image: linear-gradient(115deg, #000 40%, var(--edd-red));
+  background-attachment: fixed;
+}
+
+#root {
+  z-index: 20;
+  position: relative;
+}
+
+/* Headings are wrapped in :where() so any class rule overrides them */
+:where(h1, h2, h3, h4, h5) {
+  font-family: var(--font-script);
+  margin: 0.5rem 0;
+}
+
+:where(h2, h3, h4, h5) {
+  text-shadow: var(--color-accent) 1px 1px 0px;
+}
+
+:where(h2) {
+  font-size: 3.5rem;
+  letter-spacing: 2px;
+  line-height: 4rem;
+}
+:where(h3) {
+  font-size: 2.5rem;
+  letter-spacing: 1.6px;
+  font-weight: 400;
+  line-height: 2.8rem;
+}
+:where(h4) {
+  font-size: 2rem;
+  letter-spacing: 1.2px;
+  line-height: 2.2rem;
+}
+
+a:hover {
+  color: var(--color-accent);
+}
+
+p {
+  margin-bottom: 12px;
+}
+
+/* Inline links in copy: underline bar that fills with the rainbow on hover */
+p a {
+  text-decoration: none;
+  color: #fff;
+  position: relative;
+  font-weight: 500;
+}
+
+p a::before {
+  content: "";
+  background-color: color-mix(in srgb, var(--color-accent) 75%, transparent);
+  position: absolute;
+  left: 0;
+  bottom: 0px;
+  width: 100%;
+  height: 2px;
+  z-index: -1;
+  transition: all 0.3s ease-in-out;
+}
+
+p a:hover {
+  color: #fff;
+}
+
+p a:hover::before {
+  bottom: 0;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--edd-pink),
+    var(--edd-violet),
+    var(--edd-indigo),
+    var(--color-accent),
+    var(--edd-green)
+  );
+  opacity: 0.8;
+}

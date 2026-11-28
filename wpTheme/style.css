@@ -1,7 +1,7 @@
 /*
-Theme Name: Every Day Digital
-Author: Sam Muir
-Description: A custom theme for Every Day Digital
-Version: 2.0.3
-Tags: React, WordPress, Docker, Webpack, Theme Development
+Theme Name:  Every Day Digital
+Author:      Sam Muir
+Description: Headless theme for Every Day Digital. Registers the custom post types (Projects, Team, Services, Testimonials) that the Next.js front end reads through WPGraphQL. Requires the WPGraphQL plugin.
+Version:     2.0.3
+Text Domain: everyday-digital
 */

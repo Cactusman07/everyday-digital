@@ -1,11 +1,9 @@
-// Landing-page shell. The root layout still wraps this (gradients, fonts,
-// schema), but HomeHero only renders the full hero on "/" and the nav lives in
-// HomeHero's menuSlot — so on /lp/* the page gets gradients + small logo only.
-// This layout just adds the lp class hook and hides the global menu via CSS.
+// Landing pages: no site header or menu, one job per page. Each page draws its
+// own minimal header (app/lp/[slug]/page.tsx).
 export default function LandingLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <div className="lp-shell">{children}</div>;
+  return <div id="root">{children}</div>;
 }

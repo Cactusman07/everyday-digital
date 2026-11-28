@@ -1,0 +1,71 @@
+/* Inner page shell: the content column (.page-wrap on WordPress pages, .show
+   on showcase pages), the intro paragraph and the page header with its script
+   title and colour bar. components/pages/WordPressPage.tsx, PageHeader.tsx,
+   components/shared/ScriptTitle.tsx, components/showcase/ItemShowcase.tsx. */
+
+.page-wrap,
+.show {
+  position: relative;
+  z-index: 0;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: clamp(40px, 8vh, 90px) var(--edd-gutter) 60px;
+}
+.page-intro {
+  max-width: 62ch;
+  font-size: clamp(18px, 1.6vw, 23px);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.82);
+  margin: -10px 0 clamp(28px, 5vh, 52px);
+}
+.page-intro--small {
+  font-size: 16px;
+  color: var(--edd-mute);
+}
+
+.page-head {
+  margin: 0 0 clamp(24px, 4vw, 44px);
+}
+.page-head .eyebrow {
+  margin-bottom: 4px;
+}
+.page-title {
+  font-family: var(--font-script);
+  font-weight: 400;
+  font-size: clamp(46px, 8vw, 120px);
+  line-height: 1.02;
+  letter-spacing: 0.5px;
+  text-shadow: none;
+  margin: 0;
+}
+/* The script font has no numerals, so digits in titles use the display font */
+.page-num {
+  font-family: var(--font-display);
+  font-size: 0.78em;
+  letter-spacing: 0.01em;
+}
+.page-head::after {
+  content: "";
+  display: block;
+  width: min(220px, 40%);
+  height: 4px;
+  border-radius: 4px;
+  margin-top: 18px;
+  background: var(--edd-rainbow);
+}
+/* Inline text link in page intros (contact details, projects page) */
+.projects-cta-link {
+  color: #a89cf7;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.projects-cta-link:hover {
+  text-decoration: underline;
+}
+
+/* Tints a white icon image to the accent blue (ServiceGrid.tsx) */
+.content-icon-tint {
+  filter: invert(62%) sepia(57%) saturate(553%) hue-rotate(168deg)
+    brightness(103%) contrast(97%);
+}

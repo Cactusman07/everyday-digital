@@ -1,0 +1,11 @@
+# Check out text files with LF so Prettier (endOfLine: "lf") doesn't rewrite
+# every file on Windows, where core.autocrlf=true would otherwise produce CRLF.
+* text=auto eol=lf
+
+*.eot binary
+*.ttf binary
+*.woff binary
+*.woff2 binary
+*.png binary
+*.jpg binary
+*.ico binary

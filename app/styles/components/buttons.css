@@ -1,0 +1,54 @@
+/* Pill buttons (.btn, .btn--accent, .btn--lg) and the row that holds them
+   (.section-actions). Used on the home, about, case study, landing and
+   showcase pages and in CallToActionBand.tsx. */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 13px 22px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 15px;
+  border: 1px solid var(--edd-line);
+  color: #fff;
+  text-decoration: none;
+  transition:
+    transform 0.2s var(--edd-ease),
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+  cursor: pointer;
+}
+.btn:hover {
+  transform: translateY(-2px);
+  background: #fff;
+  color: var(--edd-accent-ink);
+  border-color: #fff;
+}
+.btn--accent {
+  background: var(--edd-accent);
+  border-color: var(--edd-accent);
+  color: var(--edd-accent-ink);
+}
+.btn--accent:hover {
+  background: var(--edd-accent-hover);
+  border-color: var(--edd-accent-hover);
+  color: var(--edd-accent-ink);
+}
+.btn--lg {
+  padding: 16px 28px;
+  font-size: 16px;
+}
+.section-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
+}

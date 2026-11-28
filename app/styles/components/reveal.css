@@ -1,0 +1,40 @@
+/* Scroll-in animations. .reveal staggers its children in
+   (components/shared/Reveal.tsx adds .in); [data-reveal] fades a single
+   element in (HomeScrollEffects.tsx adds .is-in). */
+
+.reveal > * {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.65s var(--edd-ease),
+    transform 0.65s var(--edd-ease);
+  transition-delay: calc(var(--i, 0) * var(--stagger, 70ms));
+}
+.reveal.in > * {
+  opacity: 1;
+  transform: none;
+}
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(36px);
+  transition:
+    opacity 0.9s var(--edd-ease),
+    transform 0.9s var(--edd-ease);
+}
+[data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal > * {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}

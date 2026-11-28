@@ -1,0 +1,26 @@
+/* LinkedIn, Facebook and Instagram icon links
+   (components/layout/SocialLinks.tsx) in the home hero, the menu panel and the
+   footer. */
+
+.social-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid var(--edd-line-strong);
+  color: #fff;
+  transition:
+    color 0.25s,
+    border-color 0.25s,
+    transform 0.25s;
+}
+.social-icon svg {
+  width: 24px;
+  height: 24px;
+}
+.social-icon:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
+}

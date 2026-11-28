@@ -1,0 +1,19 @@
+/* Large pull quote with attribution (components/shared/PullQuote.tsx). */
+
+.quote-lead {
+  margin: 18px 0 26px;
+  max-width: 34ch;
+}
+.quote-lead p {
+  font-family: var(--font-system);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  font-size: clamp(22px, 3.2vw, 42px);
+  line-height: 1.02;
+  margin: 0 0 14px;
+}
+.quote-lead footer {
+  color: var(--edd-mute);
+  font-size: 14px;
+}

@@ -1,0 +1,156 @@
+/* Contact form and its success state (components/shared/ContactForm.tsx),
+   used on /contact and on the landing pages. Fields show focus with a border
+   colour instead of an outline. */
+
+label:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 0px;
+}
+
+.contact-form {
+  margin-top: 2rem;
+}
+
+.contact-form .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (width < 640px) {
+  .contact-form .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.contact-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  margin-bottom: 1rem;
+}
+
+.contact-form label {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.55);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin: 0;
+}
+
+.form-optional {
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.3);
+  text-transform: none;
+  letter-spacing: normal;
+  font-size: 11px;
+}
+
+.contact-form input,
+.contact-form textarea,
+.contact-form select {
+  width: 100%;
+  max-width: 100%;
+  margin-top: 0;
+  padding: 0.625rem 0.875rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--edd-line);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus,
+.contact-form select:focus {
+  outline: none;
+  border-color: var(--edd-indigo);
+}
+
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.contact-form textarea {
+  height: auto;
+  resize: vertical;
+}
+
+.contact-form select option {
+  background: #1a1a1a;
+  color: #fff;
+}
+
+.form-submit {
+  width: 100%;
+  margin-top: 0.25rem;
+  padding: 0.75rem 2rem;
+  background: var(--edd-indigo);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.form-submit:hover:not(:disabled) {
+  background: var(--color-accent);
+}
+
+.form-submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.form-error {
+  color: #f87171;
+  font-size: 13px;
+  margin: 0 0 0.75rem;
+}
+
+.form-error a {
+  color: #f87171;
+  text-decoration: underline;
+}
+
+.form-note {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 12px;
+  text-align: center;
+  margin-top: 0.75rem;
+  margin-bottom: 0;
+}
+
+.contact-success {
+  padding: 3rem 0 2rem;
+  text-align: center;
+}
+
+.contact-success__icon {
+  width: 48px;
+  height: 48px;
+  color: var(--color-accent);
+  margin: 0 auto 1.25rem;
+  display: block;
+}
+
+.contact-success h2 {
+  color: var(--color-accent);
+  margin-bottom: 0.75rem;
+}
+
+.contact-success p {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 15px;
+}
+
+.contact-success a {
+  color: var(--color-accent);
+}

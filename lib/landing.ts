@@ -7,45 +7,64 @@
 //   "audit"     — problem-led, what we check, steps, FAQ, form
 //   "migration" — platform choice, what's included, steps, FAQ, form
 
+import type { FaqItem } from "./faq";
+import { PRICES, PRICE_COPY, dollars } from "./pricing";
+import type { ServiceSlug } from "./services";
+
 export type LandingLayout = "offer" | "audit" | "migration";
 
 export interface LandingPage {
   slug: string;
   layout: LandingLayout;
-  title: string; // <title> and H1
-  description: string; // meta description and sub-headline
+  /** <title> and H1. */
+  title: string;
+  /** Meta description and sub-headline. */
+  description: string;
   eyebrow: string;
-  price?: number; // NZD excl. GST, only when there's a published price
+  /** NZD excl. GST, only when there's a published price. Emitted as an Offer. */
+  price?: number;
   fineprint?: string;
-  proof: { value: string; label: string }[]; // three short proof points
+  /** Three short proof points under the hero. */
+  proof: { value: string; label: string }[];
   bullets: string[];
   steps?: { title: string; body: string }[];
-  faq: { q: string; a: string }[];
+  faq: FaqItem[];
   cta: string;
-  formService: string; // pre-selects the contact form's service dropdown
+  /** Pre-selects this service in the contact form. */
+  formService: ServiceSlug;
+  /**
+   * Lets search engines index the page. robots.txt doesn't block /lp/, so
+   * the noindex tag on the rest stays visible to crawlers.
+   */
   indexable?: boolean;
 }
 
-const HOSTING_FAQ = {
+const HOSTING_FAQ: FaqItem = {
   q: "What does hosting cost after launch?",
-  a: "Website hosting is $40 a month, including one hour of free updates each month, or pay annually and get two months free. eCommerce hosting is $50 a month. Prices exclude GST.",
+  a: PRICE_COPY.hosting,
 };
 
 export const LANDING_PAGES: LandingPage[] = [
   {
     slug: "wordpress-website",
     layout: "offer",
-    eyebrow: "WordPress website · from $1500 + GST",
-    title: "A simple WordPress website, designed and built, from $1500",
+    eyebrow: `WordPress website · from ${dollars(PRICES.website)} + GST`,
+    title: `A simple WordPress website, designed and built, from ${dollars(PRICES.website)}`,
     description:
       "A website designed around your business, built in WordPress so you can update it yourself. Auckland-based, working NZ-wide.",
-    price: 1500,
+    price: PRICES.website,
     fineprint:
       "Bigger sites, online stores and integrations are quoted at a fixed price after a free consultation.",
     proof: [
-      { value: "$1500", label: "+ GST for a simple WordPress site" },
+      {
+        value: dollars(PRICES.website),
+        label: "+ GST for a simple WordPress site",
+      },
       { value: "Fixed", label: "price, agreed before we start" },
-      { value: "$40/mo", label: "hosting with an hour of updates" },
+      {
+        value: `${dollars(PRICES.hostingMonthly)}/mo`,
+        label: "hosting with an hour of updates",
+      },
     ],
     bullets: [
       "A design built around your brand, not a stock template",
@@ -89,7 +108,7 @@ export const LANDING_PAGES: LandingPage[] = [
       },
     ],
     cta: "Start my website",
-    formService: "Website Design",
+    formService: "website-design",
   },
   {
     slug: "website-review",
@@ -140,7 +159,7 @@ export const LANDING_PAGES: LandingPage[] = [
       },
     ],
     cta: "Book my review",
-    formService: "Website Reviews",
+    formService: "website-reviews",
   },
   {
     slug: "online-store",
@@ -151,7 +170,10 @@ export const LANDING_PAGES: LandingPage[] = [
       "Shopify or WooCommerce, with payments, freight, GST and Google Shopping sorted, and connected to the systems you already use. We run an online store ourselves.",
     proof: [
       { value: "2", label: "platforms we specialise in" },
-      { value: "$50/mo", label: "eCommerce hosting" },
+      {
+        value: `${dollars(PRICES.ecommerceHostingMonthly)}/mo`,
+        label: "WordPress eCommerce hosting",
+      },
       { value: "Fixed", label: "price, agreed after a free chat" },
     ],
     bullets: [
@@ -192,7 +214,7 @@ export const LANDING_PAGES: LandingPage[] = [
       HOSTING_FAQ,
     ],
     cta: "Start my store",
-    formService: "eCommerce",
+    formService: "ecommerce",
   },
 ];
 

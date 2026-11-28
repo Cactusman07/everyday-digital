@@ -1,20 +1,23 @@
-wordpress
-node_modules
-dist
-build
-.next
-out
-
-playwright-report
-test-results
-
-.env.local
-.env.development.local
-.env.production.local
-.env.test.local
-
-# Full-page captures are large; keep only the hero crops in git
-public/images/work/*-full.png
-
-# TypeScript incremental build cache
+# Dependencies and build output
+/node_modules
+/.next
+/out
+/dist
+/build
 *.tsbuildinfo
+next-env.d.ts
+
+# Local WordPress (docker-compose.yml)
+/wordpress
+
+# Test output
+/playwright-report
+/test-results
+
+# Environment: commit .env.example only
+.env
+.env*.local
+
+# Tooling
+.vercel
+*.log

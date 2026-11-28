@@ -1,18 +1,24 @@
-// Landing pages for ads and social: /lp/<slug>. Defined in lib/landing.ts.
-// One job per page, one action, no nav distractions. noindex unless the entry
+// Landing pages for ads and social: /lp/<slug>, defined in lib/landing.ts.
+// One job per page, one action, no nav distractions; noindex unless the entry
 // opts in. UTM parameters pass through to the form's hidden context field so
 // the enquiry email says where the lead came from.
 
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import Link from "next/link";
 import Image from "next/image";
-import { LANDING_PAGES, getLandingPage } from "@/lib/landing";
-import { SITE, CASE_STUDIES } from "@/lib/site";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import JsonLd, { ORG_ID } from "@/components/seo/JsonLd";
+import CaseStudyCards from "@/components/shared/CaseStudyCards";
+import ContactForm from "@/components/shared/ContactForm";
+import FaqList from "@/components/shared/FaqList";
+import PullQuote from "@/components/shared/PullQuote";
+import Reveal from "@/components/shared/Reveal";
+import { CASE_STUDIES } from "@/lib/case-studies";
+import { LANDING_PAGES, getLandingPage, type LandingPage } from "@/lib/landing";
+import { pageMetadata } from "@/lib/seo";
+import { SITE, absoluteUrl, copyright, telHref } from "@/lib/site";
+import { parseTestimonial } from "@/lib/testimonials";
 import { getTestimonials, safe } from "@/lib/wordpress";
-import ContactForm from "@/components/ContactForm";
-import Reveal from "@/components/motion/Reveal";
-import JsonLd from "@/components/JsonLd";
 import logo from "@/public/images/EveryDayDigital_Logo_reversed.png";
 
 interface Props {
@@ -20,54 +26,57 @@ interface Props {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
+/** Query parameters copied into the enquiry's context field. */
+const TRACKED_PARAMS = [
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_content",
+];
+
+/** How many case studies the "Recent work" section shows. */
+const RECENT_WORK_COUNT = 2;
+
 export function generateStaticParams() {
   return LANDING_PAGES.map((l) => ({ slug: l.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
-  const lp = getLandingPage(slug);
+  const lp = getLandingPage((await params).slug);
   if (!lp) return {};
-  return {
+  return pageMetadata({
     title: lp.title,
     description: lp.description,
-    robots: lp.indexable
-      ? { index: true, follow: true }
-      : { index: false, follow: false },
-    alternates: { canonical: `/lp/${lp.slug}` },
-    openGraph: {
-      title: lp.title,
-      description: lp.description,
-      url: `/lp/${lp.slug}`,
-    },
-  };
+    path: `/lp/${lp.slug}`,
+    noindex: !lp.indexable,
+  });
 }
 
-function stripTags(html: string) {
-  return html
-    .replace(/<[^>]*>/g, "")
-    .replace(/\s+/g, " ")
-    .trim();
+/** "lp:<slug> | utm_source=…&utm_medium=…" for the enquiry email. */
+function enquiryContext(
+  lp: LandingPage,
+  query: Record<string, string | string[] | undefined>,
+) {
+  const utm = TRACKED_PARAMS.flatMap((k) => {
+    const v = query[k];
+    return typeof v === "string" ? [`${k}=${v}`] : [];
+  }).join("&");
+  return `lp:${lp.slug}${utm ? ` | ${utm}` : ""}`;
 }
 
-export default async function LandingPage({ params, searchParams }: Props) {
-  const { slug } = await params;
-  const lp = getLandingPage(slug);
+export default async function LandingPageRoute({
+  params,
+  searchParams,
+}: Props) {
+  const lp = getLandingPage((await params).slug);
   if (!lp) notFound();
 
-  const sp = await searchParams;
-  const utm = ["utm_source", "utm_medium", "utm_campaign", "utm_content"]
-    .map((k) => (typeof sp[k] === "string" ? `${k}=${sp[k]}` : null))
-    .filter(Boolean)
-    .join("&");
-  const context = `lp:${lp.slug}${utm ? ` | ${utm}` : ""}`;
-
-  const testimonials = await safe(getTestimonials);
-  const quote = testimonials[0];
-  const work = CASE_STUDIES.slice(0, 2);
+  const context = enquiryContext(lp, await searchParams);
+  const [first] = await safe(getTestimonials);
+  const quote = first && parseTestimonial(first);
 
   return (
-    <div className={`lp lp--${lp.layout}`}>
+    <div className="lp">
       {lp.price && (
         <JsonLd
           data={{
@@ -75,17 +84,22 @@ export default async function LandingPage({ params, searchParams }: Props) {
             "@type": "Offer",
             name: lp.title,
             description: lp.description,
-            price: lp.price,
-            priceCurrency: "NZD",
-            url: `${SITE.url}/lp/${lp.slug}`,
-            seller: { "@id": `${SITE.url}/#organization` },
+            // A starting price, excluding GST
+            priceSpecification: {
+              "@type": "PriceSpecification",
+              minPrice: lp.price,
+              priceCurrency: "NZD",
+              valueAddedTaxIncluded: false,
+            },
+            url: absoluteUrl(`/lp/${lp.slug}`),
+            seller: { "@id": ORG_ID },
           }}
         />
       )}
 
       {/* Minimal header: logo home-link only. No nav — one job per page. */}
       <header className="lp__head home-wrap">
-        <Link href="/" aria-label="Every Day Digital home">
+        <Link href="/" aria-label={`${SITE.name} home`}>
           <Image src={logo} alt="" className="w-12 sm:w-14" priority />
         </Link>
         <a href="#enquire" className="btn btn--accent">
@@ -102,10 +116,7 @@ export default async function LandingPage({ params, searchParams }: Props) {
             <a href="#enquire" className="btn btn--accent btn--lg">
               {lp.cta}
             </a>
-            <a
-              href={`tel:${SITE.phone.replace(/\s/g, "")}`}
-              className="btn btn--lg"
-            >
+            <a href={telHref()} className="btn btn--lg">
               Call {SITE.phone}
             </a>
           </div>
@@ -153,55 +164,21 @@ export default async function LandingPage({ params, searchParams }: Props) {
       {lp.layout !== "audit" && (
         <section className="home-section home-section--tight home-wrap">
           <p className="eyebrow">Recent work</p>
-          <Reveal className="work-grid" as="ul">
-            {work.map((c) => (
-              <li
-                key={c.slug}
-                className={`work-card ${c.ownBusiness ? "work-card--own" : ""}`}
-              >
-                <Link href={`/projects/${c.slug}`} className="work-card__link">
-                  <div className="work-card__media">
-                    <Image
-                      src={`/images/work/${c.slug}.png`}
-                      alt={`${c.client} website`}
-                      fill
-                      sizes="(max-width: 760px) 100vw, 50vw"
-                      className="work-card__img"
-                    />
-                  </div>
-                  <div className="work-card__body">
-                    <span className="work-card__sector">{c.sector}</span>
-                    <h3>{c.client}</h3>
-                    <p>{c.summary}</p>
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </Reveal>
+          <CaseStudyCards studies={CASE_STUDIES.slice(0, RECENT_WORK_COUNT)} />
         </section>
       )}
 
       {quote && (
         <section className="home-section home-section--tight home-wrap">
           <Reveal>
-            <blockquote className="quote-lead">
-              <p>“{stripTags(quote.content)}”</p>
-              <footer>— {quote.title}</footer>
-            </blockquote>
+            <PullQuote testimonial={quote} />
           </Reveal>
         </section>
       )}
 
       <section className="home-section home-section--tight home-wrap home-wrap--narrow">
         <p className="eyebrow">Questions</p>
-        <div className="faq">
-          {lp.faq.map((f) => (
-            <details key={f.q} className="faq__item">
-              <summary>{f.q}</summary>
-              <p>{f.a}</p>
-            </details>
-          ))}
-        </div>
+        <FaqList items={lp.faq} />
       </section>
 
       <section id="enquire" className="home-section home-wrap lp__form">
@@ -227,9 +204,9 @@ export default async function LandingPage({ params, searchParams }: Props) {
 
       <footer className="lp__foot home-wrap">
         <span>
-          © {new Date().getFullYear()} {SITE.legalName} · {SITE.city}
+          {copyright()} · {SITE.city}
         </span>
-        <Link href="/">everydaydigital.co.nz</Link>
+        <Link href="/">{SITE.domain}</Link>
       </footer>
     </div>
   );

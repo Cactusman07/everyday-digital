@@ -1,0 +1,20 @@
+/* Section wrappers: vertical rhythm (.home-section) and the centred content
+   column (.home-wrap). Used by FaqSection.tsx, CaseStudy.tsx and the landing
+   pages (app/lp/[slug]/page.tsx). */
+
+.home-section {
+  position: relative;
+  z-index: 20;
+  padding: clamp(48px, 7vw, 92px) 0;
+}
+.home-section--tight {
+  padding: clamp(28px, 4vw, 48px) 0 0;
+}
+.home-wrap {
+  max-width: var(--edd-maxw);
+  margin: 0 auto;
+  padding: 0 var(--edd-gutter);
+}
+.home-wrap--narrow {
+  max-width: 860px;
+}

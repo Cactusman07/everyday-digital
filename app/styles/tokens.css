@@ -1,0 +1,48 @@
+/* Design tokens: the site's custom properties (palette, lines, type, layout,
+   motion). The colours Tailwind utilities use (text-accent, text-light-blue)
+   are registered in the @theme block in globals.css; --color-accent there is
+   the brand blue used throughout these files. */
+
+:root {
+  /* Brand palette (lib/brand.ts ACCENT_PALETTE); the blue is --color-accent */
+  --edd-pink: #e34beb;
+  --edd-violet: #834beb;
+  --edd-indigo: #4b6ceb;
+  --edd-green: #9deb4b;
+  --edd-yellow: #ebe74b;
+  --edd-red: #eb4b4b;
+  --edd-rainbow: linear-gradient(
+    90deg,
+    var(--edd-pink),
+    var(--edd-violet),
+    var(--edd-indigo),
+    var(--color-accent),
+    var(--edd-green),
+    var(--edd-yellow),
+    var(--edd-red)
+  );
+
+  /* Buttons, pills and big numbers: white on the dark pages */
+  --edd-accent: #fff;
+  --edd-accent-hover: #e4e4e4;
+  --edd-accent-ink: #0b0b0d;
+  --edd-cream: #f4f1ea;
+  /* Headings in the white profile panel */
+  --edd-panel-heading: #4a90d9;
+
+  /* Text and hairlines on black */
+  --edd-mute: rgba(255, 255, 255, 0.62);
+  --edd-line: rgba(255, 255, 255, 0.13);
+  --edd-line-strong: rgba(255, 255, 255, 0.25);
+
+  /* Type: Anton capitals, the Bananas script, and the system UI stack */
+  --font-display: var(--font-anton), Impact, "Arial Narrow", sans-serif;
+  --font-script: var(--font-banana-italic), cursive;
+  --font-system:
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* Layout and motion */
+  --edd-gutter: clamp(18px, 4.5vw, 64px);
+  --edd-maxw: 1280px;
+  --edd-ease: cubic-bezier(0.2, 0.7, 0.3, 1);
+}

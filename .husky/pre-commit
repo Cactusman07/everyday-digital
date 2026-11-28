@@ -1,1 +1,25 @@
-pnpm run typecheck && pnpm exec lint-staged
+# Pre-commit: run the full tidy (audit fix + check, format, lint, typecheck,
+# test) and refuse the commit if anything needs a human decision.
+
+DEP_FILES="package.json pnpm-workspace.yaml pnpm-lock.yaml"
+deps_before=$(cat $DEP_FILES | git hash-object --stdin)
+
+# Fails on any remaining vulnerability, lint error, type error or test failure.
+pnpm run tidy
+status=$?
+
+# audit:fix may have added overrides and reinstalled. Don't commit without
+# them: review the change, stage it, and commit again.
+deps_after=$(cat $DEP_FILES | git hash-object --stdin)
+if [ "$deps_before" != "$deps_after" ]; then
+  echo ""
+  echo "pre-commit: audit:fix changed $DEP_FILES."
+  echo "Review the new overrides (git diff), stage them, and commit again."
+  exit 1
+fi
+
+[ "$status" -eq 0 ] || exit "$status"
+
+# tidy formats files in place. Re-stage the files that are already staged so the
+# commit contains the formatted versions; unstaged files are left alone.
+git update-index --again

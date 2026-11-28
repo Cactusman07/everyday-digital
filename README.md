@@ -1,28 +1,34 @@
 # Every Day Digital — Next.js + Headless WordPress
 
-A modern, server-rendered website for [Every Day Digital](https://everydaydigital.co.nz), built with Next.js (App Router), TypeScript, Tailwind CSS, and a headless WordPress backend served via Docker.
-
----
-
-## Prerequisites
-
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (includes Docker Compose)
-- [Node.js](https://nodejs.org/) (v18 or higher)
-- [pnpm](https://pnpm.io/installation)
-
----
+The website for [Every Day Digital](https://everydaydigital.co.nz): a server-rendered Next.js (App Router) site in TypeScript and Tailwind CSS, with WordPress as a headless CMS.
 
 ## Architecture
 
-Next.js runs as a standalone server on port 3000. WordPress runs in Docker as a headless CMS — content is managed in the WordPress admin and fetched via WPGraphQL at build time and on request (ISR with 60-second revalidation). WordPress no longer serves any frontend HTML.
-
 ```
-Browser → Next.js (port 3000) → WordPress GraphQL API (port 8181)
+Browser → Next.js on Vercel → WPGraphQL on WordPress (cms.everydaydigital.co.nz)
 ```
 
----
+- WordPress holds the content: pages, posts, projects, services, team and testimonials. It serves no front-end HTML.
+- Next.js fetches it over WPGraphQL. Pages are pre-rendered and cached by content type.
+- When content changes, a WordPress must-use plugin calls `/api/revalidate` and the change is live on the next request. A 5-minute timer is the fallback. See [docs/DEPLOY-AND-REVALIDATE.md](docs/DEPLOY-AND-REVALIDATE.md).
+- New blog posts and projects are shared to Facebook, Instagram and LinkedIn by `/api/social`. See [docs/SOCIAL-AUTOMATION.md](docs/SOCIAL-AUTOMATION.md).
 
-## Local URLs
+Facts that need to be exact live in code under `lib/`: prices, services, case studies, the FAQ and contact details.
+
+## Prerequisites
+
+- [Node.js](https://nodejs.org/) 20.9 or later (CI uses 24)
+- [pnpm](https://pnpm.io/installation)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/), for local WordPress
+
+## First-time setup
+
+1. `pnpm install`
+2. `cp .env.example .env.local` and fill in the values. To work against the live CMS instead of a local one, set `WORDPRESS_GRAPHQL_URL=https://cms.everydaydigital.co.nz/graphql` and skip steps 3–5.
+3. `pnpm run wp:start` starts WordPress, MariaDB and phpMyAdmin. WordPress files are stored in `wordpress/`.
+4. Open http://localhost:8181, run the installer, then install and activate the **WPGraphQL** plugin.
+5. Under Appearance → Themes, activate **Every Day Digital**. It registers the Projects, Team, Services and Testimonials post types. The mu-plugins in `wpTheme/mu-plugins/` are mounted automatically.
+6. `pnpm run dev` and open http://localhost:3000.
 
 | Service    | URL                   |
 | ---------- | --------------------- |
@@ -31,165 +37,91 @@ Browser → Next.js (port 3000) → WordPress GraphQL API (port 8181)
 | phpMyAdmin | http://localhost:8180 |
 | MariaDB    | localhost:3306        |
 
----
+## Scripts
 
-## First-Time Setup
+| Script                | What it does                                                          |
+| --------------------- | --------------------------------------------------------------------- |
+| `pnpm run dev`        | Dev server with hot reload                                            |
+| `pnpm run build`      | Production build                                                      |
+| `pnpm start`          | Serve the production build on port 3000                               |
+| `pnpm run lint`       | ESLint                                                                |
+| `pnpm run lint:php`   | `php -l` on the WordPress theme and plugins (skipped without PHP)     |
+| `pnpm run typecheck`  | `next typegen` (route and image types), then `tsc --noEmit`           |
+| `pnpm run format`     | Prettier, writing changes (`format:check` only reports)               |
+| `pnpm test`           | Vitest unit tests (`test:watch` to re-run on save)                    |
+| `pnpm run test:e2e`   | Playwright smoke tests (starts the dev server; needs a reachable CMS) |
+| `pnpm run check`      | lint, lint:php, typecheck, test                                       |
+| `pnpm run audit`      | `pnpm audit`; fails on any known vulnerability                        |
+| `pnpm run audit:fix`  | Adds pnpm overrides for vulnerable dependencies, then installs        |
+| `pnpm run tidy`       | audit:fix, audit, format, check (what the pre-commit hook runs)       |
+| `pnpm run tidy:check` | audit, format:check, check (what CI runs, without writing files)      |
+| `pnpm run update`     | Update every dependency to its latest version                         |
+| `pnpm run wp:start`   | Start the WordPress containers                                        |
+| `pnpm run wp:stop`    | Stop them (data is kept)                                              |
+| `pnpm run wp:remove`  | Remove them (`wordpress/` and the database volume are kept)           |
 
-### 1. Install dependencies
+## Quality checks
 
-```bash
-pnpm install
-```
+- **Pre-commit hook** (Husky): runs `pnpm run tidy`, and the commit fails if anything needs attention:
+  - **Vulnerabilities:** a vulnerability that `audit:fix` can't fix.
+  - **Dependency changes:** `audit:fix` changed `package.json`, `pnpm-workspace.yaml` or `pnpm-lock.yaml`. Review the new overrides, stage them and commit again.
+  - **Checks:** a lint, type or test failure.
 
-### 2. Start WordPress containers
+  Formatting fixes are re-staged automatically. If you staged part of a file with `git add -p`, the rest of that file is staged too.
 
-```bash
-pnpm run wp:start
-```
+- **CI** (`.github/workflows/ci.yml`): `tidy:check` and a production build on every push and pull request to `main`, plus the Playwright smoke tests against a production build. It uses the live CMS unless the repository sets `WORDPRESS_GRAPHQL_URL`.
+- **Unit tests** sit next to the code they test (`*.test.ts`).
 
-This creates a `wordpress/` directory alongside `docker-compose.yml` where WordPress files are stored.
-
-### 3. Fix Docker file permissions
-
-Find and enter the WordPress container:
-
-```bash
-docker ps
-docker exec -it <container_id> /bin/bash
-chown -R root:root /var/www/html
-exit
-```
-
-### 4. Complete WordPress installation
-
-Navigate to **http://localhost:8181** and follow the setup wizard.
-
-### 5. Install the WPGraphQL plugin
-
-1. Log in at **http://localhost:8181/wp-admin**
-2. Go to **Plugins → Add New**
-3. Search for **WPGraphQL** and install + activate it
-
-### 6. Activate the theme
-
-1. Go to **Appearance → Themes**
-2. Activate the **Starter Theme** (registers custom post types: Projects, Team, Services, Testimonials)
-
-### 7. Start the Next.js dev server
-
-```bash
-pnpm run dev
-```
-
-Open **http://localhost:3000** — the site will hot-reload on file changes.
-
----
-
-## Daily Development
-
-```bash
-pnpm run wp:start   # Start WordPress containers
-pnpm run dev        # Start Next.js dev server
-```
-
----
-
-## Stopping & Removing Containers
-
-```bash
-pnpm run wp:stop    # Stop containers (preserves data)
-pnpm run wp:remove  # Remove containers (preserves wordpress/ volume)
-docker-compose down -v  # Remove everything including database volume
-```
-
----
-
-## Available Scripts
-
-| Script                | Description                              |
-| --------------------- | ---------------------------------------- |
-| `pnpm run dev`        | Start Next.js dev server with hot reload |
-| `pnpm run build`      | Production build (SSG + ISR)             |
-| `pnpm start`          | Serve production build on port 3000      |
-| `pnpm run lint`       | Run Next.js ESLint                       |
-| `pnpm test`           | Run Vitest test suite                    |
-| `pnpm run test:watch` | Run Vitest in watch mode                 |
-| `pnpm run test:e2e`   | Run Playwright E2E tests                 |
-| `pnpm run wp:start`   | Start Docker containers                  |
-| `pnpm run wp:stop`    | Stop Docker containers                   |
-| `pnpm run wp:remove`  | Remove Docker containers                 |
-
----
-
-## Testing
-
-**Unit tests** use [Vitest](https://vitest.dev/) with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/). **E2E tests** use [Playwright](https://playwright.dev/) against a running dev server.
-
-Pre-commit hooks via [Husky](https://typicode.github.io/husky/) + [lint-staged](https://github.com/lint-staged/lint-staged) automatically run ESLint and related unit tests on every commit.
-
-```bash
-pnpm test           # Run unit tests once
-pnpm run test:watch # Run unit tests in watch mode
-pnpm run test:e2e   # Run E2E tests (starts dev server automatically)
-```
-
----
-
-## Project Structure
+## Project structure
 
 ```
-everyday-digital/
-├── app/                        # Next.js App Router pages
-│   ├── layout.tsx              # Root layout (HTML shell, nav, hero, SEO metadata)
-│   ├── page.tsx                # Home page
-│   ├── loading.tsx             # Route transition loading UI
-│   ├── not-found.tsx           # 404 page
-│   ├── globals.css             # Global styles + Tailwind
-│   ├── sitemap.ts              # Dynamic sitemap generation
-│   ├── robots.ts               # robots.txt configuration
-│   ├── [slug]/                 # Dynamic WordPress pages (about, blog, etc.)
-│   ├── blog/[slug]/            # Individual blog posts
-│   ├── projects/[slug]/        # Individual projects
-│   └── services/[slug]/        # Individual services
-├── components/                 # React components
-├── lib/
-│   ├── wordpress.ts            # GraphQL data-fetching functions
-│   ├── queries.ts              # GraphQL query strings
-│   └── types.ts                # TypeScript interfaces
-├── hooks/                      # Custom React hooks
-├── public/                     # Static assets (fonts, images)
-├── wpTheme/                    # WordPress theme (custom post type registration)
-├── docker-compose.yml          # WordPress + MariaDB + phpMyAdmin containers
-├── next.config.ts              # Next.js configuration
-├── e2e/                        # Playwright E2E tests
-├── vitest.config.ts            # Unit test configuration
-├── playwright.config.ts        # E2E test configuration
-├── eslint.config.mjs           # ESLint configuration
-└── tsconfig.json               # TypeScript configuration
+app/                       Routes (Next.js App Router)
+  layout.tsx               HTML shell, fonts, background, site-wide schema
+  (home)/                  Home page, with the full-screen hero layout
+  (site)/                  Everything else, with the logo-and-menu layout:
+    [slug]/                WordPress pages (about, services, projects, blog, contact, terms…)
+    blog|projects|services/[slug]/
+                           Detail pages and their share images (see lib/detail-routes.ts)
+  lp/[slug]/               Landing pages for ads (lib/landing.ts); no site header
+  api/revalidate/          On-demand cache purge, called by WordPress
+  api/social/              Social posting, called by WordPress
+  sitemap.ts, robots.ts, manifest.ts, feed.xml/, llms.txt/, llms-full.txt/, opengraph-image.tsx
+  globals.css              Tailwind entry point; imports app/styles/ in cascade order
+  styles/                  Site CSS: tokens, base, layout/, components/ and per-page files
+components/
+  layout/                  Header, hero, menu, footer, loading screen
+  home/                    Home page sections and their scroll effects
+  pages/                   WordPress page layout and its lists (services, projects, posts, team)
+  showcase/                Blog post, project, service and case-study pages
+  shared/                  Building blocks used across pages (testimonials, FAQ, contact form…)
+  seo/                     JSON-LD structured data
+lib/
+  wordpress/               WPGraphQL client, queries, types, sanitising, content-type map
+  detail-routes.ts         Shared logic for the blog, project and service routes
+  site.ts                  Business identity and contact details
+  pricing.ts               The published prices, and every sentence that quotes them
+  services.ts, case-studies.ts, faq.ts, pages.ts, landing.ts, navigation.ts
+  seo.ts, og.tsx, llms.ts  Page metadata, share images, llms.txt sections
+  html.ts, dates.ts, testimonials.ts, brand.ts, scroll.ts, auth.ts
+  social/                  Captions and channel posting for /api/social
+wpTheme/                   WordPress theme (post types) and mu-plugins (revalidate, social)
+e2e/                       Playwright smoke tests
+scripts/                   Screenshot capture and the PHP lint
+docs/                      Deployment, social automation, SEO audit, marketing plan
 ```
-
----
 
 ## SEO
 
-The site implements comprehensive SEO via the Next.js Metadata API:
+- Server-rendered HTML with per-page titles, descriptions, canonical URLs and Open Graph cards. `lib/seo.ts` keeps site name, locale and share image on every page.
+- A generated share image for every post, project and service.
+- JSON-LD:
+  - **Every page:** business (ProfessionalService/LocalBusiness), founder and website.
+  - **Detail pages:** BlogPosting, CreativeWork for projects, Service with Offers.
+  - **Listing pages:** Blog and CollectionPage.
+  - **Also:** FAQPage, OfferCatalog and breadcrumbs.
+- **Sitemap:** last-modified dates and images.
+- **Machine-readable versions:** an RSS feed, `/llms.txt` and `/llms-full.txt` for AI assistants.
+- **robots.txt:** blocks only `/api/` and sets an explicit AI-crawler policy.
+- **IndexNow:** pinged when content changes.
 
-- **Server-rendered HTML** — search engines see full page content, not an empty `<div>`
-- **Per-page metadata** — title, description, Open Graph, and Twitter cards generated from WordPress content
-- **Dynamic sitemap** — auto-generated from all WordPress pages, posts, projects, and services
-- **robots.txt** — allows crawlers, blocks `/wp-admin/` and `/wp-content/`
-- **JSON-LD structured data** — Organization, Article, and Service schemas
-- **ISR (Incremental Static Regeneration)** — pages are statically generated and revalidated every 60 seconds
-
----
-
-## Deployment
-
-Next.js runs as its own server — it does **not** output a WordPress theme. For production:
-
-```bash
-pnpm run build   # Generates optimized static pages + server bundle
-pnpm start       # Serves on port 3000
-```
-
-The build output lives in `.next/` (git-ignored). WordPress only needs to be reachable at the `WORDPRESS_GRAPHQL_URL` configured in `.env.local` for content fetching.
+The full audit is in [docs/SEO-GEO-AEO-AUDIT.md](docs/SEO-GEO-AEO-AUDIT.md).

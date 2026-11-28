@@ -7,7 +7,8 @@ page, with captions written by Claude from the item's own text.
 ```
 WordPress "Publish"  (first time only, or when a scheduled post goes live)
   → EDD Social Share mu-plugin waits ~60 seconds (WP-Cron), then
-  → POST https://everydaydigital.co.nz/api/social  { title, excerpt, text, url, image, tags }
+  → POST https://everydaydigital.co.nz/api/social
+      { type: "post" | "project", title, excerpt, text, url, image, tags }
   → Claude writes three captions (LinkedIn / Facebook / Instagram)
   → posts to each channel that's set up
   → result + captions saved on the WordPress item ("Share on social" box)
@@ -16,12 +17,18 @@ WordPress "Publish"  (first time only, or when a scheduled post goes live)
 - **Test mode is on until you set `SOCIAL_LIVE=1`.** Captions are written and shown
   in the WordPress box, nothing is posted. Publish a test post, read the captions,
   then switch it on.
+- `ANTHROPIC_API_KEY` is optional. Without it, or if Claude's call fails or
+  declines, simple template captions (title, excerpt and link) are
+  used, so posting never depends on the AI. `SOCIAL_MODEL` picks the model
+  (default `claude-sonnet-5-5`).
 - Untick **Share on social when published** in the editor to skip an item.
-- **Share again now** in the same box re-sends an item on demand.
-- Updates never re-post. Pages, services and testimonials are never shared.
+- **Share again now** in the same box re-sends an item straight away.
+- Updates never re-post. Only blog posts and projects are shared.
 - Each channel is optional: leave its variables out and it's skipped.
 - Instagram needs a **JPEG** featured image (its API rejects PNG/WebP). Projects
   with a PNG screenshot are posted to Facebook and LinkedIn only.
+- LinkedIn hashtags are real, clickable hashtags. The link preview uses the
+  featured image only when it's hosted on the CMS.
 
 ## 1. Facebook: turn the profile into a Page
 
@@ -85,8 +92,9 @@ Same pattern as the Home Office Space poster, so you can copy settings from ther
 1. Vercel → Settings → Environment Variables (Production): add everything in the
    "Social posting" block of `.env.example`. Leave `SOCIAL_LIVE` unset for now.
    Redeploy.
-2. Upload `wpTheme/mu-plugins/edd-social.php` to `wp-content/mu-plugins/` on
-   Cloudways.
+2. Upload `wpTheme/mu-plugins/edd-social.php` **and** `edd-common.php` (the
+   shared helpers it loads) to `wp-content/mu-plugins/` on Cloudways. Without
+   `edd-common.php` WordPress stops with a fatal error.
 3. Add to `wp-config.php`:
 
    ```php
@@ -106,14 +114,17 @@ Same pattern as the Home Office Space poster, so you can copy settings from ther
 
 The weekly blog idea routine is separate. For recurring posts (a service
 spotlight, a testimonial, "get in touch"), the simplest route is a scheduled
-task that calls `/api/social` with a hand-built payload (same JSON as the
-plugin sends). Or use a scheduler like Buffer or Meta Business Suite for those,
-and let this pipeline handle new content only.
+task that calls `/api/social` with a hand-built payload: the same JSON as the
+plugin sends, with the `Authorization: Bearer <SOCIAL_WEBHOOK_SECRET>` header.
+It must include `type` (`"post"` or `"project"`), `title` and an absolute
+`url`, or the route returns 400. Or use a scheduler like Buffer or Meta Business
+Suite for those, and let this pipeline handle new content only.
 
 ## Troubleshooting
 
 - WordPress box says "EDD_SOCIAL_URL / EDD_SOCIAL_SECRET not set": wp-config constants missing.
 - `Unauthorized`: the two secrets don't match.
+- `type must be "post" or "project"` (HTTP 400): a hand-built payload is missing `type`.
 - Facebook `(#200) ... permission`: the token is a user token, not a Page token, or lacks `pages_manage_posts`.
 - Instagram "needs a JPEG featured image": set a .jpg featured image.
 - LinkedIn `HTTP 401`: token expired (60 days). Regenerate it.

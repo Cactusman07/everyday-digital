@@ -1,0 +1,76 @@
+/* Site header: the logo on inner pages (InnerHeader.tsx) and,
+   on the home page, the full-screen hero with the cycling "Every Day <word>"
+   title (HeroWordCycle.tsx). The pinned-hero rules work with the scroll
+   effects in components/home/HomeScrollEffects.tsx. */
+
+.animate-invert {
+  transition: all 0.4s ease;
+}
+.animate-invert:hover {
+  filter: sepia(300%) hue-rotate(150deg) saturate(800%);
+}
+
+#title {
+  position: absolute;
+  top: 100px;
+  bottom: 200px;
+  left: 30px;
+  right: 30px;
+}
+
+/* Gooey morph between the two words, using the #threshold SVG filter */
+#title #textWrap {
+  filter: url(#threshold) blur(0.4px);
+}
+
+#title h1 {
+  transform: translateY(-40%);
+  top: 40%;
+}
+
+#text1,
+#text2 {
+  position: absolute;
+  user-select: none;
+}
+
+/* Hero stays put on the home page while the content scrolls over it */
+body:has(.dive-intro) #header {
+  position: fixed;
+  inset: 0;
+  margin: 20px 32px;
+  height: auto;
+}
+body:has(.dive-intro) #title h1 {
+  transform-origin: 34% 56%;
+  will-change: transform;
+}
+/* The page content sits above the hero. Let clicks fall through to the hero
+   (About link, social icons, CTAs) wherever the content is see-through. */
+body:has(.dive-intro) #root {
+  pointer-events: none;
+}
+body:has(.dive-intro) #root .dive-main,
+body:has(.dive-intro) #root .dive-outro {
+  pointer-events: auto;
+}
+#header > *,
+#header #title > a {
+  transition: opacity 0.4s;
+}
+#header.is-diving > *:not(#title):not(.fixed),
+#header.is-diving #title > a {
+  opacity: 0;
+  pointer-events: none;
+}
+#header.is-done {
+  visibility: hidden;
+}
+
+/* Mobile hero: keep "About our approach" clear of the two-line title.
+   !important: the link's position is set inline in HomeHero.tsx. */
+@media (width < 768px) {
+  #header #title > a {
+    top: 72% !important;
+  }
+}

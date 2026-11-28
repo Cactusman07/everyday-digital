@@ -1,15 +1,21 @@
-import { ogImage, OG_SIZE } from "@/lib/og";
+// The site-wide share card, used by the home page and as the default for
+// pages without their own image.
+
+import { OG_CONTENT_TYPE, ogImage } from "@/lib/og";
+import { DEFAULT_OG_ALT, OG_SIZE } from "@/lib/seo";
+import { PRICES, dollars } from "@/lib/pricing";
+import { getServiceMeta } from "@/lib/services";
 import { SITE } from "@/lib/site";
 
-export const alt = `${SITE.name} — ${SITE.tagline}`;
+export const alt = DEFAULT_OG_ALT;
 export const size = OG_SIZE;
-export const contentType = "image/png";
+export const contentType = OG_CONTENT_TYPE;
 
 export default function OpenGraphImage() {
   return ogImage({
-    title: "We keep you running.",
+    title: SITE.tagline,
     kicker: "Auckland · Web design · Development · Hosting · AI & automation",
-    footer: "WordPress websites from $1500 + GST · Hosting from $40/mo",
-    colour: "#834beb",
+    footer: `WordPress websites from ${dollars(PRICES.website)} + GST · Hosting from ${dollars(PRICES.hostingMonthly)}/mo`,
+    colour: getServiceMeta("automation")?.colour,
   });
 }

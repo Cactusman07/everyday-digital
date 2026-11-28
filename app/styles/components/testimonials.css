@@ -1,0 +1,170 @@
+/* Testimonials (components/shared/Testimonials.tsx). On the home page
+   (variant="home", .home-testimonials) the heading is sticky beside the
+   quotes; inner pages show a band of cards (.tst-band). .tst is one quote
+   card; --k is its colour. */
+
+/* Home variant: sticky heading, full quotes with a clear header each */
+.home-testimonials {
+  padding: 16vh var(--edd-gutter) 10vh;
+  display: grid;
+  grid-template-columns: minmax(260px, 0.8fr) 1.6fr;
+  gap: clamp(30px, 6vw, 100px);
+  align-items: start;
+}
+.home-testimonials__head {
+  position: sticky;
+  top: 90px;
+}
+.home-testimonials__title {
+  margin: 8px 0 18px;
+  display: flex;
+  flex-direction: column;
+}
+.home-testimonials__title span:first-child {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: clamp(40px, 5vw, 84px);
+  line-height: 0.95;
+}
+.home-testimonials__script {
+  font-family: var(--font-script);
+  font-size: clamp(48px, 6.4vw, 108px);
+  line-height: 1.05;
+}
+.home-testimonials__sub {
+  color: var(--edd-mute);
+  max-width: 30ch;
+}
+.home-testimonials__list {
+  display: grid;
+  gap: clamp(28px, 5vh, 56px);
+}
+@media (width < 1024px) {
+  .home-testimonials {
+    grid-template-columns: 1fr;
+  }
+  .home-testimonials__head {
+    position: static;
+  }
+}
+
+/* Quote card */
+.tst {
+  margin: 0;
+  position: relative;
+  padding: clamp(24px, 3vw, 44px);
+  border-radius: 24px;
+  background: #0d0d0d;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+.tst::before {
+  content: "\201C";
+  position: absolute;
+  right: 18px;
+  top: -40px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 700;
+  font-size: 240px;
+  line-height: 1;
+  color: var(--k);
+  opacity: 0.18;
+  pointer-events: none;
+}
+.tst::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--k);
+}
+.tst__who {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+.tst__av {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: #000;
+  background: var(--k);
+}
+.tst__name {
+  display: block;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: clamp(22px, 2.2vw, 32px);
+  line-height: 1;
+  letter-spacing: 0.01em;
+}
+.tst__co {
+  display: block;
+  margin-top: 6px;
+  font-size: 14px;
+  color: var(--edd-mute);
+}
+.tst__co a {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.tst__q {
+  margin: 0;
+  max-width: 62ch;
+}
+.tst__q p {
+  font-size: clamp(16px, 1.25vw, 19px);
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.84);
+  margin: 0 0 1em;
+}
+.tst__q .tst__lead {
+  font-size: clamp(22px, 2.2vw, 32px);
+  line-height: 1.25;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: #fff;
+}
+.tst__more {
+  display: inline-block;
+  margin-top: 4px;
+  font-weight: 600;
+  font-size: 14px;
+  border-bottom: 1px solid var(--k);
+}
+
+/* Inner-page variant */
+.tst-band {
+  margin: clamp(50px, 9vh, 100px) 0 clamp(20px, 4vh, 40px);
+}
+.tst-band__title {
+  margin: 0 0 24px;
+  text-shadow: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 14px;
+}
+.tst-band__title span:first-child {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: clamp(32px, 4vw, 60px);
+}
+.tst-band__script {
+  font-family: var(--font-script);
+  font-size: clamp(40px, 5vw, 76px);
+}
+.tst-band__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+  gap: 16px;
+}

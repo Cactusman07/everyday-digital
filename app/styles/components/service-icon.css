@@ -1,0 +1,20 @@
+/* Line-art service icons (components/shared/ServiceIcon.tsx). --k is the
+   service colour; .ac marks the accent shapes. A .has-sicon ancestor lights
+   the icon up on hover. */
+
+.sicon {
+  color: #fff;
+  transition: color 0.3s;
+  flex: none;
+}
+.sicon .ac {
+  fill: var(--k);
+  fill-opacity: 0.35;
+  transition: fill-opacity 0.3s;
+}
+.has-sicon:hover .sicon {
+  color: var(--k);
+}
+.has-sicon:hover .sicon .ac {
+  fill-opacity: 0.75;
+}

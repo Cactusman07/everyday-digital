@@ -1,0 +1,25 @@
+/* Small rounded labels: .chip (tags on the home page, post cards and
+   showcase meta) and .pill (case study "own business" badge, CaseStudy.tsx). */
+
+.chip {
+  display: inline-block;
+  border: 1px solid var(--edd-line-strong);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: 12.5px;
+  margin: 0 6px 6px 0;
+}
+
+.pill {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--edd-line);
+  color: #fff;
+}
+.pill--own {
+  background: var(--edd-accent);
+  border-color: var(--edd-accent);
+  color: var(--edd-accent-ink);
+}

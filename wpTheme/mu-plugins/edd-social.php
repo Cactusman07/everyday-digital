@@ -2,11 +2,12 @@
 /**
  * Plugin Name: EDD Social Share
  * Description: When a blog post or project is published for the first time, sends it to the Every Day Digital website, which writes captions with AI and posts to Facebook, Instagram and LinkedIn. Adds a "Share on social" box to the editor.
- * Version:     1.0.0
+ * Version:     1.1.0
  * Author:      Every Day Digital
  *
- * Install: copy this file to wp-content/mu-plugins/ (must-use plugins load
- * automatically). Then add to wp-config.php, above "That's all, stop editing!":
+ * Install: copy this file and edd-common.php to wp-content/mu-plugins/ (must-use
+ * plugins load automatically). Then add to wp-config.php, above "That's all,
+ * stop editing!":
  *
  *     define( 'EDD_SOCIAL_URL',    'https://everydaydigital.co.nz/api/social' );
  *     define( 'EDD_SOCIAL_SECRET', 'same value as SOCIAL_WEBHOOK_SECRET in Vercel' );
@@ -26,33 +27,39 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+require_once __DIR__ . '/edd-common.php';
+
 final class EDD_Social_Share {
 
-	/** Post types that get shared, mapped to their path on the website. */
-	private const TYPES = array(
-		'post'     => '/blog/',
-		'projects' => '/projects/',
-		'project'  => '/projects/',
-	);
+	/** Canonical content types that get shared (see EDD_Common). */
+	private const SHARED_TYPES = array( 'post', 'project' );
 
 	private const META_SKIP   = '_edd_social_skip';
 	private const META_SENT   = '_edd_social_sent';
 	private const META_RESULT = '_edd_social_result';
 	private const CRON_HOOK   = 'edd_social_send';
 
+	/** Seconds to wait for the website, which writes captions and posts before replying. */
+	private const TIMEOUT = 60;
+
 	public static function init(): void {
 		add_action( 'transition_post_status', array( __CLASS__, 'on_transition' ), 20, 3 );
+		// One accepted arg, so scheduled sends never force past the "skip" setting.
 		add_action( self::CRON_HOOK, array( __CLASS__, 'send' ), 10, 1 );
 		add_action( 'add_meta_boxes', array( __CLASS__, 'add_box' ) );
 		add_action( 'save_post', array( __CLASS__, 'save_box' ), 10, 1 );
-		add_action( 'admin_post_edd_social_resend', array( __CLASS__, 'resend' ) );
+		EDD_Common::on_admin_action( 'edd_social_resend', 'edit_post', array( __CLASS__, 'resend' ) );
 	}
 
-	public static function on_transition( string $new, string $old, WP_Post $post ): void {
-		if ( 'publish' !== $new || 'publish' === $old ) {
-			return;
-		}
-		if ( ! isset( self::TYPES[ $post->post_type ] ) || wp_is_post_revision( $post ) ) {
+	/** The canonical content type of a shared post, or null if it isn't shared. */
+	private static function shared_type( WP_Post $post ): ?string {
+		$type = EDD_Common::content_type( $post->post_type );
+		return in_array( $type, self::SHARED_TYPES, true ) ? $type : null;
+	}
+
+	/** Schedules the send the first time a shared item is published. */
+	public static function on_transition( string $new_status, string $old_status, WP_Post $post ): void {
+		if ( 'publish' !== $new_status || 'publish' === $old_status || null === self::shared_type( $post ) ) {
 			return;
 		}
 		if ( get_post_meta( $post->ID, self::META_SKIP, true ) || get_post_meta( $post->ID, self::META_SENT, true ) ) {
@@ -62,63 +69,56 @@ final class EDD_Social_Share {
 		wp_schedule_single_event( time() + 60, self::CRON_HOOK, array( $post->ID ) );
 	}
 
-	/** Builds the payload and sends it to the website. Runs from WP-Cron. */
-	public static function send( int $post_id ): void {
+	/**
+	 * Builds the payload, sends it to the website and stores the result on the item.
+	 *
+	 * @param int  $post_id Item to share.
+	 * @param bool $force   Send even if "Share on social" is unticked ("Share again now").
+	 */
+	public static function send( int $post_id, bool $force = false ): void {
 		$post = get_post( $post_id );
 		if ( ! $post || 'publish' !== $post->post_status ) {
 			return;
 		}
+		$type = self::shared_type( $post );
+		if ( null === $type ) {
+			return;
+		}
 		// Checked again here: the block editor saves the "Share" box a moment
 		// after the publish itself, so an unticked box may only land now.
-		if ( get_post_meta( $post_id, self::META_SKIP, true ) && ! doing_action( 'admin_post_edd_social_resend' ) ) {
+		if ( ! $force && get_post_meta( $post_id, self::META_SKIP, true ) ) {
 			delete_post_meta( $post_id, self::META_SENT );
 			return;
 		}
-		if ( ! defined( 'EDD_SOCIAL_URL' ) || ! defined( 'EDD_SOCIAL_SECRET' ) ) {
+		if ( ! EDD_Common::configured( 'EDD_SOCIAL_URL', 'EDD_SOCIAL_SECRET' ) ) {
 			update_post_meta( $post_id, self::META_RESULT, wp_json_encode( array( 'ok' => false, 'error' => 'EDD_SOCIAL_URL / EDD_SOCIAL_SECRET not set in wp-config.php' ) ) );
 			return;
 		}
 
-		$site  = defined( 'EDD_SITE_URL' ) ? untrailingslashit( EDD_SITE_URL ) : home_url();
-		$path  = self::TYPES[ $post->post_type ] ?? '/';
-		$image = get_the_post_thumbnail_url( $post, 'large' ) ?: '';
-		$full  = get_the_post_thumbnail_url( $post, 'full' ) ?: $image;
-		$text  = wp_strip_all_tags( strip_shortcodes( $post->post_content ) );
-		$tags  = wp_get_post_terms( $post_id, 'post_tag', array( 'fields' => 'names' ) );
+		$site = EDD_Common::configured( 'EDD_SITE_URL' ) ? untrailingslashit( EDD_SITE_URL ) : home_url();
+		$text = wp_strip_all_tags( strip_shortcodes( $post->post_content ) );
+		$tags = wp_get_post_terms( $post_id, 'post_tag', array( 'fields' => 'names' ) );
 
 		$payload = array(
-			'type'    => 'post' === $post->post_type ? 'post' : 'project',
-			'id'      => $post_id,
+			'type'    => $type,
 			'title'   => html_entity_decode( get_the_title( $post ), ENT_QUOTES ),
 			'excerpt' => html_entity_decode( wp_strip_all_tags( get_the_excerpt( $post ) ), ENT_QUOTES ),
 			'text'    => mb_substr( preg_replace( '/\s+/', ' ', $text ), 0, 4000 ),
-			'url'     => $site . $path . $post->post_name,
-			'image'   => $full,
+			'url'     => $site . EDD_Common::item_path( $type, $post->post_name ),
+			'image'   => (string) get_the_post_thumbnail_url( $post, 'full' ),
+			// The "cover" tag only controls image layout on the website; it isn't a topic.
 			'tags'    => is_array( $tags ) ? array_values( array_diff( $tags, array( 'cover' ) ) ) : array(),
 		);
 
-		$res = wp_remote_post(
-			EDD_SOCIAL_URL,
-			array(
-				'timeout' => 60,
-				'headers' => array(
-					'Content-Type'  => 'application/json',
-					'Authorization' => 'Bearer ' . EDD_SOCIAL_SECRET,
-				),
-				'body'    => wp_json_encode( $payload ),
-			)
-		);
-
-		$result = is_wp_error( $res )
-			? wp_json_encode( array( 'ok' => false, 'error' => $res->get_error_message() ) )
-			: wp_remote_retrieve_body( $res );
+		$response = EDD_Common::post_json( EDD_SOCIAL_URL, EDD_SOCIAL_SECRET, $payload, self::TIMEOUT );
+		$result   = is_wp_error( $response )
+			? wp_json_encode( array( 'ok' => false, 'error' => $response->get_error_message() ) )
+			: wp_remote_retrieve_body( $response );
 		update_post_meta( $post_id, self::META_RESULT, $result );
 	}
 
 	public static function add_box(): void {
-		foreach ( array_keys( self::TYPES ) as $type ) {
-			add_meta_box( 'edd-social', 'Share on social', array( __CLASS__, 'render_box' ), $type, 'side' );
-		}
+		add_meta_box( 'edd-social', 'Share on social', array( __CLASS__, 'render_box' ), EDD_Common::post_types( self::SHARED_TYPES ), 'side' );
 	}
 
 	public static function render_box( WP_Post $post ): void {
@@ -155,11 +155,11 @@ final class EDD_Social_Share {
 			}
 		}
 		if ( 'publish' === $post->post_status ) {
-			$url = wp_nonce_url( admin_url( 'admin-post.php?action=edd_social_resend&post=' . $post->ID ), 'edd_social_resend_' . $post->ID );
-			echo '<p><a class="button" href="' . esc_url( $url ) . '">Share again now</a></p>';
+			echo '<p><a class="button" href="' . esc_url( EDD_Common::admin_action_url( 'edd_social_resend', $post->ID ) ) . '">Share again now</a></p>';
 		}
 	}
 
+	/** Saves the "Share on social when published" checkbox. */
 	public static function save_box( int $post_id ): void {
 		if ( ! isset( $_POST['edd_social_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['edd_social_nonce'] ) ), 'edd_social_box' ) ) {
 			return;
@@ -174,16 +174,15 @@ final class EDD_Social_Share {
 		}
 	}
 
-	public static function resend(): void {
-		$post_id = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0;
-		check_admin_referer( 'edd_social_resend_' . $post_id );
-		if ( ! $post_id || ! current_user_can( 'edit_post', $post_id ) ) {
-			wp_die( 'Not allowed' );
-		}
+	/**
+	 * "Share again now": sends straight away, even if sharing was unticked.
+	 *
+	 * @return string|null The editor URL to return to.
+	 */
+	public static function resend( int $post_id ): ?string {
 		update_post_meta( $post_id, self::META_SENT, gmdate( 'c' ) );
-		self::send( $post_id );
-		wp_safe_redirect( get_edit_post_link( $post_id, 'url' ) );
-		exit;
+		self::send( $post_id, true );
+		return get_edit_post_link( $post_id, 'url' );
 	}
 }
 

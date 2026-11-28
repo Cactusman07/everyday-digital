@@ -1,0 +1,92 @@
+/* WordPress HTML on dark pages (.prose-edd): WordPress pages, blog posts,
+   project and service showcases and case studies (WordPressPage.tsx,
+   ItemShowcase.tsx, CaseStudy.tsx). Headings in the content are Anton capitals;
+   body copy sits in a readable column. Selectors here target CMS markup, so
+   they stay element-based. */
+
+#content .prose-edd {
+  max-width: 74ch;
+  font-size: clamp(16px, 1.25vw, 18px);
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.86);
+}
+#content .prose-edd p {
+  margin: 0 0 1.1em;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+#content .prose-edd h1,
+#content .prose-edd h2,
+#content .prose-edd h3,
+#content .prose-edd h4,
+#content .prose-edd h5 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  text-shadow: none;
+  letter-spacing: 0.01em;
+  color: #fff;
+  line-height: 1.02;
+  margin: 1.7em 0 0.5em;
+}
+#content .prose-edd h1,
+#content .prose-edd h2 {
+  font-size: clamp(28px, 3.4vw, 46px);
+}
+#content .prose-edd h3 {
+  font-size: clamp(23px, 2.5vw, 34px);
+}
+#content .prose-edd h4,
+#content .prose-edd h5 {
+  font-size: clamp(20px, 2vw, 26px);
+}
+#content .prose-edd > :first-child {
+  margin-top: 0;
+}
+#content .prose-edd a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s;
+}
+#content .prose-edd a:hover {
+  color: #fff;
+}
+#content .prose-edd strong {
+  color: #fff;
+  font-weight: 600;
+}
+#content .prose-edd ul,
+#content .prose-edd ol {
+  margin: 0 0 1.2em;
+  padding-left: 1.3em;
+}
+#content .prose-edd ul {
+  list-style: disc;
+}
+#content .prose-edd ol {
+  list-style: decimal;
+}
+#content .prose-edd li {
+  margin: 0 0 0.5em;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+#content .prose-edd li::marker {
+  color: var(--color-accent);
+}
+#content .prose-edd img {
+  border-radius: 14px;
+  height: auto;
+  max-width: 100%;
+  margin: 1.2em 0;
+}
+#content .prose-edd blockquote {
+  border-left: 3px solid var(--edd-indigo);
+  padding: 4px 0 4px 20px;
+  margin: 1.4em 0;
+  font-size: 1.15em;
+  color: #fff;
+}

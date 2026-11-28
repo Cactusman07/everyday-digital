@@ -1,0 +1,14 @@
+/* Inner-page footer links row (components/layout/SiteFooter.tsx). */
+
+.edd-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  justify-content: center;
+  font-size: 13px;
+  color: var(--edd-mute);
+  margin: 0 0 14px;
+}
+.edd-foot a:hover {
+  color: #fff;
+}

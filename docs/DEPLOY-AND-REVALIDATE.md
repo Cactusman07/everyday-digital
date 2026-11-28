@@ -1,81 +1,105 @@
-# Deploying this branch and wiring instant publish
+# Deploying and instant publish
 
-## 1. Preview only — nothing goes to production
+The site deploys from `main` on Vercel. Every pull request gets its own preview deployment. WordPress (cms.everydaydigital.co.nz on Cloudways) tells the site when content changes, so edits are live on the next request.
 
-This work lives on `redesign/kinetic-2026`. Pushing the branch gives you a Vercel **preview deployment** automatically; production (`main`) is untouched until you merge the PR. Review the preview URL on your phone and desktop, leave comments on the PR, and merge when you're happy.
+## 1. Environment variables in Vercel
 
-## 2. Environment variables in Vercel
+Project → Settings → Environment Variables. Set each for **Production and Preview**, then redeploy so the change takes effect.
 
-Project → Settings → Environment Variables. Set each for **Production and Preview**:
+| Name                                   | Value                                       | Notes                                                                                  |
+| -------------------------------------- | ------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `WORDPRESS_GRAPHQL_URL`                | `https://cms.everydaydigital.co.nz/graphql` |                                                                                        |
+| `NEXT_PUBLIC_SITE_URL`                 | `https://everydaydigital.co.nz`             | Previews can keep the production value. It only sets canonical, sitemap and share URLs |
+| `REVALIDATE_SECRET`                    | output of `openssl rand -hex 32`            | Same value goes in WordPress as `EDD_REVALIDATE_SECRET`                                |
+| `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | Search Console token                        | Optional. Adds the verification meta tag                                               |
+| `NEXT_PUBLIC_BING_SITE_VERIFICATION`   | Bing Webmaster token                        | Optional. Adds the verification meta tag                                               |
 
-| Name                    | Value                                       | Notes                                                                                             |
-| ----------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| `WORDPRESS_GRAPHQL_URL` | `https://cms.everydaydigital.co.nz/graphql` | Already set                                                                                       |
-| `NEXT_PUBLIC_SITE_URL`  | `https://everydaydigital.co.nz`             | Already set. Preview deployments can leave this as production — it only affects canonical/OG URLs |
-| `REVALIDATE_SECRET`     | output of `openssl rand -hex 32`            | **New.** Same value goes into WordPress below                                                     |
+The social posting variables are in [SOCIAL-AUTOMATION.md](SOCIAL-AUTOMATION.md).
 
-Redeploy after adding `REVALIDATE_SECRET` so the route picks it up.
+## 2. WordPress must-use plugins
 
-## 3. WordPress side (Cloudways)
+The plugins live in `wpTheme/mu-plugins/`:
+
+- `edd-common.php`: shared helpers. Does nothing on its own, but the other two load it, so it **must** be uploaded with them. Without it WordPress stops with a fatal error.
+- `edd-revalidate.php`: pings the site when content changes.
+- `edd-social.php`: shares new posts and projects (see [SOCIAL-AUTOMATION.md](SOCIAL-AUTOMATION.md)).
+
+To install:
 
 1. SFTP/SSH to the `cms.everydaydigital.co.nz` application.
 2. Create `wp-content/mu-plugins/` if it doesn't exist.
-3. Upload `wpTheme/mu-plugins/edd-revalidate.php` from this repo into it. Must-use plugins activate automatically and can't be switched off by accident.
+3. Upload all three files into it. Must-use plugins load automatically and can't be switched off by accident.
 4. Edit `wp-config.php`, above `/* That's all, stop editing! */`:
 
 ```php
 define( 'EDD_REVALIDATE_URL',    'https://everydaydigital.co.nz/api/revalidate' );
-define( 'EDD_REVALIDATE_SECRET', 'paste-the-same-secret-here' );
-// Optional while testing — also ping the preview deployment:
-// define( 'EDD_REVALIDATE_PREVIEW_URL', 'https://everyday-digital-git-redesign-kinetic-2026-<team>.vercel.app/api/revalidate' );
+define( 'EDD_REVALIDATE_SECRET', 'same value as REVALIDATE_SECRET in Vercel' );
+// Optional: also ping a preview deployment while testing
+// define( 'EDD_REVALIDATE_PREVIEW_URL', 'https://<preview-deployment>.vercel.app/api/revalidate' );
 ```
 
-5. In wp-admin, edit any published project and click **Update**. Then:
-   - Tools → Site Health → Info → **EDD Revalidate** shows the last ping and its HTTP status.
-   - The admin bar now has **↻ Refresh live site**, which purges everything on demand.
+5. In wp-admin, update any published project, then check Site Health (section 5).
 
-## 4. What happens on publish
+## 3. What happens on publish
 
 ```
-WP "Publish"/"Update"/"Trash"
-  → transition_post_status / trashed_post hook
-  → POST /api/revalidate  { type: "project", slug: "plow-foods" }
-  → Next.js revalidateTag("wp:projects") + revalidatePath("/projects/plow-foods")
-  → next request for that page is rebuilt from fresh WordPress data
+WP Publish / Update / Unpublish / Trash / Restore, or deleting a published item
+  → transition_post_status / before_delete_post hook
+  → POST /api/revalidate  { "all": false, "type": "project", "slug": "home-office-space" }
+  → Next.js purges the wp:projects tag and the /, /sitemap.xml and /projects/home-office-space paths
+  → the next request is rebuilt from fresh WordPress data
 ```
 
-Covered post types: `post`, `page`, `projects`, `services`, `team`, `testimonials` (the plural names this WordPress uses). Menu changes also trigger a full purge. Publishing also pings IndexNow (production only).
+- One ping per change, to each configured target (production, plus preview if set). Draft-only edits are ignored.
+- `type` is the canonical key: `post`, `page`, `project`, `service`, `team` or `testimonial`. The plugin maps WordPress's post types (`projects`, `services`, `testimonials`) to these.
+- A trashed item still sends its real slug, so its live URL is purged.
+- Pages also send their `uri`, e.g. `"uri": "/about/"`, and that path is purged.
+- An unknown or missing `type` purges every tag. So does `{ "all": true }`, which is what the admin-bar **↻ Refresh live site** button sends.
+- IndexNow (Bing and others) is told about the changed URLs in production only, and only for a typed change.
+- Menu changes don't ping anything. The site's menu is built from the published pages, so publishing a page covers it.
 
-Fallback: every fetch also refreshes at most every 5 minutes, so content still appears if the publish call is missed or not set up yet.
+Fallback: every WordPress fetch also refreshes at most every 5 minutes (`FALLBACK_REVALIDATE_SECONDS` in `lib/wordpress/client.ts`), so content still appears if a ping is missed.
 
-## 5. Testing the route by hand
+## 4. Testing the route by hand
 
 ```bash
 curl -X POST https://everydaydigital.co.nz/api/revalidate \
   -H "Authorization: Bearer YOUR_SECRET" \
   -H "Content-Type: application/json" \
-  -d '{"type":"project","slug":"plow-foods"}'
-# → {"ok":true,"revalidated":["wp:projects"],"paths":["/","/sitemap.xml","/projects/plow-foods"],...}
+  -d '{"type":"project","slug":"home-office-space"}'
+# → {"ok":true,"revalidated":["wp:projects"],"paths":["/","/sitemap.xml","/projects/home-office-space"],"indexnow":200,"at":"…"}
 ```
 
-A wrong secret returns 401. A missing env var returns 500 with a clear message.
+Send `{"all":true}` to purge everything. `indexnow` is the IndexNow HTTP status, or `"skipped"` outside production or for a full purge. A wrong or missing secret returns 401. A missing `REVALIDATE_SECRET` env var returns 500.
+
+## 5. Site Health
+
+Tools → Site Health → Info → **EDD Revalidate** shows whether the constants are set, then one row per target (Production, and Preview if set) with the last ping: time, `ok` or the HTTP status, type and slug, and the start of the response. Failures are also written to the PHP error log.
 
 ## 6. Local development
 
 ```bash
 cp .env.example .env.local   # fill in values
 pnpm install
-pnpm dev
+pnpm wp:start                # WordPress on http://localhost:8181
+pnpm dev                     # site on http://localhost:3000
 ```
 
-`scripts/capture-screenshots.mjs` needs `pnpm exec playwright install chromium` once, then `node scripts/capture-screenshots.mjs` writes the four work-tile PNGs to `public/images/work/`. Commit them.
+Docker mounts `wpTheme/` as the theme and `wpTheme/mu-plugins/` at `wp-content/mu-plugins`, so local WordPress runs the same plugins. They do nothing until their wp-config constants are set. First-time WordPress setup (WPGraphQL, activating the theme) is in the README.
 
-## 7. Before merging to main — checklist
+## 7. Work screenshots
+
+The case-study tiles use `public/images/work/<slug>.png`. To refresh them:
+
+```bash
+pnpm exec playwright install chromium   # once
+node scripts/capture-screenshots.mjs
+```
+
+This captures the three public sites. The Plow Foods portal is behind a login, so its image is made by hand. `lib/site.test.ts` fails if a case study has no screenshot. Commit the PNGs.
+
+## Production checklist
 
 - [ ] `REVALIDATE_SECRET` set in Vercel (Production + Preview)
-- [ ] mu-plugin installed on Cloudways with matching constants; Site Health shows an `ok` ping
-- [ ] Real screenshots committed to `public/images/work/`
-- [ ] `XX`/`null` result fields in `lib/site.ts` filled or left `null` (null fields are hidden, `XX` strings are not — search for `XX`)
-- [ ] Instagram URL in `lib/site.ts` confirmed or removed
-- [ ] WordPress content reviewed page by page (Sam) — the branch doesn't change CMS content
-- [ ] Google Search Console verified on the production domain
+- [ ] All three mu-plugins on Cloudways with matching constants; Site Health shows an `ok` ping
+- [ ] Google Search Console and Bing Webmaster verified on the production domain

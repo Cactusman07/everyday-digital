@@ -1,95 +1,74 @@
-// /llms.txt — a plain-text summary of the site for generative engines, in the
-// emerging llms.txt convention (https://llmstxt.org). Generated from lib/site.ts
-// so it can never drift from the published offer.
+// /llms.txt — a short Markdown summary of the business and links to its
+// content, for AI assistants and answer engines (https://llmstxt.org).
+// /llms-full.txt has the full text.
 
+import { CASE_STUDIES } from "@/lib/case-studies";
+import { newestFirst } from "@/lib/dates";
+import { excerptOf } from "@/lib/html";
+import { faqLines, introLines, pricingLines, textResponse } from "@/lib/llms";
+import { FOOTER_LINKS } from "@/lib/navigation";
+import { SERVICES } from "@/lib/services";
+import { SITE, absoluteUrl } from "@/lib/site";
 import { getPosts, getProjects, safe } from "@/lib/wordpress";
-import { excerptText, stripHtml } from "@/lib/content";
-import {
-  SITE,
-  PRICING,
-  SERVICES,
-  HOSTING,
-  CASE_STUDIES,
-  FAQ,
-} from "@/lib/site";
+import { itemPath } from "@/lib/wordpress/content-types";
 
 export const revalidate = 3600;
 
+/** How many recent articles to list. */
+const LATEST_ARTICLES = 12;
+
+const link = (text: string, path: string) => `[${text}](${absoluteUrl(path)})`;
+
 export async function GET() {
-  const lines: string[] = [];
-  lines.push(`# ${SITE.name}`);
-  lines.push("");
-  lines.push(`> ${SITE.description}`);
-  lines.push("");
-  lines.push(
-    `Location: ${SITE.city}, New Zealand. Works with businesses NZ-wide.`,
-  );
-  lines.push(
-    `Founder: ${SITE.founder}. Contact: ${SITE.email}, ${SITE.phone}.`,
-  );
-  lines.push(
-    `Pricing model: ${PRICING.line} ${PRICING.rest} We specialise in WordPress and Shopify.`,
-  );
-  lines.push("");
-  lines.push("## Services");
-  for (const sv of SERVICES) {
-    lines.push(
-      `- ${sv.title}: ${sv.summary} (${SITE.url}/services/${sv.slug}/)`,
-    );
-  }
-  lines.push("");
-  lines.push("## Pricing (NZD, excluding GST)");
-  lines.push(`- ${PRICING.line}`);
-  lines.push(`- ${PRICING.rest}`);
-  lines.push(
-    `- Website hosting: $${HOSTING.shared.monthly}/month or $${HOSTING.shared.annual}/year (two months free). ${HOSTING.support}`,
-  );
-  lines.push(`- eCommerce hosting: $${HOSTING.ecommerce.monthly}/month.`);
-  lines.push("");
-  lines.push("## Selected work");
-  for (const c of CASE_STUDIES) {
-    lines.push(
-      `- ${c.client} (${c.sector}): ${c.summary} Built with ${c.stack.join(", ")}. ${SITE.url}/projects/${c.slug}`,
-    );
-  }
-  lines.push("");
   const [posts, projects] = await Promise.all([
     safe(getPosts),
     safe(getProjects),
   ]);
-  lines.push("## Latest articles");
-  for (const p of [...posts]
-    .sort((a, b) => +new Date(b.date) - +new Date(a.date))
-    .slice(0, 12)) {
-    lines.push(
-      `- [${stripHtml(p.title)}](${SITE.url}/blog/${p.slug}) (${p.date.slice(0, 10)}): ${excerptText(p.excerpt || p.content, 200)}`,
-    );
-  }
-  lines.push("");
-  lines.push("## All projects");
-  for (const p of projects) {
-    lines.push(
-      `- [${stripHtml(p.title)}](${SITE.url}/projects/${p.slug}): ${excerptText(p.excerpt || p.content, 160)}`,
-    );
-  }
-  lines.push("");
-  lines.push("## Frequently asked questions");
-  for (const f of FAQ) {
-    lines.push(`- Q: ${f.q}`);
-    lines.push(`  A: ${f.a}`);
-  }
-  lines.push("");
-  lines.push("## Links");
-  lines.push(`- Home: ${SITE.url}/`);
-  lines.push(`- Pricing: ${SITE.url}/#pricing`);
-  lines.push(`- Services: ${SITE.url}/services`);
-  lines.push(`- Projects: ${SITE.url}/projects`);
-  lines.push(`- Blog: ${SITE.url}/blog`);
-  lines.push(`- RSS feed: ${SITE.url}/feed.xml`);
-  lines.push(`- Contact: ${SITE.url}/contact`);
-  lines.push(`- Sitemap: ${SITE.url}/sitemap.xml`);
 
-  return new Response(lines.join("\n") + "\n", {
-    headers: { "content-type": "text/plain; charset=utf-8" },
-  });
+  return textResponse([
+    `# ${SITE.name}`,
+    "",
+    ...introLines(),
+    "",
+    `The full text of every service, project and article is at ${absoluteUrl("/llms-full.txt")}.`,
+    "",
+    "## Services",
+    ...SERVICES.map(
+      (s) => `- ${link(s.title, itemPath("service", s.slug))}: ${s.summary}`,
+    ),
+    "",
+    ...pricingLines(),
+    "",
+    "## Selected work",
+    ...CASE_STUDIES.map(
+      (c) =>
+        `- ${link(c.client, itemPath("project", c.slug))} (${c.sector}): ${c.summary} Built with ${c.stack.join(", ")}.`,
+    ),
+    "",
+    "## Latest articles",
+    ...newestFirst(posts)
+      .slice(0, LATEST_ARTICLES)
+      .map(
+        (p) =>
+          `- ${link(p.title, itemPath("post", p.slug))} (${p.date.slice(0, 10)}): ${excerptOf(p, 200)}`,
+      ),
+    "",
+    "## All projects",
+    ...projects.map(
+      (p) =>
+        `- ${link(p.title, itemPath("project", p.slug))}: ${excerptOf(p, 160)}`,
+    ),
+    "",
+    ...faqLines(),
+    "",
+    "## Links",
+    `- ${link("Home", "/")}`,
+    `- ${link("Pricing", "/#pricing")}`,
+    ...FOOTER_LINKS.map((l) => `- ${link(l.label, l.href)}`),
+    "",
+    "## Optional",
+    `- ${link("Full text of the site", "/llms-full.txt")}`,
+    `- ${link("RSS feed", "/feed.xml")}`,
+    `- ${link("Sitemap", "/sitemap.xml")}`,
+  ]);
 }

@@ -1,0 +1,72 @@
+/* Fixed backdrop behind every page: the six hero gradient layers that
+   HeroWordCycle cross-fades (#background1–6, app/layout.tsx) and the New
+   Zealand dot map (#svgNZ, components/layout/NzDotMap.tsx). */
+
+.fullpage {
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: all 2.5s ease-out;
+}
+
+#background1 {
+  background-image: linear-gradient(115deg, #000 40%, var(--edd-pink));
+  opacity: 0;
+}
+#background2 {
+  background-image: linear-gradient(115deg, #000 40%, var(--edd-violet));
+  opacity: 0;
+}
+#background3 {
+  background-image: linear-gradient(115deg, #000 40%, var(--edd-indigo));
+  opacity: 0;
+}
+#background4 {
+  background-image: linear-gradient(115deg, #000 40%, var(--color-accent));
+  opacity: 0;
+}
+#background5 {
+  background-image: linear-gradient(115deg, #000 40%, var(--edd-green));
+  opacity: 0;
+}
+#background6 {
+  background-image: linear-gradient(115deg, #000 40%, var(--edd-yellow));
+  opacity: 0;
+}
+
+#svgNZ {
+  position: fixed;
+  z-index: 0;
+  right: -40px;
+  height: 60%;
+  bottom: 30px;
+  transition: all 0.5s ease-out;
+}
+
+#svgNZ g circle {
+  fill: white;
+  opacity: 0.2;
+}
+
+@media (width >= 768px) {
+  #svgNZ {
+    bottom: 100px;
+  }
+}
+
+@media (width >= 1024px) {
+  #svgNZ {
+    height: 75%;
+    bottom: 40px;
+  }
+}
+
+@media (width >= 1536px) {
+  #svgNZ {
+    height: 100%;
+    bottom: -100px;
+  }
+}

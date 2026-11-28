@@ -13,11 +13,10 @@ describe("robots", () => {
     expect(general?.allow).toBe("/");
   });
 
-  it("keeps machine-only and paid landing routes out of the index", () => {
-    const general = rulesArray().find((r) => r.userAgent === "*");
-    expect(general?.disallow).toEqual(
-      expect.arrayContaining(["/api/", "/lp/"]),
-    );
+  it("blocks the API but lets crawlers see the noindex on landing pages", () => {
+    for (const rule of rulesArray()) {
+      expect(rule.disallow).toBe("/api/");
+    }
   });
 
   it("states an explicit policy for AI crawlers", () => {

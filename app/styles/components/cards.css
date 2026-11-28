@@ -1,0 +1,25 @@
+/* Dark link card shared by the Services and Blog lists (ServiceGrid.tsx,
+   PostGrid.tsx); --k sets the hover border colour. */
+
+.edd-card {
+  background: rgba(10, 10, 10, 0.72);
+  border: 1px solid var(--edd-line);
+  border-radius: 18px;
+  transition:
+    transform 0.35s var(--edd-ease),
+    border-color 0.3s,
+    background 0.3s;
+}
+.edd-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--k, var(--color-accent));
+  background: rgba(16, 16, 16, 0.9);
+}
+.edd-card__title {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: 22px;
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+  margin: 0;
+}

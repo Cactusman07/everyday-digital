@@ -1,20 +1,45 @@
+// /sitemap.xml, built from WordPress content. Every entry carries the date it
+// last changed (listing pages take their newest item's date) and the main
+// image, which is what Google and Bing use. changefreq and priority are left
+// out because both ignore them.
+
 import type { MetadataRoute } from "next";
-import { getPages, getPosts, getProjects, getServices } from "@/lib/wordpress";
-import { FEATURED_SLUGS } from "@/lib/site";
+import { gmt, latest } from "@/lib/dates";
+import { absoluteUrl } from "@/lib/site";
+import {
+  getPages,
+  getPosts,
+  getProjects,
+  getServices,
+  pageSlug,
+  type WPEntry,
+} from "@/lib/wordpress";
+import {
+  itemPath,
+  sectionOf,
+  type RoutedType,
+} from "@/lib/wordpress/content-types";
 
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://everydaydigital.co.nz";
+const images = (url?: string) => (url ? [url] : undefined);
 
-// /sitemap.xml, built from WordPress content.
+/** Entries for one routed type, plus the date the newest of them changed. */
+function entriesFor(
+  type: RoutedType,
+  items: (WPEntry & { dateGmt?: string })[],
+) {
+  const entries = items.map((item) => ({
+    url: absoluteUrl(itemPath(type, item.slug)),
+    lastModified: gmt(item.modifiedGmt) ?? gmt(item.dateGmt),
+    images: images(item.featuredImage?.node.sourceUrl),
+  }));
+  return {
+    path: sectionOf(type).path,
+    entries,
+    newest: latest(entries.map((e) => e.lastModified)),
+  };
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const entries: MetadataRoute.Sitemap = [
-    {
-      url: SITE_URL,
-      changeFrequency: "weekly",
-      priority: 1,
-    },
-  ];
-
   try {
     const [pages, posts, projects, services] = await Promise.all([
       getPages(),
@@ -22,49 +47,34 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       getProjects(),
       getServices(),
     ]);
+    const sections = [
+      entriesFor("post", posts),
+      entriesFor("project", projects),
+      entriesFor("service", services),
+    ];
+    /** The newest change listed on a page, if the page is a section index. */
+    const newestIn = (path: string) =>
+      sections.find((s) => s.path === path)?.newest;
 
-    for (const page of pages) {
-      if (page.isFrontPage) continue;
-      const slug = page.uri.replace(/^\/|\/$/g, "");
-      entries.push({
-        url: `${SITE_URL}/${slug}`,
-        changeFrequency: "monthly",
-        priority: 0.8,
-      });
-    }
-
-    for (const post of posts) {
-      entries.push({
-        url: `${SITE_URL}/blog/${post.slug}`,
-        lastModified: new Date(post.modified ?? post.date),
-        changeFrequency: "monthly",
-        priority: 0.6,
-      });
-    }
-
-    for (const project of projects) {
-      const featured = FEATURED_SLUGS.includes(project.slug);
-      entries.push({
-        url: `${SITE_URL}/projects/${project.slug}`,
-        lastModified:
-          (project.modified ?? project.date)
-            ? new Date((project.modified ?? project.date)!)
-            : undefined,
-        changeFrequency: "monthly",
-        priority: featured ? 0.8 : 0.6,
-      });
-    }
-
-    for (const service of services) {
-      entries.push({
-        url: `${SITE_URL}/services/${service.slug}`,
-        changeFrequency: "monthly",
-        priority: 0.7,
-      });
-    }
+    return [
+      {
+        url: absoluteUrl("/"),
+        lastModified: latest(sections.map((s) => s.newest)),
+      },
+      // A listing page changed when it, or anything listed on it, changed
+      ...pages
+        .filter((p) => !p.isFrontPage)
+        .map((p) => {
+          const path = `/${pageSlug(p)}`;
+          return {
+            url: absoluteUrl(path),
+            lastModified: latest([gmt(p.modifiedGmt), newestIn(path)]),
+          };
+        }),
+      ...sections.flatMap((s) => s.entries),
+    ];
   } catch {
-    // WordPress may not be available during build
+    // WordPress may not be reachable during a build
+    return [{ url: absoluteUrl("/") }];
   }
-
-  return entries;
 }
