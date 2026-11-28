@@ -185,7 +185,9 @@ export default function HomeScrollEffects() {
         const top = -170 + entry * (vh * 0.14 + 170) + P * vh * 0.52;
         const o = outro ? outro.getBoundingClientRect().top / vh : 2;
         const leave = clamp((0.95 - o) / 0.35);
-        fig.style.transform = `translateY(${top + leave * 60}px)`;
+        // `translate`, not `transform`: the idle sway (CSS `rotate`) then
+        // pivots on his hands wherever he is, so they stay on the rope
+        fig.style.translate = `0 ${top + leave * 60}px`;
         rope.style.height = `${Math.max(0, top + 24)}px`;
         climber.style.opacity = String(1 - leave);
         if (!reduce && Math.abs(dy) > 0) {

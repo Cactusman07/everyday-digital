@@ -2,8 +2,8 @@
 //
 // Climber: hangs on a rope at the right edge and lowers himself down the page
 // as you scroll. Arms and legs are redrawn every frame by HomeScrollEffects.
-// Waver: stands in the closing section with a laptop under one arm and waves
-// on a loop. Pure CSS animation.
+// Waver: the climber again, landed in the closing section. He holds the end
+// of his rope (coiled on the floor) and waves. Pure CSS animation.
 
 export function Climber() {
   return (
@@ -65,47 +65,68 @@ export function Waver() {
   return (
     <div className="waver" data-waver aria-hidden="true">
       <p className="waver__bubble">Kia ora!</p>
-      <svg viewBox="0 0 260 340" className="waver__svg" fill="#fff">
-        {/* legs and shoes */}
-        <rect x="98" y="196" width="26" height="110" rx="13" />
-        <rect x="136" y="196" width="26" height="110" rx="13" />
-        <rect x="84" y="292" width="42" height="20" rx="10" />
-        <rect x="134" y="292" width="42" height="20" rx="10" />
+      <svg
+        viewBox="0 0 240 330"
+        className="waver__svg"
+        fill="none"
+        stroke="#fff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <defs>
+          {/* The rope fades in from above: he's just come down it */}
+          <linearGradient
+            id="waver-rope"
+            gradientUnits="userSpaceOnUse"
+            x1="0"
+            y1="0"
+            x2="0"
+            y2="70"
+          >
+            <stop offset="0" stopColor="#fff" stopOpacity="0" />
+            <stop offset="1" stopColor="#fff" />
+          </linearGradient>
+        </defs>
+        {/* shadow on the ground */}
+        <ellipse
+          cx="122"
+          cy="306"
+          rx="62"
+          ry="5"
+          fill="#fff"
+          fillOpacity="0.16"
+          stroke="none"
+        />
+        {/* the rope, from above to his hand, then slack and coiled on the floor */}
+        <path d="M70 0 V146" stroke="url(#waver-rope)" strokeWidth="4" />
+        <path
+          d="M70 150 C70 210 66 262 62 290 C60 304 32 306 30 298 C28 290 50 288 56 298"
+          strokeWidth="4"
+        />
+        {/* legs and feet */}
+        <polyline points="110,214 106,258 104,298 92,300" strokeWidth="19" />
+        <polyline points="134,214 138,258 140,298 152,300" strokeWidth="19" />
         {/* body */}
-        <rect x="88" y="104" width="84" height="116" rx="36" />
-        {/* head and cap */}
-        <circle cx="130" cy="66" r="34" />
-        <path d="M96 58 Q130 14 164 58 L186 62 Q176 70 162 66 Z" />
-        {/* arm down, holding a laptop */}
-        <g className="waver__hold">
-          <rect
-            x="66"
-            y="112"
-            width="24"
-            height="88"
-            rx="12"
-            transform="rotate(14 78 118)"
-          />
-          <rect
-            x="30"
-            y="170"
-            width="70"
-            height="46"
-            rx="6"
-            transform="rotate(-10 65 193)"
-          />
-          <circle
-            cx="65"
-            cy="193"
-            r="6"
-            fill="#000"
-            transform="rotate(-10 65 193)"
-          />
-        </g>
-        {/* waving arm */}
+        <rect
+          x="98"
+          y="121"
+          width="48"
+          height="104"
+          rx="24"
+          fill="#fff"
+          stroke="none"
+        />
+        {/* head, with the same cap as the climber */}
+        <circle cx="122" cy="92" r="26" fill="#fff" stroke="none" />
+        <path d="M96 85 q26 -29 52 0 l17 2" strokeWidth="9.5" />
+        {/* arm gripping the rope */}
+        <polyline points="108,138 84,170 72,150" strokeWidth="17" />
+        <circle cx="70" cy="147" r="10.5" fill="#fff" stroke="none" />
+        {/* waving arm: the forearm swings from the elbow */}
+        <polyline points="136,138 172,122" strokeWidth="17" />
         <g className="waver__arm">
-          <rect x="168" y="44" width="24" height="84" rx="12" />
-          <circle cx="180" cy="40" r="17" />
+          <line x1="172" y1="122" x2="190" y2="80" strokeWidth="17" />
+          <circle cx="193" cy="72" r="11" fill="#fff" stroke="none" />
         </g>
       </svg>
     </div>

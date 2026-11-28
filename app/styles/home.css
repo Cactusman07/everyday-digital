@@ -31,11 +31,12 @@
   top: 0;
   left: 0;
   overflow: visible;
-  will-change: transform;
+  will-change: translate, rotate;
+  /* His grip on the rope: the idle sway swings the body beneath his hands */
+  transform-origin: 40px 24px;
 }
 .climber:not(.is-moving) .climber__fig {
   animation: climber-sway 3.2s ease-in-out infinite;
-  transform-box: view-box;
 }
 @keyframes climber-sway {
   0%,
@@ -572,6 +573,7 @@
 .dive-outro__foot {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 20px;
   flex-wrap: wrap;
   font-size: 14px;
@@ -610,11 +612,11 @@
   height: auto;
   display: block;
   overflow: visible;
-  animation: bob 3.2s ease-in-out infinite;
 }
+/* The forearm swings from the elbow (172,122 in the SVG) */
 .waver__arm {
   transform-box: view-box;
-  transform-origin: 180px 124px;
+  transform-origin: 172px 122px;
   animation: wave 1.6s ease-in-out infinite;
 }
 @keyframes wave {
@@ -630,15 +632,6 @@
   20%,
   40% {
     transform: rotate(14deg);
-  }
-}
-@keyframes bob {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-6px);
   }
 }
 .waver__bubble {
